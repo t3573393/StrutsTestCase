@@ -396,10 +396,16 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * Returns the forward sent to RequestDispatcher.
      */
     private String getActualForward() {
+
         if (response.containsHeader("Location")) {
             return Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
-        } else
-            return request.getContextPath() + Common.stripJSessionID(((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward());
+        } else {
+            String forward = ((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward();
+            if (forward == null)
+                return null;
+            else
+                return request.getContextPath() + Common.stripJSessionID(forward);
+        }
     }
 
     /**
@@ -432,7 +438,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
         init();
         forwardPath = request.getContextPath() + forwardPath;
-        if (!(getActualForward().equals(forwardPath)))
+        String actualForward = getActualForward();
+        if (actualForward == null)
+            throw new AssertionFailedError("Was expecting '" + forwardPath + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
+        if (!(actualForward.equals(forwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
     }
 
