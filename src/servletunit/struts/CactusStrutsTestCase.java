@@ -232,6 +232,18 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Sets an initialization parameter on the
+     * ActionServlet.  Allows you to simulate an init parameter
+     * that would normally have been found in web.xml.
+     * @param key the name of the initialization parameter
+     * @param value the value of the intialization parameter
+     */
+    public void setInitParameter(String key, String value){
+        this.config.setInitParameter(key, value);
+	this.actionServletIsInitialized = false;
+    }
+
+    /**
      * Sets the location of the Struts configuration file.  This method
      * should only be called if the configuration file is different than
      * the default value of /WEB-INF/struts-config.xml.<br><br>
