@@ -39,8 +39,5 @@
 		<action path="/loginNoInput" type="examples.LoginAction" name="loginForm" scope="request">
 			<forward name="success" path="/main/success.jsp"/>
 		</action>
-		<action path="/tilesForward" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request">
-			<forward name="success" path="page.library"/>
-		</action>
 	</action-mappings>
 </struts-config>
