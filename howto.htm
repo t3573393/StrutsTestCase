@@ -5,8 +5,8 @@
 <title>StrutsTestCase for JUnit</title>
 </head>
 <body>
-<center><h1>StrutsTestCase for JUnit v1.6</h1></center>
-<font color=red><center><h3>Now with Cactus Support!</h3></center></font>
+<center><h1>StrutsTestCase for JUnit v1.7</h1></center>
+<font color=red><center><h3>Now supporting Struts 1.1!</h3></center></font>
 <font size="-1"><center>Copyright (C) 2002 Deryl Seale</center></font>
 <hr>
 <br>
@@ -19,7 +19,7 @@ for testing code based on the Struts framework.  StrutsTestCase provides both a 
  StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation 
  of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases. 
  <br><br>
-StrutsTestCase is compliant with the Java Servlet 2.3 specification, and supports Struts 1.0.1 and Cactus 1.2.
+StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.1 and 1.0.2, and Cactus 1.2.
 
 <br><br>
 <h2>Where does it live?</h2>
@@ -34,6 +34,7 @@ StrutsTestCase for JUnit provides two base classes, both of which are extensions
 <br><br>
 <b>Please note</b> that while the following examples use the MockStrutsTestCase approach, you could choose to use the Cactus approach by simply subclassing from CactusStrutsTestCase without changing another line of code!
 <h2>How does it work?</h2>
+<b>Please note</b> that there are many more methods in the StrutsTestCase library than are illustrated here -- check out the <a href="api/index.html">javadocs</a> for a complete picture of what you can do with StrutsTestCase!<br><br>
 Using the popular cookbook approach, let's consider the following code snippet:<br><br>
 <table border="0" cellspacing="2" cellpadding="2" align="center" bgcolor="#FEEACB">
 <tr>
@@ -106,10 +107,8 @@ public class TestLoginAction extends MockStrutsTestCase {
 </table>
 
 <br>
-<b>NOTE:</b> If you choose to override the <code>setUp()</code> and <code>tearDown()</code> methods, you
-<b>must</b> explicitly call <code>super.setUp()</code> and <code>super.tearDown()</code>.  These methods
-perform some important initialization routines, and StrutsTestCase will not work if
-the they are not called.
+<b>NOTE:</b> If you choose to override the <code>setUp()</code> method, you
+<b>must</b> explicitly call <code>super.setUp()</code>.  This method performs some important initialization routines, and StrutsTestCase will not work if it is not called.
 <br>
 <br>
 The first thing we need to do is to tell Struts which mapping to use in this test.  To do so, we specify a path that is associated with a Struts mapping; this is the same mechanism that the Struts tag library method uses.

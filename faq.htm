@@ -8,11 +8,36 @@
 <center><h2>Frequently Asked Questions About StrutsTestCase for JUnit</h2></center>
 <hr>
 <h3>Why do I keep getting NullPointerExceptions when I run my test case?</h3>
-This is usually the case of overriding the <code>setUp()</code> and <code>tearDown()</code> methods in your StrutsTestCase subclass.  If you choose to override these methods, you <b>must</b> explicitly call <code>super.setUp()</code> and <code>super.tearDown()</code>.  Both MockStrutsTestCase and CactusStrutsTestCase use these methods for initialization, and will not work if the base class methods are not called.
+This is usually the case of overriding the <code>setUp()</code> method in your StrutsTestCase subclass.  If you choose to override this method, you <b>must</b> explicitly call <code>super.setUp()</code>.  Both MockStrutsTestCase and CactusStrutsTestCase use this method for initialization, and will not work if the base class method is not called.  This is now enforced with an internal check, and your test case will fail if super.setUp() is not called.
 <h3>Why is a session value I set in one test method not available in another test method?</h3>
 StrutsTestCase follows a common JUnit practice of not saving state between unit tests.  This is to avoid side effects when running many unit tests at once, each of which should remain independent of one another.  If you wish to test an Action subclass that depends on another Action or Servlet having set up one or more state variables, you should simulate this behavior by setting the state variables in the session object (via the <code>getSession()</code> method) or the request object (via the <code>getRequest()</code> method).  Alternately, you can test several Action subclasses in a sequence by calling setRequestPathInfo() and actionPerform() for each one.  For more information, please see the <a href="http://www.junit.org">JUnit site</a>.
 <h3>Why do I keep getting XML exceptions when using the Swing UI TestRunner?</h3>
 When using the junit.swingui.TestRunner application, you must uncheck the "reload classes every run" box before you run your tests.  Otherwise, your test will fail with a class loader issue.  This only seems to be an issue with MockStrutsTestCase running in the SwingUI TestRunner; the commond line TestRunner works fine, as does CactusStrutsTestCase in all cases.
+<h3>How can I use the Struts transaction token support in my test cases?</h3>
+You can use the Struts transaction token in your tests, but the way in which you set it up differs depending on whether or not you are using MockStrutsTestCase or CactusStrutsTestCase.<br><br>
+For MockStrutsTestCase, you can set the both the request and session tokens with your test method directly:
+<pre><b>
+     public void testTransactionToken() {
+	addRequestParameter(Constants.TOKEN_KEY, "test_token");
+	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
+        setRequestPathInfo("/testToken");
+        actionPerform();
+        verifyNoActionErrors();
+     }
+</b></pre>
+For CactusStrutsTestCase, you must set the request token using the normal beginXXX() method:
+<pre><b>
+     public void beginTransactionToken(WebRequest theRequest) {
+        theRequest.addParameter(Constants.TOKEN_KEY, "test_token");
+     }
+	
+     public void testTransactionToken() {
+        getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
+        setRequestPathInfo("/testToken");
+        actionPerform();
+        verifyNoActionErrors();
+     }
+</b></pre>
 <br>
 <br>
 <br>
