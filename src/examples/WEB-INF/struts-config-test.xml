@@ -18,15 +18,14 @@
     <global-forwards>
         <forward name="login" path="/login/login.jsp" contextRelative="true"/>
         <forward name="success" path="/main/success.jsp"/>
+        <forward name="failure" path="/main/failure.jsp"/>
         <forward name="redirect" path="/main/success.jsp" redirect="true" />
     </global-forwards>
     <!-- ========== Action Mapping Definitions ============================== -->
     <action-mappings>
         <!-- The following mappings are for internal testing -->
         <!-- only, and can be safely ignored.                -->
-        <action path="/testMessage" type="servletunit.struts.tests.MessageResourceAction" input="/login/login.jsp" scope="request">
-            <forward name="failure" path="/main/failure.jsp"/>
-        </action>
+        <action path="/testMessage" type="servletunit.struts.tests.MessageResourceAction" input="/login/login.jsp" scope="request"/>
         <action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
         <action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request" />
         <action path="/testRelativeRedirect" type="servletunit.struts.tests.RedirectAction" scope="request"/>
@@ -50,9 +49,7 @@
         </action>
         <action path="/testActionMessages" type="servletunit.struts.tests.MessageAction" />
         <action path="/testNullAction" type="servletunit.struts.tests.NullAction" />
-        <action path="/testCustomMapping" type="servletunit.struts.tests.CustomMappingAction">
-            <forward name="failure" path="/main/failure.jsp"/>
-        </action>
+        <action path="/testCustomMapping" type="servletunit.struts.tests.CustomMappingAction"/>
         <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request"/>
     </action-mappings>
     <message-resources parameter="examples.ApplicationResources"/>
