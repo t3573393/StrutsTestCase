@@ -52,8 +52,8 @@ public class ServletContextSimulator implements ServletContext
     private Hashtable attributes;
     private RequestDispatcherSimulator dispatcher = null;
 
-    public ServletContextSimulator(Hashtable initParameters) {
-        this.initParameters = initParameters;
+    public ServletContextSimulator() {
+        this.initParameters = new Hashtable();
         this.attributes = new Hashtable();
     }
 
@@ -155,6 +155,22 @@ public class ServletContextSimulator implements ServletContext
     public Enumeration getInitParameterNames()
     {
         return initParameters.keys();
+    }
+
+    /**
+     * Sets a named initialization parameter with the supplied
+     * <code>String</code> value.
+     *
+     * @param name      a <code>String</code> specifying the name
+     *                  of the initialization parameter
+     *
+     * @param value     a <code>String</code> value for this initialization
+     *                  parameter
+     *
+     */
+    public void setInitParameter(String key,String value)
+    {
+        initParameters.put(key,value);
     }
 
     /**
