@@ -18,6 +18,7 @@ package servletunit.struts.tests;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.taglib.html.Constants;
+import org.apache.struts.Globals;
 import servletunit.struts.MockStrutsTestCase;
 
 public class TestTokenAction extends MockStrutsTestCase {
@@ -33,7 +34,7 @@ public class TestTokenAction extends MockStrutsTestCase {
 
     public void testTransactionToken() {
 	addRequestParameter(Constants.TOKEN_KEY, "test_token");
-	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
+	getSession().setAttribute(Globals.TRANSACTION_TOKEN_KEY, "test_token");
         setRequestPathInfo("test","/testToken");
         actionPerform();
         verifyNoActionErrors();

@@ -29,12 +29,12 @@ public class MessageResourceAction extends Action {
 
 
 
-    public ActionForward perform(ActionMapping mapping,
+    public ActionForward execute(ActionMapping mapping,
                                  ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
 
-        MessageResources resources = getResources();
+        MessageResources resources = getResources(request);
         if (resources == null) {
             return mapping.findForward("failure");
         } else {

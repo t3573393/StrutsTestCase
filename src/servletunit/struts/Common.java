@@ -20,6 +20,8 @@ import junit.framework.AssertionFailedError;
 import org.apache.struts.action.*;
 import org.apache.struts.tiles.*;
 import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.config.ForwardConfig;
+import org.apache.struts.config.ActionConfig;
 import org.apache.struts.Globals;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -163,9 +165,9 @@ public class Common {
      *
      * @throws AssertionFailedError if the expected and actual tiles definitions do not match.
      */
-    protected static void verifyTilesForward(ActionServlet actionServlet, String actionPath, String forwardName, String expectedDefinition, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
+    protected static void verifyTilesForward(String actionPath, String forwardName, String expectedDefinition, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering verifyTilesForward() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", forwardName = " + forwardName + ", expectedDefinition = " + expectedDefinition);
+            logger.trace("Entering verifyTilesForward() : actionPath = " + actionPath + ", forwardName = " + forwardName + ", expectedDefinition = " + expectedDefinition);
 
         String definitionName = null;
 
@@ -173,7 +175,7 @@ public class Common {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyTilesForward() : processing an input forward");
             }
-            forwardName = getActionConfig(actionServlet, actionPath, request, context).getInput();
+            forwardName = getActionConfig(actionPath, request, context).getInput();
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyTilesForward() : retrieved input forward name = " + forwardName);
             }
@@ -188,13 +190,7 @@ public class Common {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyTilesForward() : processing normal forward");
             }
-            ActionForward expectedForward = findForward(actionPath, forwardName, request, context, actionServlet);
-            if (expectedForward == null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("verifyTilesForward() : looking for global forward declaration");
-                }
-                expectedForward = actionServlet.findForward(forwardName);
-            }
+            ForwardConfig expectedForward = findForward(actionPath, forwardName, request, context);
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
@@ -217,10 +213,10 @@ public class Common {
      *
      * @throws AssertionFailedError if expected and actual paths do not match.
      */
-    protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
+    protected static void verifyForwardPath(String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
 
         if (logger.isTraceEnabled())
-            logger.trace("Entering verifyForwardPath() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", forwardName = " + forwardName + ", actualForwardPath = " + actualForwardPath);
+            logger.trace("Entering verifyForwardPath() : actionPath = " + actionPath + ", forwardName = " + forwardName + ", actualForwardPath = " + actualForwardPath);
 
         boolean usesTiles = false;
         boolean useModules = false;
@@ -229,7 +225,7 @@ public class Common {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : processing an input forward");
             }
-            forwardName = getActionConfig(actionServlet, actionPath, request, context).getInput();
+            forwardName = getActionConfig(actionPath, request, context).getInput();
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : retrieved input forward name = " + forwardName);
             }
@@ -260,13 +256,7 @@ public class Common {
                     throw new AssertionFailedError("Expected a null forward from action, but received '" + actualForwardPath + "'");
             }
 
-            ActionForward expectedForward = findForward(actionPath, forwardName, request, context, actionServlet);
-            if (expectedForward == null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("verifyForwardPath() : looking for global forward declaration");
-                }
-                expectedForward = actionServlet.findForward(forwardName);
-            }
+            ForwardConfig expectedForward = findForward(actionPath, forwardName, request, context);
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
@@ -370,11 +360,11 @@ public class Common {
     /**
      * Returns any ActionForm instance stored in the request or session, if available.
      */
-    protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request, ServletContext context) {
+    protected static ActionForm getActionForm(String actionPath, HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering getActionForm() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", request = " + request + ", context = " + context);
+            logger.trace("Entering getActionForm() : actionPath = " + actionPath + ", request = " + request + ", context = " + context);
         ActionForm form;
-        ActionMapping actionConfig = getActionConfig(actionServlet, actionPath, request, context);
+        ActionConfig actionConfig = getActionConfig(actionPath, request, context);
         if ("request".equals(actionConfig.getScope())) {
             if (logger.isDebugEnabled()) {
                 logger.debug("getActionForm() : looking for form in request scope");
@@ -392,11 +382,26 @@ public class Common {
         return form;
     }
 
-    protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context, ActionServlet actionServlet) {
+    /**
+     * Returns a ForwardConfig for the given forward name.  This method first searches for the forward in the supplied
+     * action mapping.  If it is not defined there, or if the mapping is not provided, it searches for it globally.
+     */
+    protected static ForwardConfig findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering findForward() : mappingName = " + mappingName + ", forwardName = " + forwardName + ", request = " + request + ", context = " + context + ", actionServlet = " + actionServlet);
-        ActionMapping mapping = getActionConfig(actionServlet, mappingName, request, context);
-        ActionForward forward =  mapping == null ? null : mapping.findForward(forwardName);
+            logger.trace("Entering findForward() : mappingName = " + mappingName + ", forwardName = " + forwardName + ", request = " + request + ", context = " + context);
+        ForwardConfig forward = null;
+        // first, look for forward in mapping (if it's defined)
+        if (mappingName != null) {
+            ActionConfig mapping = getActionConfig(mappingName, request, context);
+            forward =  mapping == null ? null : mapping.findForwardConfig(forwardName);
+        }
+        // if it's not there, check for global forwards
+        if (forward == null) {
+            if (logger.isDebugEnabled())
+                logger.debug("findForward() : looking for forward globally");
+            ModuleConfig moduleConfig = getModuleConfig(request,context);
+            forward = moduleConfig.findForwardConfig(forwardName);
+        }
         if (logger.isDebugEnabled()) {
             logger.debug("findForward() : retrieved forward = " + forward);
         }
@@ -405,19 +410,13 @@ public class Common {
         return forward;
     }
 
-    protected static ActionMapping getActionConfig(ActionServlet actionServlet, String mappingName, HttpServletRequest request, ServletContext context) {
+    /**
+     * Returns the configuration for the given action mapping.
+     */
+    protected static ActionConfig getActionConfig(String mappingName, HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering getActionConfig() : actionServlet = " + actionServlet + ", mappingName = " + mappingName + ", request = " + request + ", context = " + context);
-        if (logger.isDebugEnabled()) {
-            logger.debug("getActionConfig() : looking for config in request context");
-        }
-        ModuleConfig config = (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
-        if (config == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("getActionConfig() : looking for config in application context");
-            }
-            config = (ModuleConfig) context.getAttribute(Globals.MODULE_KEY);
-        }
+            logger.trace("Entering getActionConfig() : mappingName = " + mappingName + ", request = " + request + ", context = " + context);
+        ModuleConfig config = getModuleConfig(request, context);
         ActionMapping actionMapping = (ActionMapping) config.findActionConfig(mappingName);
         if (logger.isDebugEnabled()) {
             logger.debug("getActionConfig() : retrieved mapping = " + actionMapping);
@@ -427,10 +426,35 @@ public class Common {
         return actionMapping;
     }
 
-    protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context, ActionServlet actionServlet) {
+    /**
+     * Returns the configuration for the current module.
+     */
+    protected static ModuleConfig getModuleConfig(HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering setActionForm() : form = " + form + ", request = " + request + ", actionPath = " + actionPath + ", context = " + context + ", actionServlet = " + actionServlet);
-        ActionMapping actionConfig = getActionConfig(actionServlet, actionPath, request, context);
+            logger.trace("Entering getModuleConfig() : request = " + request + ", context = " + context);
+        if (logger.isDebugEnabled()) {
+            logger.debug("getModuleConfig() : looking for config in request context");
+        }
+        ModuleConfig config = (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
+        if (config == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("getModuleConfig() : looking for config in application context");
+            }
+            config = (ModuleConfig) context.getAttribute(Globals.MODULE_KEY);
+        }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting getModuleConfig() : returning " + config);
+        return config;
+
+    }
+
+    /**
+     * Sets an ActionForm instance in the request.
+     */
+    protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering setActionForm() : form = " + form + ", request = " + request + ", actionPath = " + actionPath + ", context = " + context);
+        ActionConfig actionConfig = getActionConfig(actionPath, request, context);
         if (actionConfig.getScope().equals("request"))  {
             if (logger.isDebugEnabled()) {
                 logger.debug("setActionForm() : setting form in request context");

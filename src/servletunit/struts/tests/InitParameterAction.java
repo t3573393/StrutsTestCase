@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class InitParameterAction extends Action {
 
-    public ActionForward perform(ActionMapping mapping,
+    public ActionForward execute(ActionMapping mapping,
                                  ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {

@@ -22,7 +22,6 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
 import servletunit.HttpServletRequestSimulator;
@@ -166,12 +165,12 @@ public class MockStrutsTestCase extends TestCase {
 
     /**
      * Set this TestCase to use a given HttpServletRequestWrapper
-     * class when calling Action.perform().  Note that if this
+     * class when calling Action.execute().  Note that if this
      * method is not called, then the normal HttpServletRequest
      * object is used.
      *
      * @param wrapper an HttpServletRequestWrapper object to be
-     * used when calling Action.perform().
+     * used when calling Action.execute().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
         if (logger.isDebugEnabled())
@@ -234,12 +233,12 @@ public class MockStrutsTestCase extends TestCase {
 
     /**
      * Set this TestCase to use a given HttpServletResponseWrapper
-     * class when calling Action.perform().  Note that if this
+     * class when calling Action.execute().  Note that if this
      * method is not called, then the normal HttpServletResponse
      * object is used.
      *
      * @param wrapper an HttpServletResponseWrapper object to be
-     * used when calling Action.perform().
+     * used when calling Action.execute().
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
         if (logger.isDebugEnabled())
@@ -339,7 +338,7 @@ public class MockStrutsTestCase extends TestCase {
      * for further validation.
      *
      * @exception AssertionFailedError if there are any execution
-     * errors while calling Action.perform()
+     * errors while calling Action.execute()
      *
      */
     public void actionPerform() {
@@ -358,11 +357,11 @@ public class MockStrutsTestCase extends TestCase {
         } catch (ServletException se) {
             if (logger.isDebugEnabled())
                 logger.debug("Error in actionPerform()",se.getRootCause());
-            fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
+            fail("Error running Action.execute(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (Exception ex) {
             if (logger.isDebugEnabled())
                 logger.debug("Error in actionPerform()",ex);
-            fail("Error running action.perform(): " + ex.getClass() + " - " + ex.getMessage());
+            fail("Error running Action.execute(): " + ex.getClass() + " - " + ex.getMessage());
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting actionPerform()");
@@ -627,7 +626,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyForward() : forwardName = " + forwardName);
         init();
-        Common.verifyForwardPath(actionServlet,actionPath,forwardName,getActualForward(),false,request,config.getServletContext(),config);
+        Common.verifyForwardPath(actionPath,forwardName,getActualForward(),false,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyForward()");
     }
@@ -682,7 +681,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyInputForward()");
         init();
-        Common.verifyForwardPath(actionServlet,actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
+        Common.verifyForwardPath(actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyInputForward()");
     }
@@ -703,7 +702,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyTilesForward(String forwardName, String definitionName) {
         init();
-        Common.verifyTilesForward(actionServlet,actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
+        Common.verifyTilesForward(actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
     }
 
     /**
@@ -719,7 +718,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyInputTilesForward(String definitionName) {
         init();
-        Common.verifyTilesForward(actionServlet,actionPath,null,definitionName,true,request,config.getServletContext(),config);
+        Common.verifyTilesForward(actionPath,null,definitionName,true,request,config.getServletContext(),config);
     }
 
     /**
@@ -740,7 +739,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyActionErrors() : errorNames = " + errorNames);
         init();
-        Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
+        Common.verifyActionMessages(request,errorNames,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyActionErrors()");
     }
@@ -757,7 +756,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyNoActionErrors()");
         init();
-        Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
+        Common.verifyNoActionMessages(request,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyNoActionErrors()");
     }
@@ -813,7 +812,7 @@ public class MockStrutsTestCase extends TestCase {
         init();
         if (logger.isDebugEnabled())
             logger.debug("Exiting getActionForm()");
-        return Common.getActionForm(actionServlet,actionPath,request,context);
+        return Common.getActionForm(actionPath,request,context);
     }
 
     /**
@@ -831,7 +830,8 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Entering setActionForm() : form = " + form);
         init();
         // make sure action servlet is intialized
-        Common.setActionForm(form,request,actionPath,context,this.getActionServlet());
+        getActionServlet();
+        Common.setActionForm(form,request,actionPath,context);
         if (logger.isDebugEnabled())
             logger.debug("Exiting setActionForm()");
     }

@@ -29,7 +29,7 @@ public class ComplexFormAction extends Action {
      * It is deliberately checked in empty, as it is a place-
      * holder.
      */
-    public ActionForward perform(ActionMapping mapping,
+    public ActionForward execute(ActionMapping mapping,
                                  ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {

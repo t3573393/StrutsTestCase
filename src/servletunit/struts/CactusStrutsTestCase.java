@@ -18,12 +18,11 @@ package servletunit.struts;
 
 import junit.framework.AssertionFailedError;
 import org.apache.cactus.ServletTestCase;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionServlet;
-import org.apache.struts.Globals;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -151,12 +150,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
     /**
      * Set this TestCase to use a given HttpServletRequestWrapper
-     * class when calling Action.perform().  Note that if this
+     * class when calling Action.execute().  Note that if this
      * method is not called, then the normal HttpServletRequest
      * object is used.
      *
      * @param wrapper an HttpServletRequestWrapper object to be
-     * used when calling Action.perform().
+     * used when calling Action.execute().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
         if (logger.isDebugEnabled())
@@ -212,12 +211,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
     /**
      * Set this TestCase to use a given HttpServletResponseWrapper
-     * class when calling Action.perform().  Note that if this
+     * class when calling Action.execute().  Note that if this
      * method is not called, then the normal HttpServletResponse
      * object is used.
      *
      * @param wrapper an HttpServletResponseWrapper object to be
-     * used when calling Action.perform().
+     * used when calling Action.execute().
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
         if (logger.isDebugEnabled())
@@ -461,10 +460,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * Executes the Action instance to be tested.  This method initializes
      * the ActionServlet, sets up and optionally validates the ActionForm
      * bean associated with the Action to be tested, and then calls the
-     * Action.perform() method.  Results are stored for further validation.
+     * Action.execute() method.  Results are stored for further validation.
      *
      * @exception AssertionFailedError if there are any execution
-     * errors while calling Action.perform() or ActionForm.validate().
+     * errors while calling Action.execute() or ActionForm.validate().
      *
      */
     public void actionPerform() {
@@ -475,7 +474,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             HttpServletRequest request = this.request;
             HttpServletResponse response = this.response;
             // make sure errors are cleared from last test.
-            request.removeAttribute(Action.ERROR_KEY);
+            request.removeAttribute(Globals.ERROR_KEY);
             request.removeAttribute(Globals.MESSAGE_KEY);
 
             if (this.requestWrapper != null)
@@ -490,11 +489,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
         } catch (ServletException se) {
             if (logger.isDebugEnabled())
                 logger.debug("Error in actionPerform()",se.getRootCause());
-            fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
+            fail("Error running Action.execute(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (IOException e) {
             if (logger.isDebugEnabled())
                 logger.debug("Error in actionPerform()",e);
-            fail("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
+            fail("Error running Action.execute(): " + e.getClass() + " - " + e.getMessage());
         }
     }
 
@@ -543,7 +542,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyForward() : forwardName = " + forwardName);
         init();
-        Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,getActualForward(),false,request,config.getServletContext(),config);
+        Common.verifyForwardPath(request.getPathInfo(),forwardName,getActualForward(),false,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyForward()");
     }
@@ -599,7 +598,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyInputForward()");
         init();
-        Common.verifyForwardPath(actionServlet,request.getPathInfo(),null,getActualForward(),true,request,config.getServletContext(),config);
+        Common.verifyForwardPath(request.getPathInfo(),null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyInputForward()");
     }
@@ -620,7 +619,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyTilesForward(String forwardName, String definitionName) {
         init();
-        Common.verifyTilesForward(actionServlet,request.getPathInfo(),forwardName,definitionName,false,request,config.getServletContext(),config);
+        Common.verifyTilesForward(request.getPathInfo(),forwardName,definitionName,false,request,config.getServletContext(),config);
     }
 
     /**
@@ -636,7 +635,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyInputTilesForward(String definitionName) {
         init();
-        Common.verifyTilesForward(actionServlet,request.getPathInfo(),null,definitionName,true,request,config.getServletContext(),config);
+        Common.verifyTilesForward(request.getPathInfo(),null,definitionName,true,request,config.getServletContext(),config);
     }
 
     /**
@@ -657,7 +656,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyActionErrors() : errorNames = " + errorNames);
         init();
-        Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
+        Common.verifyActionMessages(request,errorNames,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyActionErrors()");
     }
@@ -673,7 +672,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyNoActionErrors()");
         init();
-        Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
+        Common.verifyNoActionMessages(request,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyNoActionErrors()");
     }
@@ -729,7 +728,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         init();
         if (logger.isDebugEnabled())
             logger.debug("Exiting getActionForm()");
-        return Common.getActionForm(actionServlet,request.getPathInfo(),request,config.getServletContext());
+        return Common.getActionForm(request.getPathInfo(),request,config.getServletContext());
     }
 
     /**
@@ -747,7 +746,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             logger.debug("Entering setActionForm() : form = " + form);
         init();
         // make sure ActionServlet is initialized.
-        Common.setActionForm(form,request,request.getPathInfo(),config.getServletContext(),this.getActionServlet());
+        Common.setActionForm(form,request,request.getPathInfo(),config.getServletContext());
         if (logger.isDebugEnabled())
             logger.debug("Exiting setActionForm()");
     }
