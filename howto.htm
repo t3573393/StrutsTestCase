@@ -20,7 +20,8 @@ for testing code based on the Struts framework.  StrutsTestCase uses <a href="ht
  StrutsTestCase does not require a running servlet engine, it's quick and easy to write unit test cases. 
 <br><br>
 <h2>Where does it live?</h2>
-StrutsTestCase for JUnit is hosted at <a href="http://sourceforge.net/projects/strutstestcase/">SourceForge</a>. You can find the latest and greatest release of StrutsTestCase <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">here.</a>
+StrutsTestCase for JUnit is hosted at <a href="http://sourceforge.net/projects/strutstestcase/">SourceForge</a>. You can find the latest and greatest release of StrutsTestCase <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">here.</a><br><br>
+Javadocs for all of the StrutsTestCase classes can be found <a href="api/index.html">here</a>.
 <h2>How does it work?</h2>
 Using the popular cookbook approach, let's consider the following code snippet:<br><br>
 <table border="0" cellspacing="2" cellpadding="2" align="center" bgcolor="#FEEACB">
@@ -132,9 +133,7 @@ public class TestLoginAction extends StrutsTestCase {
 <br>
 Finally, we need to get the ActionServlet to do its thing, which just involves executing the doPost method:
 <br><br>
-<i><b>NOTE:</b>You <i>must</i> have your WEB-INF directory accessible in your classpath, and it must contain
-your <code>struts-config.xml</code> file.  The ActionServlet controller looks up this file as <code>WEB-INF/struts-config.xml</code>,
-so the directory structure must be present.</i>
+<b>NOTE:</b> By default, the Struts ActionServlet will look for the file <code>WEB-INF/struts-config.xml</code>, so you must place the directory that <i>contains</i> WEB-INF in your CLASSPATH.  If you would like to use an alternate configuration file, please see the <a href="api/servletunit/struts/StrutsTestCase.html#setConfigFile(java.lang.String)">setConfigFile()</a> method for details on how this file is located.
 <br><br>
 <table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center"  border="0">
 <tr>
