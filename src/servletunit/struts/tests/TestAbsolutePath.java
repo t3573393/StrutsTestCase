@@ -31,8 +31,8 @@ public class TestAbsolutePath extends MockStrutsTestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        setServletConfigFile("/WEB-INF/web.xml");
         rootPath = System.getProperty("basedir");
+        setServletConfigFile(rootPath + "/src/examples/WEB-INF/web.xml");
     }
 
     public void testSuccessfulLogin() {
