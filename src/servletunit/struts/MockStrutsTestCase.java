@@ -29,7 +29,6 @@ import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
 import servletunit.ServletContextSimulator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.InputStream;
