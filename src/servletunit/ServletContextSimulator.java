@@ -289,9 +289,9 @@ public class ServletContextSimulator implements ServletContext
      * and <code>URLConnection</code> objects necessary to access
      * the resource.
      *
-     * <p>In this mock implementation, this method is exactly the same as
-     * <code>java.lang.Class.getResourceAsStream</code>,
-     * which uses a class loader.
+     * <p>In this mock implementation, this method first looks for
+     * the supplied pathname in the underlying filesystem; if it
+     * does not exist there, the default Java classloader is used.
      *
      *
      * @param path     a <code>String</code> specifying the path
