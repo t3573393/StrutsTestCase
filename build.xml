@@ -78,8 +78,10 @@
         <delete dir="${build.dir}" />
         <delete dir="${basedir}/dist" />
         <delete dir="${test.dir}" />
+	<delete dir="${basedir}/test.war"/>
 	<delete file="${basedir}/strutstest.zip"/>
 	<delete file="${basedir}/strutstest.tar.gz"/>
+	<delete file="${basedir}/strutstest-src.tar.gz"/>
     </target>
     
     <!-- Generate Javadocs for the application -->
