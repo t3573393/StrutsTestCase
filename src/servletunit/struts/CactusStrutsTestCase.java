@@ -337,6 +337,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
         // set up the ActionForm
         ActionForm form = null;
+	System.out.println("mapping.getAttribute = " + mapping.getAttribute());
         if (mapping.getAttribute() != null) {
             String formType = actionServlet.findFormBean(mapping.getAttribute()).getType();
             try {
@@ -376,14 +377,16 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
         try {
             this.forward = action.perform(mapping,form,request,response);
-            ActionForm retForm = null;
-            String scope = mapping.getScope();
-            if ("request".equals(scope)) {
-                retForm = (ActionForm)getRequest().getAttribute(mapping.getAttribute());
-            } else if ("session".equals(scope)) {
-                retForm = (ActionForm)getSession().getAttribute(mapping.getAttribute());
-            }
-            setActionForm(retForm);
+	    if (mapping.getAttribute() != null) {
+		ActionForm retForm = null;
+		String scope = mapping.getScope();
+		if ("request".equals(scope)) {
+		    retForm = (ActionForm)getRequest().getAttribute(mapping.getAttribute());
+		} else if ("session".equals(scope)) {
+		    retForm = (ActionForm)getSession().getAttribute(mapping.getAttribute());
+		}
+		setActionForm(retForm);
+	    }
         } catch (ServletException e) {
             e.printStackTrace();
             throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
