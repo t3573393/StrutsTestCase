@@ -24,7 +24,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionForward;
-import org.apache.struts.digester.Digester;
+import org.apache.commons.digester.Digester;
 import junit.framework.TestCase;
 import junit.framework.AssertionFailedError;
 import servletunit.HttpServletRequestSimulator;
