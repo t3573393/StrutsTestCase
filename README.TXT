@@ -1,4 +1,4 @@
-StrutsTestCase for JUnit - release 1.9.1
+StrutsTestCase for JUnit - release 1.9.5
 ----------------------------------------
 
 This is a point release that resolves outstanding issues
