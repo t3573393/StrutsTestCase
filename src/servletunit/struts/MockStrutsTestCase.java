@@ -82,12 +82,21 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
-     * Initializes the test fixture for this test. This method creates
+     * A check that every method should run to ensure that the
+     * base class setUp method has been called.
+     */
+    protected void init() {
+	if (!isInitialized)
+	    throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
+    }
+
+    /**
+     * Sets up the test fixture for this test.  This method creates
      * an instance of the ActionServlet, initializes it to validate
      * forms and turn off debugging, and creates a mock HttpServletRequest
      * and HttpServletResponse object to use in this test.
      */
-    protected void init() {
+    public void setUp() throws Exception {
 	if (!isInitialized) {
 	    if (actionServlet == null)
 		actionServlet = new ActionServlet();
@@ -99,16 +108,6 @@ public class MockStrutsTestCase extends TestCase {
 	    responseWrapper = null;
 	    isInitialized = true;
 	}
-    }
-
-    /**
-     * Sets up the test fixture for this test.  This method creates
-     * an instance of the ActionServlet, initializes it to validate
-     * forms and turn off debugging, and creates a mock HttpServletRequest
-     * and HttpServletResponse object to use in this test.
-     */
-    public void setUp() throws Exception {
-	init();
     }
 
     /**
@@ -389,6 +388,13 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
     init();
+	if (response.containsHeader("Location")) {
+	    String expectedRedirect = actionServlet.findMapping(actionPath).findForward(forwardName).getPath();
+	    String actualRedirect = response.getHeader("Location");
+	    if (!expectedRedirect.equals(actualRedirect))
+		fail("Was expecting redirect '" + expectedRedirect + "' but received redirect '" + actualRedirect + "'");
+	    return;
+	}
         RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
         Common.verifyForwardPath(actionServlet,actionPath,forwardName,dispatcher.getForward(),false);
     }
