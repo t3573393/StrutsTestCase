@@ -86,6 +86,10 @@
         <mkdir dir="${doc.dir}/api" />
 	<copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
 	<copy file="${basedir}/LICENSE.TXT" toDir="${distribute.dir}"/>
+	<mkdir dir="${distribute.dir}/examples" />
+	<copy todir="${distribute.dir}/examples" >
+	     <fileset dir="${src.dir}/servletunit/struts/examples"/>
+	</copy>
         <javadoc packagenames="servletunit,servletunit.struts"
            sourcepath="${src.dir}"
            destdir="${doc.dir}/api"
