@@ -29,7 +29,6 @@ import servletunit.ServletContextSimulator;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.InputStream;
-import java.io.File;
 import java.net.URL;
 
 /**
@@ -366,24 +365,14 @@ public class MockStrutsTestCase extends TestCase {
      * Sets the location of the web.xml configuration file to be used
      * to set up the servlet context and configuration for this test.
      * This method supports both init-param and context-param tags,
-     * setting the ServletConfig and ServletContext appropriately.<br><br>
-     * The rules for searching for the configuration files are the same
-     * as the rules associated with calling Class.getResourceAsStream().
-     * Briefly, this method delegates the call to its class loader, after
-     * making these changes to the resource name: if the resource name starts
-     * with "/", it is unchanged; otherwise, the package name is prepended
-     * to the resource name after converting "." to "/". <br><br>
-     * To be on the safe side, always make sure the pathname refers to a
-     * file in the same directory as your test, or make sure it begins
-     * with a "/" character.
+     * setting the ServletConfig and ServletContext appropriately.
+     * This method can take either an absolute path, or a relative path.  If an
+     * absolute path is supplied, the configuration file will be loaded from the
+     * underlying filesystem; otherwise, the ServletContext loader will be used.
      */
     public void setServletConfigFile(String pathname) {
         init();
-        // ugly hack to get this to play ball with Class.getResourceAsStream()
-        if (!pathname.startsWith("/")) {
-            String prefix = this.getClass().getPackage().getName().replace('.','/');
-            pathname = "/" + prefix + "/" + pathname;
-        }
+
         // pull in the appropriate parts of the
         // web.xml file -- first the init-parameters
         Digester digester = new Digester();
@@ -396,7 +385,7 @@ public class MockStrutsTestCase extends TestCase {
         digester.addCallParam("web-app/servlet/init-param/param-name", 0);
         digester.addCallParam("web-app/servlet/init-param/param-value", 1);
         try {
-            InputStream input = getClass().getResourceAsStream(pathname);
+            InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
             digester.parse(input);
@@ -415,7 +404,7 @@ public class MockStrutsTestCase extends TestCase {
         digester.addCallParam("web-app/context-param/param-name", 0);
         digester.addCallParam("web-app/context-param/param-value", 1);
         try {
-            InputStream input = getClass().getResourceAsStream(pathname);
+            InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
             digester.parse(input);
