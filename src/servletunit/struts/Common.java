@@ -142,10 +142,13 @@ public class Common {
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
-	    String tilesForward = getTilesForward(forwardName,request,context,config);
-	    if (tilesForward != null)
-		forwardName = tilesForward;
-        }
+	    if (actionServlet instanceof org.apache.struts.tiles.ActionComponentServlet) {
+		// only run this check if we're using TILES
+		String tilesForward = getTilesForward(forwardName,request,context,config);
+		if (tilesForward != null)
+		    forwardName = tilesForward;
+	    }
+	}
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
     }
