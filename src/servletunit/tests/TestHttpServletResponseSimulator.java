@@ -73,12 +73,18 @@ public class TestHttpServletResponseSimulator extends TestCase {
         assertTrue(response.encodeRedirectUrl(url).indexOf(url)!=-1);
     }
 
+    /**
+     * tests the setHeader() and containsHeader() methods
+     */
     public void testSetHeader() {
         HttpServletResponseSimulator response = new HttpServletResponseSimulator();
         response.setHeader("TestName", "testValue");
         assertTrue(response.containsHeader("TestName"));
     }
 
+    /**
+     * tests the setIntHeader() and containsHeader() methods.
+     */
     public void testSetIntHeader() {
         HttpServletResponseSimulator response = new HttpServletResponseSimulator();
         response.setIntHeader("TestName", 5);
@@ -90,10 +96,50 @@ public class TestHttpServletResponseSimulator extends TestCase {
         return new TestSuite(TestHttpServletResponseSimulator.class);
     }
 
+    /**
+     * tests the send redirect method
+     * @throws Exception
+     */
     public void testSendRedirect() throws Exception{
         HttpServletResponseSimulator response = new HttpServletResponseSimulator();
         response.sendRedirect("http://sourceforge.net");
         response.containsHeader("Location");
+    }
+
+    /**
+     * tests that getContentType() returns the value previously set
+     * by calling setContentType() or setHeader() with a "Content-type"
+     * parameter
+     */
+    public void testContentType(){
+        String type = "image/gif";
+        String type2 = "text/xml";
+        String type3 = "video/mpeg";
+        HttpServletResponseSimulator response = new HttpServletResponseSimulator();
+        response.setContentType(type);
+        assertEquals(type, response.getContentType());
+        response.setHeader("Content-type", type2);
+        assertEquals(type2, response.getContentType());
+        response.addHeader("Content-type", type3);
+        assertEquals(type3, response.getContentType());
+    }
+
+    /**
+     * tests that getContentLength() returns the value previously set
+     * by calling setContentLength() or setIntHeader() with a "Content-length"
+     * parameter
+     */
+    public void testContentLength(){
+        int len1 = 25;
+        int len2 = 156;
+        int len3 = 42;
+        HttpServletResponseSimulator response = new HttpServletResponseSimulator();
+        response.setContentLength(len1);
+        assertEquals(len1, response.getContentLength());
+        response.setIntHeader("Content-length", len2);
+        assertEquals(len2, response.getContentLength());
+        response.addIntHeader("Content-length", len3);
+        assertEquals(len3, response.getContentLength());
     }
 
 }

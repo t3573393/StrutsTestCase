@@ -33,7 +33,11 @@ package servletunit;
 // http://www.equitytg.com.
 // 954.360.9800
 // dfoster@equitytg.com
-
+//
+// Additions by:
+// Sean Pritchard
+// smpritchard@yahoo.com
+//
 import junit.framework.AssertionFailedError;
 
 import javax.servlet.ServletOutputStream;
@@ -161,7 +165,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
      public void addCookie(Cookie cookie)
     {
-	cookies.put( cookie.getName(), cookie );
+    cookies.put( cookie.getName(), cookie );
     }
 
     /**
@@ -169,7 +173,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      * not been added to the repsonse.
      */
     public Cookie findCookie( String name ) {
-	return (Cookie) cookies.get( name );
+    return (Cookie) cookies.get( name );
     }
 
     /**
@@ -177,34 +181,34 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void addDateHeader(String name, long date)
     {
-	this.headers.put(name,new Long(date).toString());
+    this.headers.put(name,new Long(date).toString());
     }
-    
+
     /**
      * Adds a response header with the given name and value.
      */
     public void addHeader(String name, String value)
     {
-	this.setHeader(name,value);
+    this.setHeader(name,value);
     }
-    
+
     /**
      * Returns a given header field, or null if this header
      * has not been set.
      */
     public String getHeader(String name) {
-	if (headers.containsKey(name))
-	    return (String) headers.get(name);
-	else
-	    return null;
+    if (headers.containsKey(name))
+        return (String) headers.get(name);
+    else
+        return null;
     }
-    
+
     /**
-     * Adds a response header with the given name and integer value. 
+     * Adds a response header with the given name and integer value.
      */
     public void addIntHeader(String name, int value)
     {
-	this.addIntHeader(name,value);
+    this.setIntHeader(name,value);
     }
 
     /**
@@ -254,26 +258,26 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void flushBuffer() throws IOException
     {
-	throw new UnsupportedOperationException("flushBuffer operation is not supported!");
+    throw new UnsupportedOperationException("flushBuffer operation is not supported!");
     }
-    
+
 
     /**
      * This method is not supported.
      */
     public int getBufferSize()
     {
-	throw new UnsupportedOperationException("getBufferSize operation is not supported!");
+    throw new UnsupportedOperationException("getBufferSize operation is not supported!");
     }
-    
+
     /**
      * This method is not supported.
      */
     public String getCharacterEncoding()
     {
-	throw new UnsupportedOperationException("getBufferSize operation is not supported!");
+    throw new UnsupportedOperationException("getBufferSize operation is not supported!");
     }
-    
+
     /**
      * Returns the locale assigned to the response.
      *
@@ -283,14 +287,14 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public Locale getLocale()
     {
-	if (locale == null)
-	    return Locale.US;
-	else
-	    return locale;
+    if (locale == null)
+        return Locale.US;
+    else
+        return locale;
     }
-    
-    
-    
+
+
+
     /**
      * Returns a {@link ServletOutputStream} suitable for writing binary
      * data in the response. The servlet container does not encode the
@@ -385,8 +389,8 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public StringBuffer getWriterBuffer()
     {
-	if (stringWriter==null) return null;
-	return stringWriter.getBuffer();
+    if (stringWriter==null) return null;
+    return stringWriter.getBuffer();
     }
 
     //TODO: better documentation
@@ -422,7 +426,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void resetBuffer()
     {
-	throw new UnsupportedOperationException("resetBuffer operation is not supported.");
+    throw new UnsupportedOperationException("resetBuffer operation is not supported.");
     }
 
     /**
@@ -470,7 +474,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void setBufferSize(int size)
     {
-	throw new UnsupportedOperationException("setBufferSize operation not supported.");
+    throw new UnsupportedOperationException("setBufferSize operation not supported.");
     }
 
 
@@ -486,7 +490,15 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void setContentLength(int len)
     {
-	this.contentLength = len;
+    this.contentLength = len;
+    }
+
+    /**
+     * returns the content length previously set in setContentLength()
+     * @return the content length
+     */
+    public int getContentLength(){
+        return this.contentLength;
     }
 
     /**
@@ -507,16 +519,24 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void setContentType(String type)
     {
-	this.contentType = type;
+    this.contentType = type;
     }
-    
+
+    /**
+     * returns the content type previously set in setContentType()
+     * @return the content type
+     */
+    public String getContentType(){
+        return this.contentType;
+    }
+
 
     /**
      * This method is not supported.
      */
     public void setDateHeader(String name, long date)
     {
-	this.addDateHeader(name,date);
+    this.addDateHeader(name,date);
     }
 
     /**
