@@ -53,6 +53,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     HttpServletResponseWrapper responseWrapper;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+    boolean requestPathIsSet = false;
     String moduleName;
 
     protected static Log logger = LogFactory.getLog(CactusStrutsTestCase.class);
@@ -334,6 +335,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 logger.debug("setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
             }
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
+            this.requestPathIsSet = true;
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting setRequestPathInfo()");
@@ -468,6 +470,9 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void actionPerform() {
         if (logger.isDebugEnabled())
             logger.debug("Entering actionPerform()");
+        if(!this.requestPathIsSet){
+            throw new IllegalStateException("You must call setRequestPathInfo() prior to calling actionPerform().");
+        }
         init();
         try {
             HttpServletRequest request = this.request;

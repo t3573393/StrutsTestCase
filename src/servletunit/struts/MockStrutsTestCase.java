@@ -434,7 +434,6 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Entering setRequestPathInfo() : pathInfo = " + pathInfo);
         init();
         this.setRequestPathInfo("",pathInfo);
-        this.requestPathSet = true;
         if (logger.isDebugEnabled())
             logger.debug("Exiting setRequestPathInfo()");
     }
