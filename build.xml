@@ -226,8 +226,12 @@
         </junit>
     </target>
 
+    <target name="deploy">
+        <copy todir="${appserver.home}/webapps" file="${basedir}/test.war"/>
+    </target>
+
     <!-- Run all the build targets -->
-    <target name="all" depends="clean,build,package"/>
+    <target name="all" depends="clean,build,package,deploy"/>
 
 </project>
 
