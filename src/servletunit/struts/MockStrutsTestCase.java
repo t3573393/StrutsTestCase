@@ -24,6 +24,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.digester.Digester;
 import junit.framework.TestCase;
 import junit.framework.AssertionFailedError;
 import servletunit.HttpServletRequestSimulator;
@@ -32,7 +33,10 @@ import servletunit.ServletContextSimulator;
 import servletunit.ServletConfigSimulator;
 import servletunit.RequestDispatcherSimulator;
 import java.util.Iterator;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
+import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -98,6 +102,10 @@ public class MockStrutsTestCase extends TestCase {
             response = new HttpServletResponseSimulator();
 	    requestWrapper = null;
 	    responseWrapper = null;
+	    
+	    
+			
+
         } catch (Exception e) {
             throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
         }
@@ -304,6 +312,34 @@ public class MockStrutsTestCase extends TestCase {
             pathname = "/" + prefix + "/" + pathname;
         }
         this.config.setInitParameter("config",pathname);
+    }
+
+    public void setServletConfigFile(String pathname) {
+	 // ugly hack to get this to play ball with Class.getResourceAsStream()
+        if (!pathname.startsWith("/")) {
+            String prefix = this.getClass().getPackage().getName().replace('.','/');
+            pathname = "/" + prefix + "/" + pathname;
+        }
+	// pull in the appropriate parts of the
+	    // web.xml file.
+	    Digester digester = new Digester();
+	    URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
+	    if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
+	    digester.push(config);
+	    digester.setDebug(0);
+	    digester.setValidating(false);
+	    digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
+	    digester.addCallParam("web-app/servlet/init-param/param-name", 0);
+	    digester.addCallParam("web-app/servlet/init-param/param-value", 1);
+	    try {
+		InputStream input = getClass().getResourceAsStream(pathname);
+		if(input==null) 
+		    throw new AssertionFailedError("Invalid pathname: " + pathname);
+		digester.parse(input);
+		input.close();
+	    } catch (Exception e) {
+		throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
+	    }
     }
 
     /**
