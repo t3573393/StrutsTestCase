@@ -581,6 +581,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
             logger.debug("Exiting verifyInputForward()");
     }
 
+    public void verifyTilesForward(String forwardName, String definitionName) {
+        Common.verifyTilesForward(actionServlet,request.getPathInfo(),forwardName,definitionName,false,request,config.getServletContext(),config);
+    }
+
+    public void verifyInputTilesForward(String definitionName) {
+        Common.verifyTilesForward(actionServlet,request.getPathInfo(),null,definitionName,true,request,config.getServletContext(),config);
+    }
+
     /**
      * Verifies if the ActionServlet controller sent these error messages.
      * There must be an exact match between the provided error messages, and

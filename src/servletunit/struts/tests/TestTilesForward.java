@@ -39,12 +39,14 @@ public class TestTilesForward extends MockStrutsTestCase {
         actionPerform();
         verifyForward("success");
         verifyForwardPath("/layouts/pageLayout.jsp");
+        verifyTilesForward("success","page.library");
     }
 
     public void testTilesInputForward() {
         setRequestPathInfo("tiles","/tilesInputForward.do");
         actionPerform();
         verifyInputForward();
+        verifyInputTilesForward("page.library");
     }
 
 

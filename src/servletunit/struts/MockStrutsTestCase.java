@@ -21,10 +21,10 @@ import junit.framework.TestCase;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.Globals;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
-import org.apache.struts.action.Action;
-import org.apache.struts.Globals;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
@@ -32,8 +32,8 @@ import servletunit.ServletContextSimulator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import java.io.InputStream;
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * MockStrutsTestCase is an extension of the base JUnit testcase that
@@ -624,6 +624,14 @@ public class MockStrutsTestCase extends TestCase {
         Common.verifyForwardPath(actionServlet,actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyInputForward()");
+    }
+
+    public void verifyTilesForward(String forwardName, String definitionName) {
+        Common.verifyTilesForward(actionServlet,actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
+    }
+
+    public void verifyInputTilesForward(String definitionName) {
+        Common.verifyTilesForward(actionServlet,actionPath,null,definitionName,true,request,config.getServletContext(),config);
     }
 
     /**
