@@ -83,7 +83,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setUp() throws Exception {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setUp()");
+            logger.debug("Entering setUp()");
         try {
             if (actionServlet == null)
                 actionServlet = new ActionServlet();
@@ -97,10 +97,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
             this.response = new StrutsResponseWrapper(this.response);
             isInitialized = true;
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setUp()");
+                logger.debug("Exiting setUp()");
         } catch (Exception e) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting!servletunit.struts.CactusStrutsTestCase.setUp()",e);
+                logger.debug("Error in setUp()",e);
             throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
         }
     }
@@ -111,10 +111,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public HttpServletRequest getRequest() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getRequest()");
+            logger.debug("Entering getRequest()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getRequest()");
+            logger.debug("Exiting getRequest()");
         return this.request;
     }
 
@@ -126,18 +126,18 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public HttpServletRequestWrapper getRequestWrapper() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getRequestWrapper()");
+            logger.debug("Entering getRequestWrapper()");
         init();
         if (requestWrapper == null) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getRequestWrapper()");
+                logger.debug("Exiting getRequestWrapper()");
             return new HttpServletRequestWrapper(this.request);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("servletunit.struts.CactusStrutsTestCase.getRequestWrapper() : wrapper class is '" + requestWrapper.getClass() + "'");
+                logger.debug("getRequestWrapper() : wrapper class is '" + requestWrapper.getClass() + "'");
             }
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getRequestWrapper()");
+                logger.debug("Exiting getRequestWrapper()");
             return requestWrapper;
         }
     }
@@ -153,7 +153,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setRequestWrapper() : wrapper = " + wrapper);
+            logger.debug("Entering setRequestWrapper() : wrapper = " + wrapper);
         init();
         if (wrapper == null) {
             throw new IllegalArgumentException("wrapper class cannot be null!");
@@ -163,7 +163,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             this.requestWrapper = wrapper;
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setRequestWrapper()");
+            logger.debug("Exiting setRequestWrapper()");
     }
 
     /**
@@ -172,10 +172,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public HttpServletResponse getResponse() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getResponse()");
+            logger.debug("Entering getResponse()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getResponse()");
+            logger.debug("Exiting getResponse()");
         return this.response;
     }
 
@@ -187,18 +187,18 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public HttpServletResponseWrapper getResponseWrapper() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getResponseWrapper()");
+            logger.debug("Entering getResponseWrapper()");
         init();
         if (responseWrapper == null) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getResponseWrapper()");
+                logger.debug("Exiting getResponseWrapper()");
             return new HttpServletResponseWrapper(this.response);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("servletunit.struts.CactusStrutsTestCase.getRequestWrapper() : wrapper class is '" + responseWrapper.getClass() + "'");
+                logger.debug("getRequestWrapper() : wrapper class is '" + responseWrapper.getClass() + "'");
             }
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getResponseWrapper()");
+                logger.debug("Exiting getResponseWrapper()");
             return responseWrapper;
         }
     }
@@ -214,7 +214,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setResponseWrapper() : wrapper = " + wrapper.getClass());
+            logger.debug("Entering setResponseWrapper() : wrapper = " + wrapper.getClass());
         init();
         if (wrapper == null)
             throw new IllegalArgumentException("wrapper class cannot be null!");
@@ -222,7 +222,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             if (wrapper.getResponse() == null)
                 wrapper.setResponse(this.response);
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setResponseWrapper()");
+                logger.debug("Exiting setResponseWrapper()");
             this.responseWrapper = wrapper;
         }
     }
@@ -233,10 +233,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public HttpSession getSession() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getSession()");
+            logger.debug("Entering getSession()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getSession()");
+            logger.debug("Exiting getSession()");
         return this.session;
     }
 
@@ -249,11 +249,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void addRequestParameter(String parameterName, String parameterValue)
     {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.addRequestParameter() : paramaterName = " + parameterName + ", parameterValue = " + parameterValue);
+            logger.debug("Entering addRequestParameter() : paramaterName = " + parameterName + ", parameterValue = " + parameterValue);
         init();
         ((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValue);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.addRequestParameter()");
+            logger.debug("Exiting addRequestParameter()");
     }
 
     /**
@@ -265,11 +265,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void addRequestParameter(String parameterName, String[] parameterValues)
     {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.addRequestParameter() : paramaterName = " + parameterName + ", parameterValue = " + parameterValues);
+            logger.debug("Entering addRequestParameter() : paramaterName = " + parameterName + ", parameterValue = " + parameterValues);
         init();
         ((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValues);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.addRequestParameter()");
+            logger.debug("Exiting addRequestParameter()");
     }
 
     /**
@@ -282,11 +282,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setRequestPathInfo(String pathInfo) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setRequestPathInfo() : pathInfo = " + pathInfo);
+            logger.debug("Entering setRequestPathInfo() : pathInfo = " + pathInfo);
         init();
         this.setRequestPathInfo("",pathInfo);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setRequestPathInfo()");
+            logger.debug("Exiting setRequestPathInfo()");
     }
 
 
@@ -306,7 +306,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setRequestPathInfo() : moduleName = " + moduleName + ", pathInfo = " + pathInfo);
+            logger.debug("Entering setRequestPathInfo() : moduleName = " + moduleName + ", pathInfo = " + pathInfo);
         init();
         ((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
         if (moduleName != null) {
@@ -319,7 +319,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setRequestPathInfo()");
+            logger.debug("Exiting setRequestPathInfo()");
     }
 
     /**
@@ -331,11 +331,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setInitParameter(String key, String value){
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setInitParameter() : key = " + key + ", value = " + value);
+            logger.debug("Entering setInitParameter() : key = " + key + ", value = " + value);
         this.config.setInitParameter(key, value);
         this.actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setInitParameter()");
+            logger.debug("Exiting setInitParameter()");
     }
 
     /**
@@ -346,11 +346,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setConfigFile(String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setConfigFile() : pathname = " + pathname);
+            logger.debug("Entering setConfigFile() : pathname = " + pathname);
         init();
         setConfigFile(null,pathname);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setConfigFile()");
+            logger.debug("Exiting setConfigFile()");
     }
 
     /**
@@ -364,7 +364,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setConfigFile(String moduleName, String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setConfigFile() : moduleName = " + moduleName + ", pathname = " + pathname);
+            logger.debug("Entering setConfigFile() : moduleName = " + moduleName + ", pathname = " + pathname);
         init();
         if (moduleName == null)
             this.config.setInitParameter("config",pathname);
@@ -372,7 +372,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             this.config.setInitParameter("config/" + moduleName,pathname);
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setConfigFile()");
+            logger.debug("Exiting setConfigFile()");
     }
 
     /**
@@ -382,7 +382,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public ActionServlet getActionServlet() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getActionServlet()");
+            logger.debug("Entering getActionServlet()");
         init();
         try {
             if (!actionServletIsInitialized) {
@@ -412,11 +412,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 actionServletIsInitialized = true;
             }
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getActionServlet()");
+                logger.debug("Exiting getActionServlet()");
             return this.actionServlet;
         } catch (ServletException e) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting!servletunit.struts.CactusStrutsTestCase.getActionServlet()",e.getRootCause());
+                logger.debug("Error in getActionServlet()",e.getRootCause());
             throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
         }
     }
@@ -428,14 +428,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setActionServlet(ActionServlet servlet) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setActionServlet() : servlet = " + servlet);
+            logger.debug("Entering setActionServlet() : servlet = " + servlet);
         init();
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setActionServlet()");
+            logger.debug("Exiting setActionServlet()");
     }
 
     /**
@@ -450,7 +450,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void actionPerform() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.actionPerform()");
+            logger.debug("Entering actionPerform()");
         init();
         try {
             HttpServletRequest request = this.request;
@@ -467,14 +467,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
             ActionServlet actionServlet = this.getActionServlet();
             actionServlet.doPost(request,response);
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.actionPerform()");
+                logger.debug("Exiting actionPerform()");
         } catch (ServletException se) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting!servletunit.struts.CactusStrutsTestCase.actionPerform()",se.getRootCause());
+                logger.debug("Error in actionPerform()",se.getRootCause());
             fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (IOException e) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting!servletunit.struts.CactusStrutsTestCase.actionPerform()",e);
+                logger.debug("Error in actionPerform()",e);
             fail("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
         }
     }
@@ -484,25 +484,25 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     private String getActualForward() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getActualForward()");
+            logger.debug("Entering getActualForward()");
         if (response.containsHeader("Location")) {
             return Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
         } else {
             String forward = ((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward();
             if (logger.isDebugEnabled()) {
-                logger.debug("servletunit.struts.CactusStrutsTestCase.getActualForward() : actual forward = " + forward);
+                logger.debug("getActualForward() : actual forward = " + forward);
             }
             if (forward == null) {
                 if (logger.isDebugEnabled())
-                    logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getActualForward()");
+                    logger.debug("Exiting getActualForward()");
                 return null;
             } else {
                 String strippedForward = request.getContextPath() + Common.stripJSessionID(forward);
                 if (logger.isDebugEnabled()) {
-                    logger.debug("servletunit.struts.CactusStrutsTestCase.getActualForward() : stripped forward and added context path = " + strippedForward);
+                    logger.debug("getActualForward() : stripped forward and added context path = " + strippedForward);
                 }
                 if (logger.isDebugEnabled())
-                    logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getActualForward()");
+                    logger.debug("Exiting getActualForward()");
                 return strippedForward;
             }
         }
@@ -522,11 +522,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.verifyForward() : forwardName = " + forwardName);
+            logger.debug("Entering verifyForward() : forwardName = " + forwardName);
         init();
         Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,getActualForward(),false,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.verifyForward()");
+            logger.debug("Exiting verifyForward()");
     }
 
     /**
@@ -542,7 +542,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.verifyForwardPath() : forwardPath = " + forwardPath);
+            logger.debug("Entering verifyForwardPath() : forwardPath = " + forwardPath);
         init();
         forwardPath = request.getContextPath() + forwardPath;
         String actualForward = getActualForward();
@@ -551,7 +551,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (!(actualForward.equals(forwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + actualForward + "'");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.verifyForwardPath()");
+            logger.debug("Exiting verifyForwardPath()");
     }
 
     /**
@@ -564,11 +564,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyInputForward() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.verifyInputForward()");
+            logger.debug("Entering verifyInputForward()");
         init();
         Common.verifyForwardPath(actionServlet,request.getPathInfo(),null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.verifyInputForward()");
+            logger.debug("Exiting verifyInputForward()");
     }
 
     /**
@@ -587,11 +587,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
     public void verifyActionErrors(String[] errorNames) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.verifyActionErrors() : errorNames = " + errorNames);
+            logger.debug("Entering verifyActionErrors() : errorNames = " + errorNames);
         init();
         Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.verifyActionErrors()");
+            logger.debug("Exiting verifyActionErrors()");
     }
 
     /**
@@ -603,11 +603,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyNoActionErrors() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.verifyNoActionErrors()");
+            logger.debug("Entering verifyNoActionErrors()");
         init();
         Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.verifyNoActionErrors()");
+            logger.debug("Exiting verifyNoActionErrors()");
     }
 
     /**
@@ -625,11 +625,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyActionMessages(String[] messageNames) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.verifyActionMessages() : messageNames = " + messageNames);
+            logger.debug("Entering verifyActionMessages() : messageNames = " + messageNames);
         init();
         Common.verifyActionMessages(request,messageNames,Globals.MESSAGE_KEY,"action");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.verifyActionMessages()");
+            logger.debug("Exiting verifyActionMessages()");
     }
 
     /**
@@ -641,11 +641,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyNoActionMessages() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.verifyNoActionMessages()");
+            logger.debug("Entering verifyNoActionMessages()");
         init();
         Common.verifyNoActionMessages(request,Globals.MESSAGE_KEY,"action");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.verifyNoActionMessages()");
+            logger.debug("Exiting verifyNoActionMessages()");
     }
 
     /**
@@ -657,10 +657,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public ActionForm getActionForm() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.getActionForm()");
+            logger.debug("Entering getActionForm()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.getActionForm()");
+            logger.debug("Exiting getActionForm()");
         return Common.getActionForm(actionServlet,request.getPathInfo(),request,config.getServletContext());
     }
 
@@ -676,12 +676,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setActionForm(ActionForm form) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.CactusStrutsTestCase.setActionForm() : form = " + form);
+            logger.debug("Entering setActionForm() : form = " + form);
         init();
         // make sure ActionServlet is initialized.
         Common.setActionForm(form,request,request.getPathInfo(),config.getServletContext(),this.getActionServlet());
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.CactusStrutsTestCase.setActionForm()");
+            logger.debug("Exiting setActionForm()");
     }
 
 }

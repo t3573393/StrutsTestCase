@@ -92,7 +92,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setUp() throws Exception {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setUp()");
+            logger.debug("Entering setUp()");
         if (actionServlet == null)
             actionServlet = new ActionServlet();
         config = new ServletConfigSimulator();
@@ -103,7 +103,7 @@ public class MockStrutsTestCase extends TestCase {
         responseWrapper = null;
         isInitialized = true;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setUp()");
+            logger.debug("Exiting setUp()");
     }
 
     /**
@@ -112,10 +112,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletRequest getRequest() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getRequest()");
+            logger.debug("Entering getRequest()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getRequest()");
+            logger.debug("Exiting getRequest()");
         return this.request;
     }
 
@@ -127,18 +127,18 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletRequestWrapper getRequestWrapper() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getRequestWrapper()");
+            logger.debug("Entering getRequestWrapper()");
         init();
         if (requestWrapper == null) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getRequestWrapper()");
+                logger.debug("Exiting getRequestWrapper()");
             return new HttpServletRequestWrapper(this.request);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("servletunit.struts.MockStrutsTestCase.getRequestWrapper() : wrapper class is '" + requestWrapper.getClass() + "'");
+                logger.debug("getRequestWrapper() : wrapper class is '" + requestWrapper.getClass() + "'");
             }
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getRequestWrapper()");
+                logger.debug("Exiting getRequestWrapper()");
             return requestWrapper;
         }
     }
@@ -154,7 +154,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setRequestWrapper() : wrapper = " + wrapper);
+            logger.debug("Entering setRequestWrapper() : wrapper = " + wrapper);
         init();
         if (wrapper == null)
             throw new IllegalArgumentException("wrapper class cannot be null!");
@@ -164,7 +164,7 @@ public class MockStrutsTestCase extends TestCase {
             this.requestWrapper = wrapper;
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setRequestWrapper()");
+            logger.debug("Exiting setRequestWrapper()");
     }
 
     /**
@@ -173,10 +173,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletResponse getResponse() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getResponse()");
+            logger.debug("Entering getResponse()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getResponse()");
+            logger.debug("Exiting getResponse()");
         return this.response;
     }
 
@@ -188,18 +188,18 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletResponseWrapper getResponseWrapper() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getResponseWrapper()");
+            logger.debug("Entering getResponseWrapper()");
         init();
         if (responseWrapper == null) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getResponseWrapper()");
+                logger.debug("Exiting getResponseWrapper()");
             return new HttpServletResponseWrapper(this.response);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("servletunit.struts.MockStrutsTestCase.getRequestWrapper() : wrapper class is '" + responseWrapper.getClass() + "'");
+                logger.debug("getRequestWrapper() : wrapper class is '" + responseWrapper.getClass() + "'");
             }
             if (logger.isDebugEnabled())
-                logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getResponseWrapper()");
+                logger.debug("Exiting getResponseWrapper()");
             return responseWrapper;
         }
     }
@@ -215,7 +215,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setResponseWrapper() : wrapper = " + wrapper);
+            logger.debug("Entering setResponseWrapper() : wrapper = " + wrapper);
         init();
         if (wrapper == null)
             throw new IllegalArgumentException("wrapper class cannot be null!");
@@ -225,7 +225,7 @@ public class MockStrutsTestCase extends TestCase {
             this.responseWrapper = wrapper;
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setResponseWrapper()");
+            logger.debug("Exiting setResponseWrapper()");
     }
 
     /**
@@ -234,10 +234,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpSession getSession() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getSession()");
+            logger.debug("Entering getSession()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getSession()");
+            logger.debug("Exiting getSession()");
         return this.request.getSession(true);
     }
 
@@ -248,23 +248,23 @@ public class MockStrutsTestCase extends TestCase {
      */
     public ActionServlet getActionServlet() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getActionServlet()");
+            logger.debug("Entering getActionServlet()");
         init();
         try {
             if (!actionServletIsInitialized) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("servletunit.struts.MockStrutsTestCase.getActionServlet() : intializing actionServlet");
+                    logger.debug("getActionServlet() : intializing actionServlet");
                 }
                 this.actionServlet.init(config);
                 actionServletIsInitialized = true;
             }
         } catch (ServletException e) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting!servletunit.struts.MockStrutsTestCase.getActionServlet()",e.getRootCause());
+                logger.debug("Error in getActionServlet()",e.getRootCause());
             throw new AssertionFailedError(e.getMessage());
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getActionServlet()");
+            logger.debug("Exiting getActionServlet()");
         return actionServlet;
     }
 
@@ -275,13 +275,13 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setActionServlet(ActionServlet servlet) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setActionServlet() : servlet = " + servlet);
+            logger.debug("Entering setActionServlet() : servlet = " + servlet);
         init();
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setActionServlet()");
+            logger.debug("Exiting setActionServlet()");
         actionServletIsInitialized = false;
     }
 
@@ -298,7 +298,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void actionPerform() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.actionPerform()");
+            logger.debug("Entering actionPerform()");
         init();
         HttpServletRequest request = this.request;
         HttpServletResponse response = this.response;
@@ -311,15 +311,15 @@ public class MockStrutsTestCase extends TestCase {
             this.getActionServlet().doPost(request,response);
         } catch (ServletException se) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting!servletunit.struts.MockStrutsTestCase.actionPerform()",se.getRootCause());
+                logger.debug("Error in actionPerform()",se.getRootCause());
             fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (Exception ex) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting!servletunit.struts.MockStrutsTestCase.actionPerform()",ex);
+                logger.debug("Error in actionPerform()",ex);
             fail("Error running action.perform(): " + ex.getClass() + " - " + ex.getMessage());
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.actionPerform()");
+            logger.debug("Exiting actionPerform()");
     }
 
     /**
@@ -331,11 +331,11 @@ public class MockStrutsTestCase extends TestCase {
     public void addRequestParameter(String parameterName, String parameterValue)
     {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.addRequestParameter() : parameterName = " + parameterName + ", parameterValue = " + parameterValue);
+            logger.debug("Entering addRequestParameter() : parameterName = " + parameterName + ", parameterValue = " + parameterValue);
         init();
         this.request.addParameter(parameterName,parameterValue);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.addRequestParameter()");
+            logger.debug("Exiting addRequestParameter()");
     }
 
     /**
@@ -347,11 +347,11 @@ public class MockStrutsTestCase extends TestCase {
     public void addRequestParameter(String parameterName, String[] parameterValues)
     {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.addRequestParameter() : parameterName = " + parameterName + ", parameteValue = " + parameterValues);
+            logger.debug("Entering addRequestParameter() : parameterName = " + parameterName + ", parameteValue = " + parameterValues);
         init();
         this.request.addParameter(parameterName,parameterValues);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.addRequestParameter()");
+            logger.debug("Exiting addRequestParameter()");
     }
 
     /**
@@ -364,11 +364,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setRequestPathInfo(String pathInfo) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setRequestPathInfo() : pathInfo = " + pathInfo);
+            logger.debug("Entering setRequestPathInfo() : pathInfo = " + pathInfo);
         init();
         this.setRequestPathInfo("",pathInfo);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setRequestPathInfo()");
+            logger.debug("Exiting setRequestPathInfo()");
     }
 
     /**
@@ -387,7 +387,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setRequestPathInfo() : moduleName = " + moduleName + ", pathInfo = " + pathInfo);
+            logger.debug("Entering setRequestPathInfo() : moduleName = " + moduleName + ", pathInfo = " + pathInfo);
         init();
         this.actionPath = Common.stripActionPath(pathInfo);
         if (moduleName != null) {
@@ -398,13 +398,13 @@ public class MockStrutsTestCase extends TestCase {
                     moduleName = moduleName + "/";
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("servletunit.struts.MockStrutsTestCase.setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
+                logger.debug("setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
             }
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setRequestPathInfo()");
+            logger.debug("Exiting setRequestPathInfo()");
     }
 
     /**
@@ -417,12 +417,12 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setInitParameter(String key, String value){
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setInitParameter() : key = " + key + ", value = " + value);
+            logger.debug("Entering setInitParameter() : key = " + key + ", value = " + value);
         init();
         config.setInitParameter(key, value);
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setInitParameter()");
+            logger.debug("Exiting setInitParameter()");
     }
 
     /**
@@ -433,12 +433,12 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setContextDirectory(File contextDirectory) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setContextDirectory() : contextDirectory = " + contextDirectory);
+            logger.debug("Entering setContextDirectory() : contextDirectory = " + contextDirectory);
         init();
         context.setContextDirectory(contextDirectory);
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setContextDirectory()");
+            logger.debug("Exiting setContextDirectory()");
     }
 
     /**
@@ -449,11 +449,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setConfigFile(String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setConfigFile() : pathName = " + pathname);
+            logger.debug("Entering setConfigFile() : pathName = " + pathname);
         init();
         setConfigFile(null,pathname);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setConfigFile()");
+            logger.debug("Exiting setConfigFile()");
     }
 
     /**
@@ -467,7 +467,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setConfigFile(String moduleName, String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setConfigFile() : moduleName = " + moduleName + ", pathname =" + pathname);
+            logger.debug("Entering setConfigFile() : moduleName = " + moduleName + ", pathname =" + pathname);
         init();
         if (moduleName == null)
             this.config.setInitParameter("config",pathname);
@@ -475,7 +475,7 @@ public class MockStrutsTestCase extends TestCase {
             this.config.setInitParameter("config/" + moduleName,pathname);
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setConfigFile()");
+            logger.debug("Exiting setConfigFile()");
     }
 
     /**
@@ -489,7 +489,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setServletConfigFile(String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setServletConfigFile() : pathname = " + pathname);
+            logger.debug("Entering setServletConfigFile() : pathname = " + pathname);
         init();
 
         // pull in the appropriate parts of the
@@ -528,7 +528,7 @@ public class MockStrutsTestCase extends TestCase {
         }
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setServletConfigFile()");
+            logger.debug("Exiting setServletConfigFile()");
     }
 
     /**
@@ -536,21 +536,21 @@ public class MockStrutsTestCase extends TestCase {
      */
     private String getActualForward() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getActualForward()");
+            logger.debug("Entering getActualForward()");
         if (response.containsHeader("Location")) {
             return Common.stripJSessionID(response.getHeader("Location"));
         } else
             try  {
                 String strippedForward = request.getContextPath() + Common.stripJSessionID(((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator().getForward());
                 if (logger.isDebugEnabled()) {
-                    logger.debug("servletunit.struts.MockStrutsTestCase.getActualForward() : stripped forward and added context path - " + strippedForward);
+                    logger.debug("getActualForward() : stripped forward and added context path - " + strippedForward);
                 }
                 if (logger.isDebugEnabled())
-                    logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getActualForward()");
+                    logger.debug("Exiting getActualForward()");
                 return strippedForward;
             } catch (NullPointerException npe) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("servletunit.struts.MockStrutsTestCase.getActualForward() : caught NullPointerException - returning null",npe);
+                    logger.debug("getActualForward() : caught NullPointerException - returning null",npe);
                 }
                 return null;
             }
@@ -569,11 +569,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.verifyForward() : forwardName = " + forwardName);
+            logger.debug("Entering verifyForward() : forwardName = " + forwardName);
         init();
         Common.verifyForwardPath(actionServlet,actionPath,forwardName,getActualForward(),false,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.verifyForward()");
+            logger.debug("Exiting verifyForward()");
     }
 
     /**
@@ -589,24 +589,24 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.verifyForwardPath() : forwardPath = " + forwardPath);
+            logger.debug("Entering verifyForwardPath() : forwardPath = " + forwardPath);
         init();
         forwardPath = request.getContextPath() + forwardPath;
 
         String actualForward = getActualForward();
         if (actualForward == null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("servletunit.struts.MockStrutsTestCase.verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");
+                logger.debug("verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");
             }
             throw new AssertionFailedError("Was expecting '" + forwardPath + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("servletunit.struts.MockStrutsTestCase.verifyForwardPath() : expected forward = '" + forwardPath + "' - actual forward = '" + actualForward + "'");
+            logger.debug("verifyForwardPath() : expected forward = '" + forwardPath + "' - actual forward = '" + actualForward + "'");
         }
         if (!(actualForward.equals(forwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + actualForward + "'");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.verifyForwardPath()");
+            logger.debug("Exiting verifyForwardPath()");
     }
 
     /**
@@ -619,11 +619,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyInputForward() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.verifyInputForward()");
+            logger.debug("Entering verifyInputForward()");
         init();
         Common.verifyForwardPath(actionServlet,actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.verifyInputForward()");
+            logger.debug("Exiting verifyInputForward()");
     }
 
     /**
@@ -642,11 +642,11 @@ public class MockStrutsTestCase extends TestCase {
 
     public void verifyActionErrors(String[] errorNames) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.verifyActionErrors() : errorNames = " + errorNames);
+            logger.debug("Entering verifyActionErrors() : errorNames = " + errorNames);
         init();
         Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.verifyActionErrors()");
+            logger.debug("Exiting verifyActionErrors()");
     }
 
 
@@ -659,11 +659,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyNoActionErrors() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.verifyNoActionErrors()");
+            logger.debug("Entering verifyNoActionErrors()");
         init();
         Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.verifyNoActionErrors()");
+            logger.debug("Exiting verifyNoActionErrors()");
     }
 
     /**
@@ -681,11 +681,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyActionMessages(String[] messageNames) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.verifyActionMessages() : messageNames = " + messageNames);
+            logger.debug("Entering verifyActionMessages() : messageNames = " + messageNames);
         init();
         Common.verifyActionMessages(request,messageNames,Globals.MESSAGE_KEY,"action");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.verifyActionMessages()");
+            logger.debug("Exiting verifyActionMessages()");
     }
 
     /**
@@ -697,11 +697,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyNoActionMessages() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.verifyNoActionMessages()");
+            logger.debug("Entering verifyNoActionMessages()");
         init();
         Common.verifyNoActionMessages(request,Globals.MESSAGE_KEY,"action");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.verifyNoActionMessages()");
+            logger.debug("Exiting verifyNoActionMessages()");
     }
 
     /**
@@ -713,10 +713,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public ActionForm getActionForm() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.getActionForm()");
+            logger.debug("Entering getActionForm()");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.getActionForm()");
+            logger.debug("Exiting getActionForm()");
         return Common.getActionForm(actionServlet,actionPath,request,context);
     }
 
@@ -732,12 +732,12 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setActionForm(ActionForm form) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setActionForm() : form = " + form);
+            logger.debug("Entering setActionForm() : form = " + form);
         init();
         // make sure action servlet is intialized
         Common.setActionForm(form,request,actionPath,context,this.getActionServlet());
         if (logger.isDebugEnabled())
-            logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setActionForm()");
+            logger.debug("Exiting setActionForm()");
     }
 
 
