@@ -1,0 +1,112 @@
+<project name="guavatrain" default="all" basedir=".">
+
+    <!-- ================ Initialize Property Values ================ -->
+    
+    <!-- set jikes as the java compiler -->
+    <property name="build.compiler" value="jikes" />
+
+    <!-- compile options defaults -->
+    <property name="comp.deprecate"      value="off" />
+    <property name="comp.debug"          value="on" />
+    <property name="comp.optimize"       value="off" />
+    <property name="comp.depend"         value="on" />
+    <property name="comp.verbose"        value="off" />
+
+    <property name="build.dir"      value="${basedir}/build"/>
+    <property name="src.dir"        value="${basedir}/src"/>
+    <property name="distribute.dir" value="${basedir}/dist"/>
+    <property name="doc.dir"        value="${basedir}/docs"/>
+    <property name="test.dir"       value="${basedir}/test-results"/>
+
+    <!-- set class.path to use with javac/jikes -->
+    <path id="class.path">
+        <fileset dir="${basedir}/lib">
+            <include name="*.jar" />
+            <include name="*.zip" />
+        </fileset>
+        <pathelement location="${build.dir}" />
+    </path>
+
+    <!-- ====================== Build Targets ====================== --> 
+    
+
+    <!-- Compile the application classes --> 
+    <target name="build">
+       <mkdir dir="${build.dir}" />
+       <javac srcdir="${src.dir}" 
+               destdir="${build.dir}"
+               deprecation="${comp.deprecate}" 
+               debug="${comp.debug}" 
+               optimize="${comp.opt}" 
+               verbose="${comp.verbose}" 
+               depend="${comp.depend}">
+            <classpath refid="class.path" />
+            <include name="**/*.java" />
+        </javac>
+    </target>
+
+    <!-- package the application for deployment.  -->
+    <target name="package">
+        <mkdir dir="${distribute.dir}"/>
+	<jar jarfile="${distribute.dir}/servletunit.jar">
+	    <fileset dir="${build.dir}" includes="**/*.class"/>
+	    <fileset dir="${src.dir}/servletunit/struts/examples/" includes="WEB-INF/**" excludes="WEB-INF/CVS/**"/>
+	</jar>    
+    </target>
+
+    <!-- Clean up the build -->
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${distribute.dir}" />
+        <delete dir="${doc.dir}" />
+        <delete dir="${test.dir}" />
+    </target>
+    
+    <!-- Generate Javadocs for the application -->
+    <target name="docs">
+        <mkdir dir="${doc.dir}/api" />
+        <javadoc packagenames="servletunit.*"
+           sourcepath="${src.dir}"
+           destdir="${doc.dir}/api"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="StrutsTestCase Documentation"
+           doctitle="&lt;H1&gt;StrutsTestCase for JUnit&lt;/H1&gt;"
+           bottom="&lt;i&gt;Copyright &#169; Deryl Seale All Rights Reserved.&lt;/i&gt;">
+            <group title="Achieve Code" packages="com.achieve.*"/>
+            <!-- Put in links to JDK classes -->
+            <link offline="true" 
+                  href="http://java.sun.com/products/j2se/1.3/docs/api/" 
+                  packagelistLoc="http://java.sun.com/products/jdk/1.3/docs/api" />
+            <link offline="true" 
+                  href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/" 
+                  packagelistLoc="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/" />
+        </javadoc>
+    </target>
+
+    <!-- Run unit tests -->
+    <target name="test" depends="build">
+        <mkdir dir="${test.dir}" />
+        <junit printsummary="yes" haltonfailure="yes">
+            <sysproperty key="test.dir" value="${test.dir}" />
+            <classpath refid="class.path" />
+	    <classpath>
+	       <pathelement location="${src.dir}/servletunit/struts/examples/"/>
+	    </classpath>
+            <formatter type="plain" />
+
+            <batchtest fork="yes" todir="${test.dir}">
+                <fileset dir="${build.dir}">
+                    <include name="**/examples/**/Test*.class" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+    
+    <!-- Run all the build targets -->
+    <target name="all" depends="clean,build,package" />
+    
+</project>
+
+
