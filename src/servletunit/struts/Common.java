@@ -93,17 +93,21 @@ public class Common {
 	
 	String result = null;
 	try {
-	    ComponentDefinitionsFactory definitionsFactory = DefinitionsUtil.createDefinitionsFactory(context, config);
 	    ComponentDefinition definition;
-	    if( definitionsFactory != null ) {
+	    try {
 		// Get definition of tiles/component corresponding to uri.
-		definition = definitionsFactory.getDefinition(forwardPath, request, context);
+		definition = DefinitionsUtil.createDefinitionsFactory(context, config).getDefinition(forwardPath, request, context);
 		if( definition != null ) {
 		    // We have a definition.
 		    // We use it to complete missing attribute in context.
 		    // We also get uri, controller.
 		    result = definition.getPath();
 		}
+	    } catch (NullPointerException npe) {
+		// This is a hack to replace the previous null check.
+		// Struts 1.1b1 and 1.1 nightly build have different
+		// return types for DefinitionsUtil.createDefinitionsFactory()
+		// so we have to do this to keep compatible.
 	    }
 	    definition = DefinitionsUtil.getActionDefinition(request);
 	    if( definition != null ) {
