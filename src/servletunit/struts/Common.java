@@ -221,7 +221,7 @@ public class Common {
         if (!forwardName.startsWith("/"))
             forwardName = "/" + forwardName;
 
-        if (usesTiles || isInputPath)
+        if (usesTiles)
             forwardName = request.getContextPath() + forwardName;
         else
             forwardName = request.getContextPath() + moduleName + forwardName;
