@@ -4,6 +4,10 @@
 	<!-- ========== Form Bean Definitions =================================== -->
 	<form-beans>
 		<form-bean name="loginForm" type="examples.LoginForm"/>
+		<form-bean name="dynamicLogin" dynamic="true" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="username" type="java.lang.String"/>
+			<form-property name="password" type="java.lang.String"/>
+		</form-bean>
 	</form-beans>
 	<!-- ========== Global Forward Definitions ============================== -->
 	<global-forwards>
@@ -30,5 +34,7 @@
 		</action>
 		<action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
 		<action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
+		<action path="/testDynamicAction" type="servletunit.struts.tests.DynamicAction" name="dynamicLogin" scope="request">
+		</action>
 	</action-mappings>
 </struts-config>
