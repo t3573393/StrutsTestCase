@@ -95,7 +95,6 @@ public class MockStrutsTestCase extends TestCase {
 		config = new ServletConfigSimulator();
 		config.setInitParameter("debug","0");
 		config.setInitParameter("detail","0");
-		config.setInitParameter("validate","true");
 		request = new HttpServletRequestSimulator();
 		response = new HttpServletResponseSimulator();
 		requestWrapper = null;
@@ -342,11 +341,11 @@ public class MockStrutsTestCase extends TestCase {
             pathname = "/" + prefix + "/" + pathname;
         }
 	// pull in the appropriate parts of the
-	    // web.xml file.
-	    Digester digester = new Digester();
+	// web.xml file.
+	Digester digester = new Digester();
 	    URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
 	    if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
-	    digester.push(config);
+	    digester.push(this.config);
 	    digester.setDebug(0);
 	    digester.setValidating(false);
 	    digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
