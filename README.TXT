@@ -1,8 +1,7 @@
-StrutsTestCase for JUnit - release 1.9.6
-----------------------------------------
+StrutsTestCase for JUnit - release 2.0
+---------------------------------------
 
-This is a point release that resolves outstanding issues
-with Struts 1.1b3 and module support.
+This release resolves outstanding issues with Struts 1.1.
 
 The StrutsTestCase library is available as four distinct
 releases supporting both the 2.2 and 2.3 versions of the 
@@ -17,14 +16,26 @@ WITH STRUTS 1.1B2!
 Change Log
 ==========
 
+New Features:
+------------
+
+- added verifyTilesForward and verifyInputTilesForward methods to
+verify if a specific Tiles definition was used as the result of
+executing an Action.  (MockStrutsTestCase and CactusStrutsTestCase)
+
+- added clearRequestParameters method to clear out request parameters
+when running multiple actions in a test.  Currently, this method
+cannot reset parameters set using Cactus beginXXX methods. (MockStrutsTestCase
+and CactusStrutsTestCase)
+
 Bug Fixes:
 ---------
 
-- Fixed a bug where verifyForward() would not run module aware
-comparisons.  (CactusStrutsTestCase and MockStrutsTestCase)
+- Fixed a bug where the servlet context directory was not being used
+when searching for application resources (patch #698096 - MockStrutsTestCase)
 
-- Fixed a bug where actions and forwards not prefixed with a '/'
-would not verify correctly.  (CactusStrutsTestCase and MockStrutsTestCase)
+- Fixed a bug where actions returning null -- a valid scenario -- could
+not be tested properly.  (MockStrutsTestCase and CactusStrutsTestCase)
 
 
 Questions and comments are always welcome!
