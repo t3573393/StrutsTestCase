@@ -88,23 +88,16 @@ public class MockStrutsTestCase extends TestCase {
      * and HttpServletResponse object to use in this test.
      */
     protected void init() {
-    if (!isInitialized) {
-        try {
-        if (actionServlet == null)
-            actionServlet = new ActionServlet();
-        config = new ServletConfigSimulator();
-        config.setInitParameter("debug","0");
-        config.setInitParameter("detail","0");
-        request = new HttpServletRequestSimulator();
-        response = new HttpServletResponseSimulator();
-        requestWrapper = null;
-        responseWrapper = null;
-        isInitialized = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
-        }
-    }
+	if (!isInitialized) {
+	    if (actionServlet == null)
+		actionServlet = new ActionServlet();
+	    config = new ServletConfigSimulator();
+	    request = new HttpServletRequestSimulator();
+	    response = new HttpServletResponseSimulator();
+	    requestWrapper = null;
+	    responseWrapper = null;
+	    isInitialized = true;
+	}
     }
 
     /**
@@ -114,7 +107,7 @@ public class MockStrutsTestCase extends TestCase {
      * and HttpServletResponse object to use in this test.
      */
     public void setUp() throws Exception {
-    init();
+	init();
     }
 
     /**
@@ -139,8 +132,8 @@ public class MockStrutsTestCase extends TestCase {
      * this test.
      */
     public HttpServletRequest getRequest() {
-    init();
-        return this.request;
+	init();
+	return this.request;
     }
 
      /**
@@ -150,13 +143,13 @@ public class MockStrutsTestCase extends TestCase {
      * javax.servlet.http.HttpServletRequestWrapper.
      */
     public HttpServletRequestWrapper getRequestWrapper() {
-    init();
-    if (requestWrapper == null)
-        return new HttpServletRequestWrapper(this.request);
-    else
-        return requestWrapper;
+	init();
+	if (requestWrapper == null)
+	    return new HttpServletRequestWrapper(this.request);
+	else
+	    return requestWrapper;
     }
-
+    
     /**
      * Set this TestCase to use a given HttpServletRequestWrapper
      * class when calling Action.perform().  Note that if this
@@ -167,24 +160,24 @@ public class MockStrutsTestCase extends TestCase {
      * used when calling Action.perform().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
-    init();
-    if (wrapper == null)
-        throw new IllegalArgumentException("wrapper class cannot be null!");
-    else {
-        wrapper.setRequest(this.request);
-        this.requestWrapper = wrapper;
+	init();
+	if (wrapper == null)
+	    throw new IllegalArgumentException("wrapper class cannot be null!");
+	else {
+	    wrapper.setRequest(this.request);
+	    this.requestWrapper = wrapper;
+	}
     }
-    }
-
+    
     /**
      * Returns an HttpServletResponse object that can be used in
      * this test.
      */
     public HttpServletResponse getResponse() {
-    init();
+	init();
         return this.response;
     }
-
+    
     /**
      * Returns an HttpServletResponseWrapper object that can be used in
      * this test.  Note that if {@link #setResponseWrapper} has not been
@@ -352,11 +345,11 @@ public class MockStrutsTestCase extends TestCase {
         digester.addCallParam("web-app/servlet/init-param/param-name", 0);
         digester.addCallParam("web-app/servlet/init-param/param-value", 1);
         try {
-        InputStream input = getClass().getResourceAsStream(pathname);
-        if(input==null)
-            throw new AssertionFailedError("Invalid pathname: " + pathname);
-        digester.parse(input);
-        input.close();
+	    InputStream input = getClass().getResourceAsStream(pathname);
+	    if(input==null)
+		throw new AssertionFailedError("Invalid pathname: " + pathname);
+	    digester.parse(input);
+	    input.close();
         } catch (Exception e) {
         throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
         }
