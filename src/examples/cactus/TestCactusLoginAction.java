@@ -31,7 +31,7 @@ public class TestCactusLoginAction extends CactusStrutsTestCase {
         setRequestPathInfo("/login");
         actionPerform();
         verifyForward("success");
-	verifyForwardPath("/main/success.jsp");
+	    verifyForwardPath("/main/success.jsp");
         assertEquals("deryl", getSession().getAttribute("authentication"));
         verifyNoActionErrors();
     }
@@ -43,8 +43,8 @@ public class TestCactusLoginAction extends CactusStrutsTestCase {
         setRequestPathInfo("/login");
         actionPerform();
         verifyForward("login");
-	verifyForwardPath("/login/login.jsp");
-	verifyInputForward();
+	    verifyForwardPath("/login/login.jsp");
+	    verifyInputForward();
         verifyActionErrors(new String[] {"error.password.mismatch"});
         assertNull(getSession().getAttribute("authentication"));
     }

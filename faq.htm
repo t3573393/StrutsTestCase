@@ -93,9 +93,14 @@ This is a tricky operation to test, but at least one enterprising user has found
 
 <h3 id=12>Why does my test stop executing before the ActionForward is processed?</h3>
 StrutsTestCase is designed to test only a single Action class within a test method, and as such,
-does not actually process the forward, be it another action or a JSP page. You can simulate calling
-multiple actions in a test method by calling setRequestPathInfo() and actionPerform() multiple times
-within the same method. If you choose to do this, however, you should call <a href="api/servletunit/struts/MockStrutsTestCase.html#clearRequestParameters()">clearRequestParameters()</a> to
+by default does not actually process the forward, be it another action or a JSP page. This minimizes side effects
+that can produce spurious test results. If you are using Cactus, you can override this behavior by calling the
+<a href="api/servletunit/struts/CactusStrutsTestCase.html#processRequest(boolean)">processRequest</a> method so that the
+request is fully processed by the container.
+<br/><br/>
+You can also simulate calling multiple actions in a MockStrutsTestCase test method by calling
+setRequestPathInfo() and actionPerform() multiple times within the same method. If you choose to do
+this, however, you should call <a href="api/servletunit/struts/MockStrutsTestCase.html#clearRequestParameters()">clearRequestParameters()</a> to
 ensure that no unexpected request parameters are passed along.
 
 <h3 id=13>Can I test multiple Actions in the same test method?</h3>

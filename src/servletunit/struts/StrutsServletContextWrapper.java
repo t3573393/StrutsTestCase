@@ -38,15 +38,23 @@ import java.io.FileNotFoundException;
  */
 public class StrutsServletContextWrapper extends ServletContextWrapper {
 
+    boolean processRequest = false;
     private String dispatchedResource;
 
     public StrutsServletContextWrapper(ServletContext context) {
         super(context);
     }
 
+    public void setProcessRequest(boolean flag) {
+        this.processRequest = flag;
+    }
+
     public RequestDispatcher getRequestDispatcher(String path) {
         dispatchedResource = path;
-        return new RequestDispatcherSimulator(path);
+        if (!processRequest)
+            return new RequestDispatcherSimulator(path);
+        else
+            return super.getRequestDispatcher(path);
     }
 
     public String getForward() {

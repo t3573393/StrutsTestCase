@@ -3,10 +3,11 @@ StrutsTestCase for JUnit - release 2.1.0
 
 This release resolves outstanding issues with Struts 1.1.
 
-The StrutsTestCase library is available as four distinct
+The StrutsTestCase library is available as two distinct
 releases supporting both the 2.2 and 2.3 versions of the 
 Servlet specification, and the 1.1 version of the Struts
-Framework.
+Framework. PLEASE NOTE that StrutsTestCase no longer supports
+the Struts 1.0 release.
 
 Change Log
 ==========
@@ -18,35 +19,26 @@ New Features:
 with Struts 1.0, and as such, has removed all deprecated references.
 The last release to support Struts 1.0 is StrutsTestCase v2.0.
 
-- Greatly improved error messages for common cases such as missing
-configuration files.  As well, all exceptions that are thrown in
-a test will be passed directly to the the test case, and will include
-the full exception stack trace for debugging.  Many thanks to Sean
-Pritchard for his excellent work on this.  (MockStrutsTestCase and
-CactusStrutsTestCase)
-
-- Added no argument constructors, which is now supported in
-the latest JUnit release. (MockStrutsTestCase and
-CactusStrutsTestCase)
-
-- Made getActualForward() a protected method, so that it can
-be used in test cases. (MockStrutsTestCase and
-CactusStrutsTestCase)
+- Added ability to fully process a request when using CactusStrutsTestCase,
+which allows for validating results using tools such as HTTPUnit (bug #846322).
+By default, CactusStrutsTestCase will not fully process the resulting forward
+from the Action being tested, in order to minimize side effects that can
+produce spurious results.  By calling CactusStrutsTestCase.processRequest(),
+callers can change this behavior such that the request is fully processed
+by the container.  (CactusStrutsTestCase only)
 
 Bug Fixes:
 ---------
 
-- Fixed a bug where the jsessionid was not properly stripped
-if it was longer than 44 characters. (MockStrutsTestCase and
-CactusStrutsTestCase)
+- Fixed bug (#790530) where web applications would no longer run after
+running tests.  Note that you must call the CactusStrutsTestCase.tearDown
+method in order to restore the web application to its functioning state.
+(CactusStrutsTestCase only)
 
-- Fixed NullPointerException when using OC4J (patch 831139 for
-CactusStrutsTestCase)
+- Fixed bug (#849772) where NullPointerException was thrown in certain
+versions of WebLogic.
 
-- Added patch to fix problem where running Cactus tests renders
-a web application unusable.  NOTE: This is still a work in progress,
-so the fix may work for you, or it may not.  (CactusStrutsTestCase
-only)
+
 
 
 Deryl Seale

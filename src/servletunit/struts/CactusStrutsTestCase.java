@@ -26,7 +26,12 @@ import org.apache.struts.action.ActionServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletConfig;
 import javax.servlet.http.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * CactusStrutsTestCase is an extension of the Cactus ServletTestCase
@@ -55,8 +60,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     boolean actionServletIsInitialized = false;
     boolean requestPathIsSet = false;
     String moduleName;
-    Object oldRequestProcessor;
-
+    String servletMapping = "*.do";
 
     protected static Log logger = LogFactory.getLog(CactusStrutsTestCase.class);
 
@@ -93,16 +97,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering setUp()");
         try {
-            // save original request processors to replace in teardown
-            String name = "org.apache.struts.action.REQUEST_PROCESSOR";
-            oldRequestProcessor = config.getServletContext().getAttribute(name);
 
             if (actionServlet == null)
                 actionServlet = new ActionServlet();
             requestWrapper = null;
             responseWrapper = null;
             ServletContext servletContext = new StrutsServletContextWrapper(this.config.getServletContext());
-
             this.config = new StrutsServletConfigWrapper(this.config);
             ((StrutsServletConfigWrapper) this.config).setServletContext(servletContext);
             this.request = new StrutsRequestWrapper(this.request);
@@ -117,16 +117,42 @@ public class CactusStrutsTestCase extends ServletTestCase {
         }
     }
 
-    public void tearDown () {
+    /**
+     * Sets the servlet mapping used to map requests to the Struts controller.  This is used to restore
+     * proper setting after the test has been executed. By default, the stanard "*.do" mapping will be
+     * restored, so only use this method for non-standard servlet mappings.
+     * @param servletMapping
+     */
+    public void setServletMapping(String servletMapping) {
+        this.servletMapping = servletMapping;
+    }
+
+    public void tearDown () throws Exception {
         if (logger.isTraceEnabled())
             logger.trace("Entering");
-        new ActionServlet();
-        actionServlet = null;
-        actionServletIsInitialized = false;
 
-        // FIXME -- Do the same for all Modules
-        String name = "org.apache.struts.action.REQUEST_PROCESSOR";
-        config.getServletContext().setAttribute(name, oldRequestProcessor);
+        // remove all RequestProcessor instances from context
+        // so that web application will function normally.
+        ServletContext context = this.config.getServletContext();
+        List nameList = new ArrayList();
+        Enumeration attributeNames = context.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            String name = (String) attributeNames.nextElement();
+            if (name.startsWith(Globals.REQUEST_PROCESSOR_KEY))
+                nameList.add(name);
+        }
+
+        // restore the original servlet mapping
+        ServletConfig originalConfig = ((org.apache.cactus.server.ServletConfigWrapper) this.config).getOriginalConfig();
+        ServletContext originalContext = originalConfig.getServletContext();
+        originalContext.setAttribute(Globals.SERVLET_KEY,servletMapping);
+        ((StrutsServletConfigWrapper) config).setServletContext(originalContext);
+
+
+        for (Iterator iterator = nameList.iterator(); iterator.hasNext();) {
+            context.removeAttribute((String) iterator.next());
+        }
+
         if (logger.isTraceEnabled())
             logger.trace("Exiting");
     }
@@ -433,7 +459,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 // remove request processor for default module
                 Object obj = context.getAttribute(name);
                 if (obj != null) {
-                    config.getServletContext().setAttribute(name, null);
+                    config.getServletContext().removeAttribute(name);
                 }
 
                 // remove request processor for sub-applications, if used.
@@ -445,7 +471,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
                 obj = context.getAttribute(name + moduleName);
                 if (obj != null) {
-                    config.getServletContext().setAttribute(name + moduleName, null);
+                    config.getServletContext().removeAttribute(name + moduleName);
                 }
 
                 this.actionServlet.init(config);
@@ -769,10 +795,20 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering setActionForm() : form = " + form);
         init();
-// make sure ActionServlet is initialized.
+        // make sure ActionServlet is initialized.
         Common.setActionForm(form,request,request.getPathInfo(),config.getServletContext());
         if (logger.isDebugEnabled())
             logger.debug("Exiting setActionForm()");
+    }
+
+    /**
+     * Instructs StrutsTestCase to fully process a forward request. By default, StrutsTestCase
+     * stops processing a request as soon as the forward path has been collected, in order to avoid
+     * side effects; calling this method overrides this behavior.
+     * @param flag set to true to fully process forward requests
+     */
+    public void processRequest(boolean flag) {
+        ((StrutsServletContextWrapper) this.config.getServletContext()).setProcessRequest(flag);
     }
 
 }
