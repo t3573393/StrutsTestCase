@@ -60,7 +60,6 @@ public class HttpServletRequestSimulator implements HttpServletRequest
 
     private Hashtable parameters;
     private Hashtable headers;
-    private Hashtable requestDispatchers;
     private Vector cookies;
 
     private HttpSession session;
@@ -91,22 +90,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         attributes = new Hashtable();
         parameters = new Hashtable();
         headers = new Hashtable();
-        requestDispatchers = new Hashtable();
         cookies = new Vector();
         this.context = context;
         //if (getHeader("Accept")==null)
         //setHeader("Accept","dummy accept");
-    }
-
-    /**
-     * Add a <code>javax.servlet.RequestDispatcher</code> to a list of possible dispatchers
-     *
-     * @param   url     The url of the resource.
-     * @param   dispatcher  The resource
-     */
-    public void addDispatcher( String url, Object dispatcher )
-    {
-        this.requestDispatchers.put( url, dispatcher );
     }
 
     /**
@@ -764,7 +751,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public  RequestDispatcher getRequestDispatcher( String url )
     {
-        return (RequestDispatcher)requestDispatchers.get( url );
+        return context.getRequestDispatcher(url);
     }
 
     /**

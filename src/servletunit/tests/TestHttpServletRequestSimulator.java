@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.ServletContextSimulator;
 
+import javax.servlet.RequestDispatcher;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -179,6 +180,11 @@ public class TestHttpServletRequestSimulator extends TestCase {
 
     public void testGetRealPathNotSet() {
         assertNull(request.getRealPath("/test.html"));
+    }
+
+    public void testReturnsRequestDispatcher() {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/test/login.jsp");
+        assertNotNull(dispatcher);
     }
 
 
