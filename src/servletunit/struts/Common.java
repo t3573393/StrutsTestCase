@@ -352,9 +352,15 @@ public class Common {
         String pathCopy = path.toLowerCase();
         int jsess_idx = pathCopy.indexOf(";jsessionid=");
         if (jsess_idx > 0) {
-            // Strip jsessionid from obtained path
             StringBuffer buf = new StringBuffer(path);
-            path = buf.delete(jsess_idx, jsess_idx + 44).toString();
+
+            int queryIndex = pathCopy.indexOf("?");
+            // Strip jsessionid from obtained path, but keep query string
+            if (queryIndex > 0)
+                path = buf.delete(jsess_idx, queryIndex).toString();
+            // Strip jsessionid from obtained path
+            else
+                path = buf.delete(jsess_idx, buf.length()).toString();
         }
         if (logger.isTraceEnabled())
             logger.trace("Exiting stripJSessionID() - returning path = " + path);
