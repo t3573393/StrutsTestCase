@@ -266,11 +266,15 @@ public class ServletContextSimulator implements ServletContext
     }
 
     /**
-     * Unsupported in this version.
+     * TODO: add appropriate comments
      */
     public URL getResource(String path) throws MalformedURLException
     {
-        throw new UnsupportedOperationException("getResource operation is not supported!");
+        try {
+            return this.getClass().getResource(path);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
