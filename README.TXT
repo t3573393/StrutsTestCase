@@ -1,9 +1,8 @@
-StrutsTestCase for JUnit - release 1.9.5
+StrutsTestCase for JUnit - release 1.9.6
 ----------------------------------------
 
 This is a point release that resolves outstanding issues
-with Struts 1.1b3, and provides other assorted enhancements
-and bug fixes.
+with Struts 1.1b3 and module support.
 
 The StrutsTestCase library is available as four distinct
 releases supporting both the 2.2 and 2.3 versions of the 
@@ -18,60 +17,14 @@ WITH STRUTS 1.1B2!
 Change Log
 ==========
 
-New Features:
-------------
-
-- StrutsTestCase is now distributed under the Apache Software 
-Foundation license.  This change comes in advance of StrutsTestCase's
-inclusion in the Struts 1.2 development road map.
-
-- Added setActionForm() method for setting an ActionForm instance to be 
-used in a unit test, allowing for setting complex objects in an ActionForm.
-It's important to note that this method merely makes the ActionForm instance
-available for the unit test; it does not subvert how Struts manages the
-ActionForm for a given Action.  In particular, if your ActionForm class 
-overrides the reset() method, then you could potentially reset anything
-you've set in the ActionForm instance you pass to this method.  
-(MockStrutsTestCase and CactusStrutsTestCase)
-
-- Changed setConfigFile() and setServletConfig() methods to take in absolute
-paths. (MockStrutsTestCase and CactusStrutsTestCase)
-
-- Added verifyActionMessages() and verifyNoActionMessages() for tests that
-need to validate that ActionMessages are set properly.  (MockStrutsTestCase
-and CactusStrutsTestCase)
-
-- Added setContextDirectory() method to enable using ServletContext.getRealPath()
-and HttpServletRequest.getRealPath() methods for testing.  (MockStrutsTestCase only)
-
 Bug Fixes:
 ---------
 
-- Fixed bug where sub-application requests were not properly validated,
-resulting in a NullPointerException.  (MockStrutsTestCase and 
-CactusStrutsTestCase)
+- Fixed a bug where verifyForward() would not run module aware
+comparisons.  (CactusStrutsTestCase and MockStrutsTestCase)
 
-- Fixed bug where calls to HttpServletRequestSimulator.setAttribute() would
-throw a NullPointerException if an argument was null.  (MockStrutsTestCase)
-
-- Fixed bug where tiles test required manually setting Tiles plug-in
-properties.  Tests now read the properties from the config.xml properly.
-(MockStrutsTestCase and CactusStrutsTestCase)
-
-- Cleaned up error messages to be a bit more explicit.  (MockStrutsTestCase
-and CactusStrutsTestCase)
-
-- Fixed bug where verifyInputForward() would fail if the input forward
-was defined using Tiles.  (MockStrutsTestCase and CactusStrutsTestCase)
-
-- Fixed bug where URL's were not properly processed if they included a
-jsessionid parameter name that was upper case.  (MockStrutsTestCase and
-CactusStrutsTestCase)
-
-- Fixed bug where sub-applications were not spuriously failing if the
-test class had more than one test method.  (CactusStrutsTestCase)
-
-- Fixed bug where setting a null session attribute would throw a NullPointerException.
+- Fixed a bug where actions and forwards not prefixed with a '/'
+would not verify correctly.  (CactusStrutsTestCase and MockStrutsTestCase)
 
 
 Questions and comments are always welcome!
