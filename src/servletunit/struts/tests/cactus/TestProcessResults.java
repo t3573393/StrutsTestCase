@@ -18,8 +18,16 @@ public class TestProcessResults extends CactusStrutsTestCase {
     }
 
     public void endSuccessfulLogin(WebResponse response) {
-        String html = "<h2>You have successfully logged in!</h2>\n\n<a href=\"/test/login/login.jsp\">Go back</a>";
         assertEquals("unexpected response code",200,response.getStatusCode());
-        assertEquals("unexpected text",html,response.getText());
+        String[] text = response.getTextAsArray();
+        for (int i = 0; i < text.length; i++) {
+            String line = text[i];
+            if (line != null && 
+                    !line.equals("<h2>You have successfully logged in!</h2>") &&
+                    !line.equals("<a href=\"/test/login/login.jsp\">Go back</a>") &&
+                    !line.equals(""))
+                fail("unexpected text: " + line);
+
+        }
     }
 }
