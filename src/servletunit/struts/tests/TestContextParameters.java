@@ -17,18 +17,34 @@
 package servletunit.struts.tests;
 
 import servletunit.struts.MockStrutsTestCase;
+import junit.framework.AssertionFailedError;
 
 public class TestContextParameters extends MockStrutsTestCase {
 
     public TestContextParameters(String testName) {
         super(testName);
     }
-    
+
     public void testContextParameters() {
-	setRequestPathInfo("/testContextParams");
-	setServletConfigFile("/WEB-INF/web.xml");
+        setRequestPathInfo("/testContextParams");
+        setServletConfigFile("/WEB-INF/web.xml");
         actionPerform();
         verifyNoActionErrors();
     }
-    
+
+    public void testContextParametersAbsolutePath() {
+        setRequestPathInfo("/testContextParams");
+        setServletConfigFile("c:/develop/projects/strutstestcase/src/examples/WEB-INF/web.xml");
+        actionPerform();
+        verifyNoActionErrors();
+    }
+
+    public void testContextParametersBadAbsolutePath() {
+        try {
+            setServletConfigFile("foo/web.xml");
+        } catch (AssertionFailedError afe) {
+            return;
+        }
+        fail("Expected AssertionFailedError!");
+    }
 }
