@@ -17,19 +17,25 @@
 package servletunit.struts.tests.cactus;
 
 import servletunit.struts.CactusStrutsTestCase;
+import org.apache.cactus.WebRequest;
+
+import javax.servlet.http.Cookie;
 
 public class TestAbsolutePath extends CactusStrutsTestCase {
 
-    String rootPath;
+    static final String COOKIE_NAME = "config_file";
 
     public TestAbsolutePath(String testName) {
         super(testName);
-        rootPath = System.getProperty("basedir");
+    }
+
+    public void beginSuccessfulLogin(WebRequest theRequest) {
+        theRequest.addCookie(COOKIE_NAME, System.getProperty("basedir") + "/src/examples/WEB-INF/struts-config.xml");
     }
 
     public void testSuccessfulLogin() {
-        System.out.println(rootPath);
-        setConfigFile(rootPath + "/src/examples/WEB-INF/struts-config.xml");
+        String fileName = getCookieValue(request.getCookies(), COOKIE_NAME);
+        setConfigFile(fileName);
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
         setRequestPathInfo("/login");
@@ -38,6 +44,21 @@ public class TestAbsolutePath extends CactusStrutsTestCase {
         verifyForwardPath("/main/success.jsp");
         assertEquals("deryl",getSession().getAttribute("authentication"));
         verifyNoActionErrors();
+    }
+
+    private String getCookieValue (Cookie[] cookies, String name) {
+        String value = null;
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                logger.debug ("checking cookie " + cookies[i].getName());
+
+                if (cookies[i].getName().equals(name)) {
+                    value = cookies[i].getValue();
+                    break;
+                }
+            }
+        }
+        return value;
     }
 
     public static void main(String[] args) {
