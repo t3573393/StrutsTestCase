@@ -109,20 +109,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Tears down the test fixture upon completion.  This method calls
-     * the destroy method on the ActionServlet method used in this test,
-     * and <b>must</b> be called if this method is overridden in a subclass.
-     */
-    public void tearDown() throws Exception {
-	init();
-        try {
-            actionServlet.destroy();
-        } catch (Exception e) {
-            throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
-        }
-    }
-
-    /**
      * Returns an HttpServletRequest object that can be used in
      * this test.
      */
