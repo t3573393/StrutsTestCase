@@ -23,6 +23,7 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.apache.commons.digester.Digester;
 import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.ActionForm;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
@@ -484,6 +485,19 @@ public class MockStrutsTestCase extends TestCase {
     init();
         Common.verifyNoActionErrors(request);
     }
+
+    /**
+     * Returns the ActionForm instance stored in either the request or session.  Note
+     * that no form will be returned if the Action being tested cleans up the form
+     * instance.
+     *
+     * @ return the ActionForm instance used in this test, or null if it does not exist.
+     */
+    public ActionForm getActionForm() {
+        init();
+        return Common.getActionForm(actionServlet,actionPath,request);
+    }
+
 
 
 

@@ -10,6 +10,7 @@ import org.apache.struts.tiles.NoSuchDefinitionException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 
 
@@ -182,5 +183,23 @@ public class Common {
         return path;
     }
 
+    /**
+     * Returns any ActionForm instance stored in the request or session, if available.
+     */
+    protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request)
+    {
+        ActionForm form;
+        // It's deprecated, I know.  It's a lot of trouble to do it differently for now.
+        ActionMapping mapping = actionServlet.findMapping(actionPath);
+        System.out.println("looking for this key: " + mapping.getAttribute() + " in this scope: " + mapping.getScope());
+        if ("request".equals(mapping.getScope())) {
+            form = (ActionForm) request.getAttribute(mapping.getAttribute());
+            System.out.println("form = " + form);
+        } else {
+            HttpSession session = request.getSession();
+            form = (ActionForm) session.getAttribute(mapping.getAttribute());
+        }
+        return form;
+    }
 
 }

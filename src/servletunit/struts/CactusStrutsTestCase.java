@@ -23,6 +23,7 @@ import junit.framework.AssertionFailedError;
 import org.apache.cactus.ServletTestCase;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.ActionForm;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -435,6 +436,18 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void verifyNoActionErrors() {
         init();
         Common.verifyNoActionErrors(request);
+    }
+
+    /**
+     * Returns the ActionForm instance stored in either the request or session.  Note
+     * that no form will be returned if the Action being tested cleans up the form
+     * instance.
+     *
+     * @ return the ActionForm instance used in this test, or null if it does not exist.
+     */
+    public ActionForm getActionForm() {
+        init();
+        return Common.getActionForm(actionServlet,request.getPathInfo(),request);
     }
 
 }
