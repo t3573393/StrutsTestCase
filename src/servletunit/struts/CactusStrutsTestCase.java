@@ -283,9 +283,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		java.util.Enumeration names = config.getServletContext().getAttributeNames();
 		while (names.hasMoreElements()) {
 		    String name = (String) names.nextElement();
-		    if (name.indexOf(Action.REQUEST_PROCESSOR_KEY) >= 0) {
+		    // yes, I know I should use the constant.. but it's
+		    // the only Struts 1.1 specific item in this class
+		    // and so I am being lazy for the sake of backwards
+		    // compatibility.
+		    if (name.indexOf("org.apache.struts.action.REQUEST_PROCESSOR") >= 0) {
 			config.getServletContext().setAttribute(name,null);
-		    }
+		     }
 		}
 		this.actionServlet.init(config);
 		actionServletIsInitialized = true;
