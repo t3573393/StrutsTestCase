@@ -60,5 +60,20 @@ public class TestTilesForward extends CactusStrutsTestCase {
         fail("Should have failed.");
     }
 
+    public void testTileForwardFailDefinitionExists() {
+        addRequestParameter("username","deryl");
+        addRequestParameter("password","radar");
+        setRequestPathInfo("tiles","/tilesForward.do");
+        actionPerform();
+        verifyForward("success");
+        verifyForwardPath("/layouts/pageLayout.jsp");
+        try {
+        verifyTilesForward("failure","another.page");
+        } catch (AssertionFailedError afe) {
+            return;
+        }
+        fail("Should have failed.");
+    }
+
 
 }
