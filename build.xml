@@ -61,7 +61,7 @@
                 <isset property="build_2.2"/>
             </not>
         </condition>
-        <property name="struts.version" value="1.1"/>
+        <property name="struts.version" value="1.2"/>
     </target>
 
     <!-- Compile the application classes -->
@@ -245,7 +245,7 @@
             dest="${temp.dir}/jakarta-struts-nightly.zip"
             verbose="false"/>
         <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
-        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1.jar" overwrite="true"/>
+        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.2.jar" overwrite="true"/>
         <delete dir="${temp.dir}"/>
     </target>
 
