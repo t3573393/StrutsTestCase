@@ -1,18 +1,18 @@
-StrutsTestCase for JUnit - release 1.8
+StrutsTestCase for JUnit - release 1.9
 --------------------------------------
 
-This release introduces improved support for Struts 1.1,
+This release introduces improved support for Struts 1.1b2,
 provides several requested enhancements, and fixes many
 reported defects.
 
-The StrutsTestCase library is now available as four distinct
+The StrutsTestCase library is available as four distinct
 releases supporting both the 2.2 and 2.3 versions of the 
 Servlet specification, and both the 1.0.x and 1.1 versions
 of the Struts Framework.
 
-The StrutsTestCase library supports Struts 1.1b1 and the
-latest nightly builds, as well as Cactus v1.3 and JUnit
-v3.7.
+The StrutsTestCase library supports Struts 1.1b2 and the
+latest nightly builds, as well as Cactus v1.4.1 and JUnit
+v3.8.
 
 Change Log
 ==========
@@ -20,47 +20,38 @@ Change Log
 New Features:
 ------------
 
-- Improved support for Struts 1.1.  This release provides a
-major refactoring of MockStrutsTestCase and CactusStrutsTestCase
-to improve support for 1.1 features, including fixes for
-reported problems with DynaActionForm and Tiles features,
-and calling the appropriate Action perform or execute method.
-(MockStrutsTestCase and CactusStrutsTestCase)
+- Added support for sub-applications in Struts 1.1.  A new setConfigFile()
+method associates a configuration file with a given sub-application name,
+and a new setRequestPathInfo() method allows validating actions associated
+with a given sub-application. (MockStrutsTestCase and CactusTestCase)
 
-NOTE: This refactoring removes or deprecates the following
-methods in CactusStrutsTestCase:
+- Added getActionForm() method to directly access form used by the action
+being tested. (MockStrutsTestCase and CactusTestCase)
 
-  get/setActionForm have been removed.
-  setFailIfInvalid has been deprecated - it no longer
-  affects the flow of control, and will be removed in
-  a future release.
-
-- Added addRequestParameter() method in that takes in a String
-array. (MockStrutsTestCase only)
-
-- Changed logging mechanism to use the Commons logging package,
-as Struts does.  (MockStrutsTestCase only)
-
-- Implemented the following Mock Servlet methods:
-
-  ServletContextSimulator: setInitParameter()
-  HttpSessionSimulator: getServletContext()
-  HttpResponseSimulator: setDateHeader(), addDateHeader(),
-    addCookie(), findCookie()
+- Added more support for Tiles plugin.  Previously, StrutsTestCase was
+relying on the deprecated ActionComponentServlet; now the code uses
+more up-to-date mechanisms for verifying Tiles forwards. (MockStrutsTestCase
+and CactusStrutsTestCase)
 
 Bug Fixes:
 ---------
 
-- Fixed bug where where calling setWrapper methods was not
-checking to see if the wrapper passed in already had a valid
-request or response. (MockStrutsTestCase and CactusStrutsTestCase)
+- Fixed bug that led to a ConcurrentModificationException when using
+CactusTestCase with Tomcat 4.x. (CactusStrutsTestCase)
 
-- Fixed bug where verifyInputForward() would fail with a
-NullPointerException if the input mapping was not defined.
-(MockStrutsTestCase and CactusStrutsTestCase)
+- Fixed bug that led to an UnsupportedOperationException when using
+MockStrutsTestCase and Struts 1.1b2. (MockStrutsTestCase)
 
-- Fixed a bug where context path was not being added to verify
-forward paths. (MockStrutsTestCase and CactusStrutsTestCase)
+- Fixed bug in HttpServletRequestSimulator that sometimes returned
+an invalid HttpSession instance. (MockStrutsTestCase)
+
+- Fixed a compatibility error between CactusStrutsTestCase and the
+Servlet 2.2 API. (CactusStrutsTestCase)
+
+- Fixed bug whereby forwards were being executed, rather than reported
+for validation, sometimes leading to a spurious IllegalStateException
+or ClassCastException, or reporting errors for resources that did not
+exist. (CactusStrutsTestCase)
 
 
 Questions and comments are always welcome!

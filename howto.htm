@@ -5,21 +5,21 @@
 <title>StrutsTestCase for JUnit</title>
 </head>
 <body>
-<center><h1>StrutsTestCase for JUnit v1.8</h1></center>
-<font color=red><center><h3>Now supporting Struts 1.1!</h3></center></font>
+<center><h1>StrutsTestCase for JUnit v1.9</h1></center>
+<font color=red><center><h3>Now supporting Struts 1.1b2, including <a href="#subapp">sub-applications!</a></h3></center></font>
 <font size="-1"><center>Copyright (C) 2002 Deryl Seale</center></font>
 <hr>
 <br>
 <center>Questions? Comments? Please mail me at <a href="mailto:deryl@acm.org">deryl@acm.org</a>, or take a short <a href="http://sourceforge.net/survey/survey.php?group_id=39190&survey_id=12467">survey</a>.</center>
 
 <h2>What is it?</h2>
-StrutsTestCase for JUnit is an extension of the standard JUnit TestCase class that provides facilities 
-for testing code based on the Struts framework.  StrutsTestCase provides both a <a href="api/servletunit/package-summary.html"/>Mock Object approach</a> and a <a href="http://jakarta.apache.org/cactus">Cactus approach</a> 
+StrutsTestCase for JUnit is an extension of the standard JUnit TestCase class that provides facilities
+for testing code based on the Struts framework.  StrutsTestCase provides both a <a href="api/servletunit/package-summary.html"/>Mock Object approach</a> and a <a href="http://jakarta.apache.org/cactus">Cactus approach</a>
  to actually run the Struts ActionServlet, allowing you to test your Struts code with or without a running servlet engine.  Because
- StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation 
- of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases. 
+ StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation
+ of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases.
  <br><br>
-StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.02 and 1.1 (beta1 and the latest nightly builds), and Cactus 1.3 and JUnit 3.7.
+StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.02 and 1.1 (beta2 and the latest nightly builds), and Cactus 1.4.1 and JUnit 3.8.
 
 <br><br>
 <h2>Where does it live?</h2>
@@ -44,7 +44,7 @@ public class LoginAction extends Action {
     public ActionForward perform(ActionMapping mapping,
                                  ActionForm form,
                                  HttpServletRequest request,
-                                 HttpServletResponse response) 
+                                 HttpServletResponse response)
     {
 
         String username = ((LoginForm) form).getUsername();
@@ -59,7 +59,7 @@ public class LoginAction extends Action {
             saveErrors(request,errors);
             return mapping.findForward("login");
         }
-	
+
 	// store authentication info on the session
         HttpSession session = request.getSession();
         session.setAttribute("authentication", username);
@@ -282,18 +282,61 @@ information.  Also, we're checking to make sure we used a different forward, nam
 that takes us back to the login page, and that the authentication information is <i>not</i>
 on the session.
 <br><br> We're also verifying that the correct error messages
-were sent.  Note that we used the symbolic name, not the actual text.  Because the 
+were sent.  Note that we used the symbolic name, not the actual text.  Because the
 <code>verifyActionErrors()</code> method takes a String array, we can verify more than
 one error message, and StrutsTestCase will make sure there is an exact match.  If the test
 produced more error messages than we were expecting, it will fail; if it produced fewer, it
-will also fail.  Only an exact match in name and number will pass.  
+will also fail.  Only an exact match in name and number will pass.
 <br><br>
 It's that easy! As you can see, StrutsTestCase not only tests the implementation of your Action objects, but also
 the mappings that execute them, the ActionForm beans that are passed as arguments, and the
 error messages and forward statements that result from execution.  It's the whole enchilada!
 <br>
 <br>
-<center><A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=39190" width="88" height="31" border="0" alt="SourceForge Logo"></A></center>
+<h2 id="subapp">Testing Sub-Applications in Struts 1.1</h2>
+Struts 1.1 introduces the concept of sub-applications, or modules -- a powerful mechanism for dividing an
+application into functional components.  StrutsTestCase now provides support for testing sub-applications,
+which extends the concepts discussed in the previous examples.  The general idea is still the same: you
+can point a unit test to a configuration file, execute an action, and validate the results.  The methods
+for setting the configuration file and executing an action are a little different, however, as the following
+example shows:
+<br><br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+	<td>
+<pre>
+public class TestLoginAction extends MockStrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
+
+    public void testSuccessfulLogin() {
+       <font color="red">setConfigFile("mymodule","/WEB-INF/struts-config-mymodule.xml");
+       setRequestPathInfo("/mymodule","/login.do");</font>
+       addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");
+       actionPerform();
+       verifyForward("success");
+       assertEquals("deryl",(String) getSession().getAttribute("authentication"));
+       verifyNoActionErrors();
+    }
+}
+</pre>
+</td>
+</tr>
+</table><br><br>
+As you can see, this looks very similar to our other test cases.  The first important difference is in setting the configuration
+file.  Here, we set the files <i>and</i> associate this configuration file with a given sub-application name.  This allows the
+StrutsTestsCase library to pass this configuration information so that the ActionServlet can correctly identify the sub-application.
+Note that the same rules apply to setting the CLASSPATH to locate the configuration file as those mentioned above.
+<br><br>
+The other important difference is in setting the request path information.  Here, we set not only the path information, but also
+the sub-application names.  The combination of these two parameters is equivalent to the entire request path; in our test case
+above, this would be equivalent to a path like this: <b><code>/mymodule/login.do</code></b>.  It is important to note that when using
+this method, the first argument <i>must contain only the sub-application name</i>, and the second argument must contain the rest
+of the path <i>not including the sub-application name</i>.  Otherwise, the request path will be incorrectly constructed, resulting
+in a spurious test failure.
+<br><br>
+<center><A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sfFOOFOOlogo.php?group_id=39190" width="88" height="31" border="0" alt="SourceForge Logo"></A></center>
 </body>
 </html>
 
