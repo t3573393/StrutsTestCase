@@ -20,6 +20,8 @@ import servletunit.struts.MockStrutsTestCase;
 
 public class TestAbsolutePath extends MockStrutsTestCase {
 
+    String rootPath;
+
     public TestAbsolutePath(String testName) {
         super(testName);
     }
@@ -27,10 +29,12 @@ public class TestAbsolutePath extends MockStrutsTestCase {
     public void setUp() throws Exception {
         super.setUp();
         setServletConfigFile("/WEB-INF/web.xml");
+        rootPath = System.getProperty("basedir");
+        System.out.println(rootPath);
     }
 
     public void testSuccessfulLogin() {
-        setConfigFile("c:/develop/projects/strutstestcase/src/examples/WEB-INF/struts-config.xml");
+        setConfigFile(rootPath + "/src/examples/WEB-INF/struts-config.xml");
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
         setRequestPathInfo("/login");

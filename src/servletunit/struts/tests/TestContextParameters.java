@@ -39,7 +39,7 @@ public class TestContextParameters extends MockStrutsTestCase {
 
     public void testContextParametersAbsolutePath() {
         setRequestPathInfo("/testContextParams");
-        setServletConfigFile("c:/develop/projects/strutstestcase/src/examples/WEB-INF/web.xml");
+        setServletConfigFile(System.getProperty("basedir") + "/src/examples/WEB-INF/web.xml");
         actionPerform();
         verifyNoActionErrors();
     }

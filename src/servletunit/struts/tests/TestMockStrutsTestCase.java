@@ -43,7 +43,7 @@ public class TestMockStrutsTestCase extends MockStrutsTestCase {
     }
 
     public void testSetContextDirectory() {
-        File file = new File("c:/develop/projects/strutstestcase");
+        File file = new File(System.getProperty("basedir"));
         setContextDirectory(file);
         assertEquals(new File(file,"test.html").getAbsolutePath(),getRequest().getRealPath("/test.html"));
     }

@@ -178,6 +178,7 @@
         <mkdir dir="${test.dir}" />
         <junit printsummary="yes" haltonfailure="yes">
             <sysproperty key="test.dir" value="${test.dir}" />
+            <sysproperty key="basedir" value="${basedir}" />
             <classpath refid="class.path" />
             <classpath>
                 <pathelement location="${src.dir}/examples/"/>

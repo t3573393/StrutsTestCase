@@ -155,8 +155,8 @@ public class TestHttpServletRequestSimulator extends TestCase {
     }
 
      public void testGetRealPath() {
-         File file = new File("c:/develop/projects/strutstestcase");
-         context.setContextDirectory(new File("c:/develop/projects/strutstestcase"));
+         File file = new File(System.getProperty("basedir"));
+         context.setContextDirectory(file);
          assertEquals(new File(file,"test.html").getAbsolutePath(),request.getRealPath("/test.html"));
      }
 

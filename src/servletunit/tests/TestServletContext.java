@@ -61,7 +61,7 @@ public class TestServletContext extends TestCase {
     }
 
     public void testGetRealPath() {
-        File file = new File("c:/develop/projects/strutstestcase");
+        File file = new File(System.getProperty("basedir"));
         context.setContextDirectory(file);
         assertEquals(new File(file,"test.html").getAbsolutePath(),context.getRealPath("/test.html"));
     }
