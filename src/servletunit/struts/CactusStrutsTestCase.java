@@ -92,19 +92,17 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * forms and turn off debugging, and clears all other parameters.
      */
     public void setUp() throws Exception {
-	if (!isInitialized) {
-	    try {
-		parameters.clear();
-		forward = null;
-		actionForm = null;
-		if (actionServlet == null)
-		    actionServlet = new ActionServlet();
-		requestWrapper = null;
-		responseWrapper = null;
-		isInitialized = true;
-	    } catch (Exception e) {
-		throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
-	    }
+	try {
+	    parameters.clear();
+	    forward = null;
+	    actionForm = null;
+	    if (actionServlet == null)
+		actionServlet = new ActionServlet();
+	    requestWrapper = null;
+	    responseWrapper = null;
+	    isInitialized = true;
+	} catch (Exception e) {
+	    throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
 	}
     }
 
