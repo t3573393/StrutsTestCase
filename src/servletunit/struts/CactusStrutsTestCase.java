@@ -57,7 +57,6 @@ import java.util.HashMap;
 public class CactusStrutsTestCase extends ServletTestCase {
 
     ActionServlet actionServlet;
-    String configFile = "/WEB-INF/struts-config.xml";
     String actionPath;
     ActionForward forward;
     HashMap parameters = new HashMap();
@@ -122,20 +121,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Returns an ActionServlet controller to be used in this
-     * test.
-     * @deprecated use actionPerform() instead.
-     */
-    public ActionServlet getActionServlet() {
-        try {
-            this.actionServlet.init(config);
-            return this.actionServlet;
-        } catch (ServletException e) {
-            throw new AssertionFailedError(e.getMessage());
-        }
-    }
-
-    /**
      * Adds an HttpServletRequest parameter to be used in setting up the
      * ActionForm instance to be used in this test.  Each parameter added
      * should correspond to an attribute in the ActionForm instance used
@@ -181,10 +166,21 @@ public class CactusStrutsTestCase extends ServletTestCase {
         this.config.setInitParameter("config",pathname);
     }
 
+    /**
+     * Executes the Action instance to be tested.
+     *
+     * @exception AssertionFailedError if there are any execution
+     * errors while calling Action.perform()
+     *
+     */
     public void actionPerform() {
 
         // set up the ActionServlet
-        ActionServlet actionServlet = this.getActionServlet();
+	try {
+	    actionServlet.init(config);
+	} catch (ServletException e) {
+	    throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
+	}
 
         // set up  the ActionMapping
         ActionMapping mapping = actionServlet.findMapping(this.actionPath);
