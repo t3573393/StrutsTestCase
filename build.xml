@@ -23,6 +23,8 @@
         <fileset dir="${basedir}/lib">
             <include name="*.jar" />
             <include name="*.zip" />
+	    <exclude name="struts-1.1.jar" if="build_1.0"/>
+	    <exclude name="struts-1.0.jar" unless="build_1.0"/>
         </fileset>
         <pathelement location="${build.dir}" />
     </path>
@@ -46,6 +48,7 @@
 	    <exclude name="**/2.2/**" unless="build_2.2"/>
 	    <exclude name="**/struts/MockStrutsTestCase.java" if="build_2.2"/>
 	    <exclude name="**/struts/CactusStrutsTestCase.java" if="build_2.2"/>
+	    <exclude name="**/*Token*.java" if="build_1.0"/>
         </javac>
     </target>
 
@@ -63,6 +66,8 @@
 	    <lib dir="${basedir}/lib">
 	         <exclude name="ant*.jar"/>
 		 <exclude name="servlet.jar"/>
+		 <exclude name="struts-1.1.jar" if="build_1.0"/>
+		 <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
 	    <!-- do we want to remove test classes? -->
 	    <classes dir="${build.dir}"/>
@@ -71,10 +76,18 @@
 
     <!-- prepare code for public release -->
     <target name="release" depends="package,docs">
-        <zip zipFile="${basedir}/strutstest.zip" basedir="${basedir}/dist"/>
+        <property name="servlet.version" value="2.3"/>
+	<property name="struts.version" value="1.1"/>
+        <condition property="servlet.version" value="2.2">
+	   <equals arg1="${build_2.2}" arg2="true"/>
+        </condition>
+	<condition property="struts.version" value="1.0">
+	   <equals arg1="${build_1.0}" arg2="true"/>
+        </condition>
+        <zip zipFile="${basedir}/strutstest-${struts.version}_${servlet.version}.zip" basedir="${basedir}/dist"/>
 	<zip zipFile="${basedir}/strutstest-src.zip" basedir="${basedir}/src"/>
 	<tar tarFile="${basedir}/strutstest.tar" basedir="${basedir}/dist"/>
-	<gzip src="${basedir}/strutstest.tar" zipfile="${basedir}/strutstest.tar.gz"/>
+	<gzip src="${basedir}/strutstest.tar" zipfile="${basedir}/strutstest-${struts.version}_${servlet.version}.tar.gz"/>
 	<delete file="${basedir}/strutstest.tar"/>
     </target>
 
@@ -84,9 +97,12 @@
         <delete dir="${basedir}/dist" />
         <delete dir="${test.dir}" />
 	<delete file="${basedir}/test.war"/>
-	<delete file="${basedir}/strutstest.zip"/>
-	<delete file="${basedir}/strutstest.tar.gz"/>
-	<delete file="${basedir}/strutstest-src.tar.gz"/>
+	<delete>
+	   <fileset dir="${basedir}" includes="strutstest*.zip"/>
+	</delete>
+	<delete>
+	   <fileset dir="${basedir}" includes="strutstest*.tar.gz"/>
+	</delete>
     </target>
     
     <!-- Generate Javadocs for the application -->
@@ -101,7 +117,7 @@
 	     <fileset dir="${src.dir}/examples"/>
 	</copy>
         <javadoc packagenames="servletunit,servletunit.struts"
-           sourcepath="${src.dir}"
+	   sourcepath="${src.dir}"
            destdir="${doc.dir}/api"
            author="true"
            version="true"
