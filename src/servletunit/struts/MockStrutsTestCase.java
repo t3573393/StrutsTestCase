@@ -144,6 +144,15 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
+     * Sets the ActionServlet to be used in this test execution.  This
+     * method should only be used if you plan to use a customized
+     * version different from that provided in the Struts distribution.
+     */
+    public void setActionServlet(ActionServlet servlet) {
+        this.actionServlet = servlet;
+    }
+
+    /**
      * Executes the Action instance to be tested.  This method
      * calls the ActionServlet.doPost() method to execute the
      * Action instance to be tested, passing along any parameters
