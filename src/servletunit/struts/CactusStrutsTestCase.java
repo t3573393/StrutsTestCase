@@ -143,7 +143,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
 	if (wrapper == null)
 	    throw new IllegalArgumentException("wrapper class cannot be null!");
 	else {
-	    wrapper.setRequest(this.request);
+	    if (wrapper.getRequest() == null)
+		wrapper.setRequest(this.request);
 	    this.requestWrapper = wrapper;
 	}
     }
@@ -185,7 +186,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
 	if (wrapper == null)
 	    throw new IllegalArgumentException("wrapper class cannot be null!");
 	else {
-	    wrapper.setResponse(this.response);
+	    if (wrapper.getResponse() == null)
+		wrapper.setResponse(this.response);
 	    this.responseWrapper = wrapper;
 	}
     }

@@ -141,13 +141,14 @@ public class MockStrutsTestCase extends TestCase {
      * used when calling Action.perform().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
-    init();
-    if (wrapper == null)
-        throw new IllegalArgumentException("wrapper class cannot be null!");
-    else {
-        wrapper.setRequest(this.request);
-        this.requestWrapper = wrapper;
-    }
+	init();
+	if (wrapper == null)
+	    throw new IllegalArgumentException("wrapper class cannot be null!");
+	else {
+	    if (wrapper.getRequest() == null)
+		wrapper.setRequest(this.request);
+	    this.requestWrapper = wrapper;
+	}
     }
 
     /**
@@ -183,13 +184,14 @@ public class MockStrutsTestCase extends TestCase {
      * used when calling Action.perform().
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
-    init();
-    if (wrapper == null)
-        throw new IllegalArgumentException("wrapper class cannot be null!");
-    else {
-        wrapper.setResponse(this.response);
-        this.responseWrapper = wrapper;
-    }
+	init();
+	if (wrapper == null)
+	    throw new IllegalArgumentException("wrapper class cannot be null!");
+	else {
+	    if (wrapper.getResponse() == null)
+		wrapper.setResponse(this.response);
+	    this.responseWrapper = wrapper;
+	}
     }
 
     /**
