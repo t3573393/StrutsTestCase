@@ -23,15 +23,20 @@ public class TestDynaActionForm extends MockStrutsTestCase {
     public TestDynaActionForm(String testName) {
         super(testName);
     }
-    
+
+    public void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
+    }
+
     public void testForm() {
-	addRequestParameter("username","deryl");
-	addRequestParameter("password","radar");
-	setRequestPathInfo("/testDynamicAction");
-	actionPerform();
-	verifyNoActionErrors();
+        addRequestParameter("username","deryl");
+        addRequestParameter("password","radar");
+        setRequestPathInfo("/testDynamicAction");
+        actionPerform();
+        verifyNoActionErrors();
     }
 
 }
 
-    
+

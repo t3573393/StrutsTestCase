@@ -27,6 +27,7 @@ public class TestTilesForward extends MockStrutsTestCase {
     public void setUp() throws Exception {
         super.setUp();
         setConfigFile("tiles","/WEB-INF/struts-config-tiles.xml");
+        setServletConfigFile("/WEB-INF/web.xml");
         setConfigFile("/WEB-INF/struts-config.xml");
     }
 

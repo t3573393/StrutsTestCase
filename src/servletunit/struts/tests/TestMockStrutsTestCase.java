@@ -32,6 +32,11 @@ public class TestMockStrutsTestCase extends MockStrutsTestCase {
         super(testCase);
     }
 
+    public void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
+    }
+
     public void testSetInitParameter() throws Exception{
         setInitParameter("testName", "testValue");
         assertEquals("testValue", getActionServlet().getInitParameter("testName"));

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE tiles-definitions SYSTEM "http://jakarta.apache.org/struts/dtds/tiles-config.dtd">
 <tiles-definitions>
 	<definition name=""/>
 	<!-- Page Layout Definition, used for pages displayed in window of Content Viewer -->

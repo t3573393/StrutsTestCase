@@ -32,7 +32,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.InputStream;
 import java.io.File;
-import java.net.URL;
 
 /**
  * MockStrutsTestCase is an extension of the base JUnit testcase that
@@ -391,8 +390,6 @@ public class MockStrutsTestCase extends TestCase {
         // pull in the appropriate parts of the
         // web.xml file -- first the init-parameters
         Digester digester = new Digester();
-        URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
-        if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
         digester.push(this.config);
         digester.setDebug(0);
         digester.setValidating(false);
@@ -411,7 +408,6 @@ public class MockStrutsTestCase extends TestCase {
 
         // now the context parameters..
         digester = new Digester();
-        if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
         digester.setDebug(0);
         digester.setValidating(false);
         digester.push(this.context);

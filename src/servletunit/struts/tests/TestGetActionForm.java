@@ -26,6 +26,11 @@ public class TestGetActionForm extends MockStrutsTestCase {
         super(testName);
     }
 
+    public void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
+    }
+
     public void testSuccessfulLogin() {
 
         addRequestParameter("username","deryl");

@@ -24,6 +24,11 @@ public class TestAbsolutePath extends MockStrutsTestCase {
         super(testName);
     }
 
+    public void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
+    }
+
     public void testSuccessfulLogin() {
         setConfigFile("c:/develop/projects/strutstestcase/src/examples/WEB-INF/struts-config.xml");
         addRequestParameter("username","deryl");

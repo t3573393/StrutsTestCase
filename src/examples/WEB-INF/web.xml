@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
-  "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
 
         <context-param>
@@ -38,7 +36,7 @@
 		</init-param>
 		<init-param>
 			<param-name>validating</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>

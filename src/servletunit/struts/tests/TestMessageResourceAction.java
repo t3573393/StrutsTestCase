@@ -24,6 +24,11 @@ public class TestMessageResourceAction extends MockStrutsTestCase {
         super(testName);
     }
 
+    public void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
+    }
+
     public void testGetResources() {
         setRequestPathInfo("/testMessage");
 	setServletConfigFile("/WEB-INF/web.xml");

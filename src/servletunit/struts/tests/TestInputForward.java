@@ -24,7 +24,12 @@ public class TestInputForward extends MockStrutsTestCase {
     public TestInputForward(String testName) {
         super(testName);
     }
-    
+
+    public void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
+    }
+
     public void testInputForward() {
 	setRequestPathInfo("/login");
 	actionPerform();

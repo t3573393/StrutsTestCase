@@ -26,11 +26,15 @@ public class TestTokenAction extends MockStrutsTestCase {
         super(testName);
     }
 
+    public void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
+    }
+
     public void testTransactionToken() {
 	addRequestParameter(Constants.TOKEN_KEY, "test_token");
 	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
         setRequestPathInfo("/testToken");
-	setServletConfigFile("/WEB-INF/web.xml");
         actionPerform();
         verifyNoActionErrors();
     }
