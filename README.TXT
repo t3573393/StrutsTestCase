@@ -60,6 +60,9 @@ was defined using Tiles.  (MockStrutsTestCase and CactusStrutsTestCase)
 jsessionid parameter name that was upper case.  (MockStrutsTestCase and
 CactusStrutsTestCase)
 
+- Fixed bug where sub-applications were not spuriously failing if the
+test class had more than one test method.  (CactusStrutsTestCase)
+
 
 Questions and comments are always welcome!
 
