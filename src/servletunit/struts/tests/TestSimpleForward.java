@@ -30,7 +30,7 @@ public class TestSimpleForward extends MockStrutsTestCase {
     }
 
     public void testSimpleForward() {
-        setRequestPathInfo("/testSimpleForward");
+        setRequestPathInfo("test","/testSimpleForward");
         actionPerform();
     }
 

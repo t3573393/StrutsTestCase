@@ -26,13 +26,13 @@ public class TestSimpleForward extends CactusStrutsTestCase {
     }
 
     public void testSimpleForward() {
-	try {
-	    setRequestPathInfo("/testSimpleForward");
-	    actionPerform();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    throw new AssertionFailedError("caught exception " + e.getClass() + " : " + e.getMessage());
-	}
+        try {
+            setRequestPathInfo("test","/testSimpleForward");
+            actionPerform();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionFailedError("caught exception " + e.getClass() + " : " + e.getMessage());
+        }
     }
 
 }
