@@ -21,23 +21,18 @@ package servletunit.struts;
 
 import org.apache.struts.action.ActionServlet;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.cactus.ServletTestCase;
 import junit.framework.AssertionFailedError;
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
-import java.io.IOException;
-import java.util.HashMap;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletConfig;
 
 /**
  * CactusStrutsTestCase is an extension of the Cactus ServletTestCase 
@@ -60,14 +55,9 @@ import java.util.HashMap;
 public class CactusStrutsTestCase extends ServletTestCase {
 
     ActionServlet actionServlet;
-    String actionPath;
-    ActionForward forward;
-    ActionForm actionForm;
-    HashMap parameters = new HashMap();
     HttpServletRequestWrapper requestWrapper;
     HttpServletResponseWrapper responseWrapper;
     boolean isInitialized = false;
-    boolean failIfFormInvalid = true;
     boolean actionServletIsInitialized = false;
 
     /**
@@ -94,14 +84,16 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setUp() throws Exception {
 	try {
-	    parameters.clear();
-	    forward = null;
-	    actionForm = null;
 	    if (actionServlet == null)
 		actionServlet = new ActionServlet();
 	    requestWrapper = null;
 	    responseWrapper = null;
 	    isInitialized = true;
+	    ServletContext servletContext = new StrutsServletContextWrapper(this.config.getServletContext());
+	    this.config = new StrutsServletConfigWrapper(this.config);
+	    ((StrutsServletConfigWrapper) this.config).setServletContext(servletContext);
+	    this.request = new StrutsRequestWrapper(this.request);
+	    this.response = new StrutsResponseWrapper(this.response);
 	} catch (Exception e) {
 	    throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
 	}
@@ -211,7 +203,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void addRequestParameter(String parameterName, String parameterValue)
     {
 	init();
-        parameters.put(parameterName,parameterValue);
+	((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValue);
     }
 
     /**
@@ -223,7 +215,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void addRequestParameter(String parameterName, String[] parameterValues)
     {
 	init();
-        parameters.put(parameterName,parameterValues);
+	((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValues);
     }
 
     /**
@@ -236,7 +228,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setRequestPathInfo(String pathInfo) {
 	init();
-        this.actionPath = Common.stripActionPath(pathInfo);
+	((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
     }
 
     /**
@@ -262,37 +254,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
         }
         this.config.setInitParameter("config",pathname);
 	actionServletIsInitialized = false;
-    }
-
-    /**
-     * Sets the ActionForm instance to be used with the
-     * Action to be tested.  In most cases, you do <b>not</b>
-     * need to use this method, as CactusStrutsTestCase sets
-     * up the ActionForm for you.  If, however, you need to
-     * use an ActionForm instance from a previous test (eg:
-     * to test nested properties) then you can use this method
-     * to set the ActionForm instance.
-     */
-    public void setActionForm(ActionForm form) {
-	init();
-        this.actionForm = form;
-    }
-
-    /**
-     * Returns the ActionForm instance used in testing an Action
-     * instance.  This method should only be used in conjunction
-     * with the setActionForm() method to keep and use ActionForm
-     * instances between test execution.
-     *
-     * @return any ActionForm instance saved in the request or
-     * session scope, or null if no such ActionForm instance
-     * is saved (or is cleaned up by the Action.perform() method).
-     *
-     * @see setActionForm(ActionForm form)
-     */
-    public ActionForm getActionForm() {
-	init();
-        return (this.actionForm);
     }
 
     /**
@@ -330,9 +291,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * Sets the behavior of this test when validating ActionForm instances.
      * Set to false if you do not want your test to fail if a form
      * does not pass validation.  By default, this is is set to true.
+     * 
+     * @deprecated This method no longer affects the flow of control.
      */
     public void setFailIfInvalid(boolean flag) {
-	this.failIfFormInvalid = flag;
     }
 
     /**
@@ -347,105 +309,25 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void actionPerform() {
 	init();
-	HttpServletRequest request = this.request;
-	HttpServletResponse response = this.response;
-	// make sure errors are cleared from last test.
-	request.removeAttribute(Action.ERROR_KEY); 
-	
-	if (this.requestWrapper != null)
-	    request = this.requestWrapper;
-	if (this.responseWrapper != null)
-	    response = this.responseWrapper;
-
-	ActionServlet actionServlet = this.getActionServlet();
-
-        // set up the ActionMapping
-        ActionMapping mapping = actionServlet.findMapping(this.actionPath);
-        if (mapping == null)
-            throw new AssertionFailedError("Undefined mapping '" + this.actionPath + "'");
-
-        // set up the ActionForm
-        ActionForm form = null;
-        if (mapping.getAttribute() != null) {
-            String formType = actionServlet.findFormBean(mapping.getAttribute()).getType();
-            try {
-                form = getActionForm();
-                if (form == null) {
-                    form = (ActionForm) Class.forName(formType).newInstance();
-                    form.reset(mapping,request);
-                }
-                BeanUtils.populate(form,parameters);
-            } catch (Exception e) {
-                throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getClass() + " - " + e.getMessage());
-            }
-
-            // Store the newly created bean in the appropriate scope
-	    String scope = mapping.getScope();
-	    String attribute = mapping.getAttribute();
-            if ("request".equals(scope))
-                getRequest().setAttribute(attribute, form);
-            else if ("session".equals(scope))
-                getSession().setAttribute(attribute, form);
-
-
-            if (mapping.getValidate()) {
-                ActionErrors errors = form.validate(mapping,request);
-                if ((errors != null) && (!errors.empty())) {
-		    if (!failIfFormInvalid) {
-			getRequest().setAttribute(Action.ERROR_KEY, errors);
-			if (mapping.getInput() == null)
-			    fail("no input mapping defined!");
-			this.forward = new ActionForward(mapping.getInput());
-			return;
-		    } else {
-			StringBuffer errorText = new StringBuffer();
-			Iterator iterator = errors.get();
-			while (iterator.hasNext()) {
-			    errorText.append(" \"");
-			    errorText.append(((ActionError) iterator.next()).getKey());
-			    errorText.append("\"");
-			}
-			throw new AssertionFailedError("Error while validating ActionForm: " + errorText.toString());
-		    }
-		}
-	    }
-        }
-
-	// Check to see if this is a simple forward.  If so,
-	// try it out to see if it works and return.  Errors
-	// should be reported as test failure.
-	String forward = mapping.getForward();
-        if ( forward != null ) {
-	    try {
-		actionServlet.getServletContext().getRequestDispatcher(forward).forward(request, response);
-		return;
-	    } catch (Exception e) {
-		throw new AssertionFailedError("Error while validating forward '" + forward + "' : " + e.getClass() + " - " + e.getMessage());
-	    }
-	}
-
-        // set up Action
-        Action action = null;
-        try {
-            action = (Action) Class.forName(mapping.getType()).newInstance();
-            action.setServlet(actionServlet);
+	try {
+	    HttpServletRequest request = this.request;
+	    HttpServletResponse response = this.response;
+	    // make sure errors are cleared from last test.
+	    request.removeAttribute(Action.ERROR_KEY); 
+	    
+	    if (this.requestWrapper != null)
+		request = this.requestWrapper;
+	    if (this.responseWrapper != null)
+		response = this.responseWrapper;
+	    
+	    ActionServlet actionServlet = this.getActionServlet();
+	    
+	    actionServlet.doPost(request,response);
+	    
+	} catch (ServletException se) {
+	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (Exception e) {
-            throw new AssertionFailedError("Error trying to set up Action: " + e.getClass() + " - " + e.getMessage());
-        }
-
-        try {
-            this.forward = action.execute(mapping,form,request,response);
-	    if (mapping.getAttribute() != null) {
-		ActionForm retForm = null;
-		String scope = mapping.getScope();
-		if ("request".equals(scope)) {
-		    retForm = (ActionForm)getRequest().getAttribute(mapping.getAttribute());
-		} else if ("session".equals(scope)) {
-		    retForm = (ActionForm)getSession().getAttribute(mapping.getAttribute());
-		}
-		setActionForm(retForm);
-	    }
-        } catch (Exception e) {
+	    e.printStackTrace();
             throw new AssertionFailedError("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
 	}
     }
@@ -463,7 +345,17 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
 	init();
-        Common.verifyForwardPath(actionServlet,actionPath,forwardName,forward.getPath(),false);
+	if (response.containsHeader("Location")) {
+	    ActionForward expectedRedirectForward = actionServlet.findMapping(request.getPathInfo()).findForward(forwardName);
+	    if (expectedRedirectForward == null)
+		fail("Cannot find forward '" + forwardName + "' - it is possible that it is not mapped correctly.");
+	    String expectedRedirect = expectedRedirectForward.getPath();
+	    String actualRedirect = Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
+	    if (!expectedRedirect.equals(actualRedirect))
+		fail("Was expecting redirect '" + expectedRedirect + "' but received redirect '" + actualRedirect + "'");
+	    return;
+	}
+        Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,((StrutsServletContextWrapper) this.config.getServletContext()).getForward(),false);
     }
 
     /**
@@ -479,8 +371,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
 	init();
-	if (!Common.stripJSessionID(forward.getPath()).equals(forwardPath))
-	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + forward.getPath() + "'");
+	if (!Common.stripJSessionID(((StrutsServletContextWrapper) this.config.getServletContext()).getForward()).equals(forwardPath))
+	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + ((StrutsServletContextWrapper) this.config.getServletContext()).getForward() + "'");
     }
 
     /**
@@ -493,8 +385,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyInputForward() {
 	init();
-        String inputPath = actionServlet.findMapping(actionPath).getInput();
-        Common.verifyForwardPath(actionServlet,actionPath,inputPath,forward.getPath(),true);
+        String inputPath = actionServlet.findMapping(request.getPathInfo()).getInput();
+        Common.verifyForwardPath(actionServlet,request.getPathInfo(),inputPath,((StrutsServletContextWrapper) this.config.getServletContext()).getForward(),true);
     }
 
     /**
