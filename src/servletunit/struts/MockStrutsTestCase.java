@@ -335,17 +335,9 @@ public class MockStrutsTestCase extends TestCase {
 
     /**
      * Sets the location of the Struts configuration file for the default module.
-     * This method take in either a relative path, or and absolute path.  If an
-     * absolute path is passed in, then the the file will be loaded from the
-     * filesystem.  If a relative path is specified, then the rules for
-     * searching for the configuration files are the same as the rules associated
-     * with calling Class.getResourceAsStream().  Briefly, this method delegates
-     * the call to its class loader, after making these changes to the resource name: if
-     * the resource name starts with "/", it is unchanged; otherwise, the package name
-     * is prepended to the resource name after converting "." to "/". <br><br>
-     * To be on the safe side, always make sure the pathname refers to a
-     * file in the same directory as your test, or make sure it begins
-     * with a "/" character.
+     * This method can take either an absolute path, or a relative path.  If an
+     * absolute path is supplied, the configuration file will be loaded from the
+     * underlying filesystem; otherwise, the ServletContext loader will be used.
      */
     public void setConfigFile(String pathname) {
         init();
@@ -353,7 +345,10 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
-     * Sets the struts configuration file for a given sub-application.
+     * Sets the struts configuration file for a given sub-application. This method
+     * can take either an absolute path, or a relative path.  If an absolute path
+     * is supplied, the configuration file will be loaded from the underlying
+     * filesystem; otherwise, the ServletContext loader will be used.
      *
      * @param moduleName the name of the sub-application, or null if this is the default application
      * @param pathname the location of the configuration file for this sub-application
