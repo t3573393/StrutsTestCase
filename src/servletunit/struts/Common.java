@@ -209,12 +209,24 @@ public class Common {
                 }
             }
         }
-        forwardName = request.getContextPath() + forwardName;
+        String moduleName = (String) request.getAttribute(INCLUDE_SERVLET_PATH);
+        if ((moduleName != null) && (moduleName.length() > 0))
+        //todo: think i can use first index 0 here, since it will start with a /
+            moduleName = moduleName.substring(moduleName.indexOf('/'),moduleName.lastIndexOf('/'));
+        if (!forwardName.startsWith("/"))
+            forwardName = "/" + forwardName;
+        forwardName = request.getContextPath() + moduleName + forwardName;
         if (logger.isDebugEnabled()) {
-            logger.debug("verifyForwardPath() : added context path to forward = " + forwardName);
+            logger.debug("verifyForwardPath() : added context path and module name to forward = " + forwardName);
         }
         if (actualForwardPath == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("verifyForwardPath() : actualForwardPath is null - this usually means it is not mapped properly.");
+            }
             throw new AssertionFailedError("Was expecting '" + forwardName + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("verifyForwardPath() : expected forward = '" + forwardName + "' - actual forward = '" + actualForwardPath + "'");
         }
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
