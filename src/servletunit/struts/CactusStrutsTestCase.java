@@ -29,9 +29,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 /**
- * CactusStrutsTestCase is an extension of the Cactus ServletTestCase 
- * base class that provides additional methods to aid in testing 
- * Struts Action objects.  It uses an in-container approach to run 
+ * CactusStrutsTestCase is an extension of the Cactus ServletTestCase
+ * base class that provides additional methods to aid in testing
+ * Struts Action objects.  It uses an in-container approach to run
  * the servlet container, and tests the execution of Action objects as they
  * are actually run through the Struts ActionServlet.  CactusStrutsTestCase
  * provides methods that set up the request path, request parameters
@@ -66,32 +66,32 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * base class setUp method has been called.
      */
     private void init() {
-	if (!isInitialized) {
-	    throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
-	}
+        if (!isInitialized) {
+            throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
+        }
     }
-    
+
     /**
      * Sets up the test fixture for this test.  This method creates
      * an instance of the ActionServlet, initializes it to validate
      * forms and turn off debugging, and clears all other parameters.
      */
     public void setUp() throws Exception {
-	try {
-	    if (actionServlet == null)
-		actionServlet = new ActionServlet();
-	    requestWrapper = null;
-	    responseWrapper = null;
-	    ServletContext servletContext = new StrutsServletContextWrapper(this.config.getServletContext());
-	    
-	    this.config = new StrutsServletConfigWrapper(this.config);
-	    ((StrutsServletConfigWrapper) this.config).setServletContext(servletContext);
-	    this.request = new StrutsRequestWrapper(this.request);
-	    this.response = new StrutsResponseWrapper(this.response);
-	    isInitialized = true;
-	} catch (Exception e) {
-	    throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
-	}
+        try {
+            if (actionServlet == null)
+                actionServlet = new ActionServlet();
+            requestWrapper = null;
+            responseWrapper = null;
+            ServletContext servletContext = new StrutsServletContextWrapper(this.config.getServletContext());
+
+            this.config = new StrutsServletConfigWrapper(this.config);
+            ((StrutsServletConfigWrapper) this.config).setServletContext(servletContext);
+            this.request = new StrutsRequestWrapper(this.request);
+            this.response = new StrutsResponseWrapper(this.response);
+            isInitialized = true;
+        } catch (Exception e) {
+            throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
+        }
     }
 
     /**
@@ -99,22 +99,22 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * this test.
      */
     public HttpServletRequest getRequest() {
-	init();
+        init();
         return this.request;
     }
 
     /**
      * Returns a HttpServletRequestWrapper object that can be used
      * in this test. Note that if {@link #setRequestWrapper} has not been
-     * called, this method will return an instance of 
+     * called, this method will return an instance of
      * javax.servlet.http.HttpServletRequestWrapper.
      */
     public HttpServletRequestWrapper getRequestWrapper() {
-	init();
-	if (requestWrapper == null)
-	    return new HttpServletRequestWrapper(this.request);
-	else
-	    return requestWrapper;
+        init();
+        if (requestWrapper == null)
+            return new HttpServletRequestWrapper(this.request);
+        else
+            return requestWrapper;
     }
 
     /**
@@ -127,14 +127,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * used when calling Action.perform().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
-	init();
-	if (wrapper == null)
-	    throw new IllegalArgumentException("wrapper class cannot be null!");
-	else {
-	    if (wrapper.getRequest() == null)
-		wrapper.setRequest(this.request);
-	    this.requestWrapper = wrapper;
-	}
+        init();
+        if (wrapper == null)
+            throw new IllegalArgumentException("wrapper class cannot be null!");
+        else {
+            if (wrapper.getRequest() == null)
+                wrapper.setRequest(this.request);
+            this.requestWrapper = wrapper;
+        }
     }
 
     /**
@@ -142,22 +142,22 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * this test.
      */
     public HttpServletResponse getResponse() {
-	init();
+        init();
         return this.response;
     }
 
     /**
      * Returns an HttpServletResponseWrapper object that can be used in
      * this test.  Note that if {@link #setResponseWrapper} has not been
-     * called, this method will return an instance of 
+     * called, this method will return an instance of
      * javax.servlet.http.HttpServletResponseWrapper.
      */
     public HttpServletResponseWrapper getResponseWrapper() {
-	init();
-	if (responseWrapper == null)
-	    return new HttpServletResponseWrapper(this.response);
-	else
-	    return responseWrapper;
+        init();
+        if (responseWrapper == null)
+            return new HttpServletResponseWrapper(this.response);
+        else
+            return responseWrapper;
     }
 
     /**
@@ -170,14 +170,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * used when calling Action.perform().
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
-	init();
-	if (wrapper == null)
-	    throw new IllegalArgumentException("wrapper class cannot be null!");
-	else {
-	    if (wrapper.getResponse() == null)
-		wrapper.setResponse(this.response);
-	    this.responseWrapper = wrapper;
-	}
+        init();
+        if (wrapper == null)
+            throw new IllegalArgumentException("wrapper class cannot be null!");
+        else {
+            if (wrapper.getResponse() == null)
+                wrapper.setResponse(this.response);
+            this.responseWrapper = wrapper;
+        }
     }
 
     /**
@@ -185,7 +185,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * test.
      */
     public HttpSession getSession() {
-	init();
+        init();
         return this.session;
     }
 
@@ -197,20 +197,20 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void addRequestParameter(String parameterName, String parameterValue)
     {
-	init();
-	((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValue);
+        init();
+        ((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValue);
     }
 
     /**
      * Adds an HttpServletRequest parameter that is an array of String values
      * to be used in setting up the ActionForm instance to be used in this test.
-     * Each parameter added should correspond to an attribute in the ActionForm 
+     * Each parameter added should correspond to an attribute in the ActionForm
      * instance used by the Action instance being tested.
      */
     public void addRequestParameter(String parameterName, String[] parameterValues)
     {
-	init();
-	((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValues);
+        init();
+        ((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValues);
     }
 
     /**
@@ -222,8 +222,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * appear in an HTML or JSP source file.
      */
     public void setRequestPathInfo(String pathInfo) {
-	init();
-	((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
+        init();
+        ((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
     }
 
     /**
@@ -235,7 +235,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setInitParameter(String key, String value){
         this.config.setInitParameter(key, value);
-	this.actionServletIsInitialized = false;
+        this.actionServletIsInitialized = false;
     }
 
     /**
@@ -253,14 +253,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * with a "/" character.
      */
     public void setConfigFile(String pathname) {
-	init();
+        init();
         // ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');
             pathname = "/" + prefix + "/" + pathname;
         }
         this.config.setInitParameter("config",pathname);
-	actionServletIsInitialized = false;
+        actionServletIsInitialized = false;
     }
 
     /**
@@ -269,28 +269,25 @@ public class CactusStrutsTestCase extends ServletTestCase {
      *
      */
     public ActionServlet getActionServlet() {
-	init();
+        init();
         try {
-	    if (!actionServletIsInitialized) {
-		// the RequestProcessor holds on to the ServletContext, so
-		// we need to ensure that it is replaced for each test.
-		java.util.Enumeration names = config.getServletContext().getAttributeNames();
-		while (names.hasMoreElements()) {
-		    String name = (String) names.nextElement();
-		    // yes, I know I should use the constant.. but it's
-		    // the only Struts 1.1 specific item in this class
-		    // and so I am being lazy for the sake of backwards
-		    // compatibility.
-		    if (name.indexOf("org.apache.struts.action.REQUEST_PROCESSOR") >= 0) {
-			config.getServletContext().setAttribute(name,null);
-		     }
-		}
-		this.actionServlet.init(config);
-		actionServletIsInitialized = true;
-	    }
+            if (!actionServletIsInitialized) {
+                // the RequestProcessor holds on to the ServletContext, so
+                // we need to ensure that it is replaced for each test.
+                ServletContext context = config.getServletContext();
+                String name = "org.apache.struts.action.REQUEST_PROCESSOR";
+
+                Object obj = context.getAttribute(name);
+                if (obj != null) {
+                    config.getServletContext().setAttribute(name, null);
+                }
+                this.actionServlet.init(config);
+                actionServletIsInitialized = true;
+            }
             return this.actionServlet;
         } catch (ServletException e) {
-	    throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
+            throw new AssertionFailedError(
+                    "Error while initializing ActionServlet: " + e.getMessage());
         }
     }
 
@@ -300,18 +297,18 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * version different from that provided in the Struts distribution.
      */
     public void setActionServlet(ActionServlet servlet) {
-	init();
+        init();
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
-	actionServletIsInitialized = false;
+        actionServletIsInitialized = false;
     }
 
     /**
      * Sets the behavior of this test when validating ActionForm instances.
      * Set to false if you do not want your test to fail if a form
      * does not pass validation.  By default, this is is set to true.
-     * 
+     *
      * @deprecated This method no longer affects the flow of control.
      */
     public void setFailIfInvalid(boolean flag) {
@@ -328,40 +325,40 @@ public class CactusStrutsTestCase extends ServletTestCase {
      *
      */
     public void actionPerform() {
-	init();
-	try {
-	    HttpServletRequest request = this.request;
-	    HttpServletResponse response = this.response;
-	    // make sure errors are cleared from last test.
-	    request.removeAttribute(Action.ERROR_KEY); 
-	    
-	    if (this.requestWrapper != null)
-		request = this.requestWrapper;
-	    if (this.responseWrapper != null)
-		response = this.responseWrapper;
-	    
-	    ActionServlet actionServlet = this.getActionServlet();
-	    actionServlet.doPost(request,response);
-	    
-	} catch (ServletException se) {
-	    se.getRootCause().printStackTrace();
-	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
+        init();
+        try {
+            HttpServletRequest request = this.request;
+            HttpServletResponse response = this.response;
+            // make sure errors are cleared from last test.
+            request.removeAttribute(Action.ERROR_KEY);
+
+            if (this.requestWrapper != null)
+                request = this.requestWrapper;
+            if (this.responseWrapper != null)
+                response = this.responseWrapper;
+
+            ActionServlet actionServlet = this.getActionServlet();
+            actionServlet.doPost(request,response);
+
+        } catch (ServletException se) {
+            se.getRootCause().printStackTrace();
+            fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (Exception e) {
-	    e.printStackTrace();
+            e.printStackTrace();
             fail("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
-	}
+        }
     }
 
     /**
      * Returns the forward sent to RequestDispatcher.
      */
     private String getActualForward() {
-	if (response.containsHeader("Location")) {
-	    return Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
-	} else
-	    return request.getContextPath() + Common.stripJSessionID(((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward());
+        if (response.containsHeader("Location")) {
+            return Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
+        } else
+            return request.getContextPath() + Common.stripJSessionID(((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward());
     }
-    
+
     /**
      * Verifies if the ActionServlet controller used this forward.
      *
@@ -374,7 +371,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
-	init();
+        init();
         Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,getActualForward(),false,request,config.getServletContext(),config);
     }
 
@@ -384,18 +381,18 @@ public class CactusStrutsTestCase extends ServletTestCase {
      *
      * @param forwardPath an absolute pathname to which the request
      * is to be forwarded.
-     * 
+     *
      * @exception AssertionFailedError if the ActionServlet controller
      * used a different forward path than <code>forwardPath</code> after
      * executing an Action object.
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
-	init();
-	forwardPath = request.getContextPath() + forwardPath;
-	if (!(getActualForward().equals(forwardPath)))
-	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
+        init();
+        forwardPath = request.getContextPath() + forwardPath;
+        if (!(getActualForward().equals(forwardPath)))
+            throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
     }
-    
+
     /**
      * Verifies if the ActionServlet controller forwarded to the defined
      * input path.
@@ -405,7 +402,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyInputForward() {
-	init();
+        init();
         Common.verifyForwardPath(actionServlet,request.getPathInfo(),null,getActualForward(),true,request,config.getServletContext(),config);
     }
 
@@ -424,7 +421,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
 
     public void verifyActionErrors(String[] errorNames) {
-	init();
+        init();
         Common.verifyActionErrors(request,errorNames);
     }
 
@@ -436,7 +433,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * sent any error messages after excecuting and Action object.
      */
     public void verifyNoActionErrors() {
-	init();
+        init();
         Common.verifyNoActionErrors(request);
     }
 
