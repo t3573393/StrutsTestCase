@@ -33,14 +33,14 @@ public class TestTilesForward extends MockStrutsTestCase {
         // properties don't seem to work.
         setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");
         setInitParameter("definitions-debug","0");
-        setConfigFile("/WEB-INF/tiles-struts-config.xml");
+        setConfigFile("tiles","/WEB-INF/struts-config-tiles.xml");
     }
 
 
     public void testTilesForward() {
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
-        setRequestPathInfo("/tilesForward");
+        setRequestPathInfo("/tiles/tilesForward");
         actionPerform();
         verifyForward("success");
         verifyForwardPath("/layouts/pageLayout.jsp");

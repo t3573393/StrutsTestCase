@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<!-- ========== Form Bean Definitions =================================== -->
+	<form-beans>
+		<form-bean name="loginForm" type="examples.LoginForm"/>
+		<form-bean name="dynamicLogin" dynamic="true" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="username" type="java.lang.String"/>
+			<form-property name="password" type="java.lang.String"/>
+		</form-bean>
+	</form-beans>
+	<!-- ========== Global Forward Definitions ============================== -->
+	<global-forwards>
+		<forward name="login" path="/login/login.jsp"/>
+	</global-forwards>
+	<!-- ========== Action Mapping Definitions ============================== -->
+	<action-mappings>
+		<!-- Process a user logon -->
+		<action path="/login" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request">
+			<forward name="success" path="/main/success.jsp"/>
+		</action>
+		<!-- The following mappings are for internal testing -->
+		<!-- only, and can be safely ignored.                -->
+		<action path="/testMessage" type="servletunit.struts.tests.MessageAction" input="/login/login.jsp" scope="request">
+			<forward name="success" path="/main/success.jsp"/>
+			<forward name="failure" path="/main/failure.jsp"/>
+		</action>
+		<action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
+		<action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
+			<forward name="redirect" path="http://www.yahoo.com" redirect="true"/>
+		</action>
+		<action path="/testRelativeRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
+			<forward name="redirect" path="/main/success.jsp" redirect="true"/>
+		</action>
+		<action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
+		<action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
+		<action path="/testDynamicAction" type="servletunit.struts.tests.DynamicAction" name="dynamicLogin" scope="request"/>
+		<action path="/userAction" type="servletunit.struts.tests.UserAction"/>
+		<action path="/loginNoInput" type="examples.LoginAction" name="loginForm" scope="request">
+			<forward name="success" path="/main/success.jsp"/>
+		</action>
+		<action path="/tiles/tilesForward" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request">
+			<forward name="success" path="page.library"/>
+		</action>
+	</action-mappings>
+    <plug-in className="org.apache.struts.tiles.TilesPlugin" >
+        <set-property property="definitions-config"
+                      value="/WEB-INF/tiles-config.xml" />
+        <set-property property="definitions-debug" value="0" />
+        <set-property property="definitions-parser-details" value="0" />
+        <set-property property="definitions-parser-validate" value="true" />
+    </plug-in>
+
+
+</struts-config>
