@@ -8,6 +8,7 @@
 			<form-property name="username" type="java.lang.String"/>
 			<form-property name="password" type="java.lang.String"/>
 		</form-bean>
+        <form-bean name="complexForm" type="servletunit.struts.tests.ComplexForm"/>
 	</form-beans>
 	<!-- ========== Global Forward Definitions ============================== -->
 	<global-forwards>
@@ -39,5 +40,8 @@
 		<action path="/loginNoInput" type="examples.LoginAction" name="loginForm" scope="request">
 			<forward name="success" path="/main/success.jsp"/>
 		</action>
+        <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request">
+            <forward name="success" path="/main/success.jsp"/>
+        </action>
 	</action-mappings>
 </struts-config>

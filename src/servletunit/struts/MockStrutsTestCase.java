@@ -536,6 +536,13 @@ public class MockStrutsTestCase extends TestCase {
         return Common.getActionForm(actionServlet,actionPath,request,context);
     }
 
+    public void setActionForm(ActionForm form) {
+        init();
+        // make sure action servlet is intialized
+        getActionServlet();
+        Common.setActionForm(form,request,actionPath,context);
+    }
+
 
 
 

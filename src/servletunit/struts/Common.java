@@ -207,7 +207,6 @@ public class Common {
     protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request, ServletContext context)
     {
         ActionForm form;
-        // It's deprecated, I know.  It's a lot of trouble to do it differently for now.
         ActionConfig actionConfig = getActionConfig(actionPath,request,context);
         if ("request".equals(actionConfig.getScope())) {
             form = (ActionForm) request.getAttribute(actionConfig.getAttribute());
@@ -235,6 +234,14 @@ public class Common {
     protected static ActionConfig getActionConfig(String mappingName, HttpServletRequest request, ServletContext context) {
         ApplicationConfig config = getApplicationConfig(request, context);
         return config.findActionConfig(mappingName);
+    }
+
+    protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context) {
+        ActionConfig actionConfig = getActionConfig(actionPath,request,context);
+        if (actionConfig.getScope().equals("request"))
+            request.setAttribute(actionConfig.getAttribute(),form);
+        else
+            request.getSession().setAttribute(actionConfig.getAttribute(),form);
     }
 
 
