@@ -86,8 +86,8 @@ public class MockStrutsTestCase extends TestCase {
      * base class setUp method has been called.
      */
     private void init() {
-	if (!isInitialized)
-	    throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
+    if (!isInitialized)
+        throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
     }
 
     /**
@@ -97,15 +97,15 @@ public class MockStrutsTestCase extends TestCase {
      * and HttpServletResponse object to use in this test.
      */
     public void setUp() throws Exception {
-	if (actionServlet == null)
-	    actionServlet = new ActionServlet();
-	config = new ServletConfigSimulator();
-	request = new HttpServletRequestSimulator(config.getServletContext());
-	response = new HttpServletResponseSimulator();
-	context = (ServletContextSimulator) config.getServletContext();
-	requestWrapper = null;
-	responseWrapper = null;
-	isInitialized = true;
+    if (actionServlet == null)
+        actionServlet = new ActionServlet();
+    config = new ServletConfigSimulator();
+    request = new HttpServletRequestSimulator(config.getServletContext());
+    response = new HttpServletResponseSimulator();
+    context = (ServletContextSimulator) config.getServletContext();
+    requestWrapper = null;
+    responseWrapper = null;
+    isInitialized = true;
     }
 
     /**
@@ -113,8 +113,8 @@ public class MockStrutsTestCase extends TestCase {
      * this test.
      */
     public HttpServletRequest getRequest() {
-	init();
-	return this.request;
+    init();
+    return this.request;
     }
 
      /**
@@ -124,13 +124,13 @@ public class MockStrutsTestCase extends TestCase {
      * javax.servlet.http.HttpServletRequestWrapper.
      */
     public HttpServletRequestWrapper getRequestWrapper() {
-	init();
-	if (requestWrapper == null)
-	    return new HttpServletRequestWrapper(this.request);
-	else
-	    return requestWrapper;
+    init();
+    if (requestWrapper == null)
+        return new HttpServletRequestWrapper(this.request);
+    else
+        return requestWrapper;
     }
-    
+
     /**
      * Set this TestCase to use a given HttpServletRequestWrapper
      * class when calling Action.perform().  Note that if this
@@ -141,24 +141,24 @@ public class MockStrutsTestCase extends TestCase {
      * used when calling Action.perform().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
-	init();
-	if (wrapper == null)
-	    throw new IllegalArgumentException("wrapper class cannot be null!");
-	else {
-	    wrapper.setRequest(this.request);
-	    this.requestWrapper = wrapper;
-	}
+    init();
+    if (wrapper == null)
+        throw new IllegalArgumentException("wrapper class cannot be null!");
+    else {
+        wrapper.setRequest(this.request);
+        this.requestWrapper = wrapper;
     }
-    
+    }
+
     /**
      * Returns an HttpServletResponse object that can be used in
      * this test.
      */
     public HttpServletResponse getResponse() {
-	init();
+    init();
         return this.response;
     }
-    
+
     /**
      * Returns an HttpServletResponseWrapper object that can be used in
      * this test.  Note that if {@link #setResponseWrapper} has not been
@@ -207,13 +207,13 @@ public class MockStrutsTestCase extends TestCase {
      *
      */
     public ActionServlet getActionServlet() {
-	init();
-	try {
-	    this.actionServlet.init(config);
-	} catch (ServletException e) {
-	    throw new AssertionFailedError(e.getMessage());
-	}
-	return actionServlet;
+    init();
+    try {
+        this.actionServlet.init(config);
+    } catch (ServletException e) {
+        throw new AssertionFailedError(e.getMessage());
+    }
+    return actionServlet;
     }
 
     /**
@@ -271,7 +271,8 @@ public class MockStrutsTestCase extends TestCase {
 
     /**
      * Sets the request path instructing the ActionServlet to used a
-     * particual ActionMapping.
+     * particual ActionMapping.  Also sets the ServletPath property
+     * on the request.
      *
      * @param pathInfo the request path to be processed.  This should
      * correspond to a particular action mapping, as would normally
@@ -281,6 +282,7 @@ public class MockStrutsTestCase extends TestCase {
     init();
         this.actionPath = Common.stripActionPath(pathInfo);
         this.request.setPathInfo(actionPath);
+        this.request.setServletPath(pathInfo);
     }
 
     /**
@@ -335,15 +337,15 @@ public class MockStrutsTestCase extends TestCase {
      * with a "/" character.
      */
     public void setServletConfigFile(String pathname) {
-	init();
-	// ugly hack to get this to play ball with Class.getResourceAsStream()
+    init();
+    // ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');
             pathname = "/" + prefix + "/" + pathname;
         }
-	// pull in the appropriate parts of the
-	// web.xml file -- first the init-parameters
-	Digester digester = new Digester();
+    // pull in the appropriate parts of the
+    // web.xml file -- first the init-parameters
+    Digester digester = new Digester();
         URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
         if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
         digester.push(this.config);
@@ -353,34 +355,34 @@ public class MockStrutsTestCase extends TestCase {
         digester.addCallParam("web-app/servlet/init-param/param-name", 0);
         digester.addCallParam("web-app/servlet/init-param/param-value", 1);
         try {
-	    InputStream input = getClass().getResourceAsStream(pathname);
-	    if(input==null)
-		throw new AssertionFailedError("Invalid pathname: " + pathname);
-	    digester.parse(input);
-	    input.close();
+        InputStream input = getClass().getResourceAsStream(pathname);
+        if(input==null)
+        throw new AssertionFailedError("Invalid pathname: " + pathname);
+        digester.parse(input);
+        input.close();
         } catch (Exception e) {
-	    throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
+        throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
         }
 
-	// now the context parameters..
-	digester = new Digester();
-	if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
+    // now the context parameters..
+    digester = new Digester();
+    if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
         digester.setDebug(0);
         digester.setValidating(false);
         digester.push(this.context);
-	digester.addCallMethod("web-app/context-param", "setInitParameter", 2);
+    digester.addCallMethod("web-app/context-param", "setInitParameter", 2);
         digester.addCallParam("web-app/context-param/param-name", 0);
         digester.addCallParam("web-app/context-param/param-value", 1);
         try {
-	    InputStream input = getClass().getResourceAsStream(pathname);
-	    if(input==null)
-		throw new AssertionFailedError("Invalid pathname: " + pathname);
-	    digester.parse(input);
-	    input.close();
+        InputStream input = getClass().getResourceAsStream(pathname);
+        if(input==null)
+        throw new AssertionFailedError("Invalid pathname: " + pathname);
+        digester.parse(input);
+        input.close();
         } catch (Exception e) {
-	    throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
+        throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
         }
-	
+
     }
 
     /**
@@ -396,16 +398,16 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
     init();
-	if (response.containsHeader("Location")) {
-	    ActionForward expectedRedirectForward = actionServlet.findMapping(actionPath).findForward(forwardName);
-	    if (expectedRedirectForward == null) 
-		fail("Cannot find forward '" + forwardName + "' - it is possible that it is not mapped correctly.");
-	    String expectedRedirect = expectedRedirectForward.getPath();
-	    String actualRedirect = response.getHeader("Location");
-	    if (!expectedRedirect.equals(actualRedirect))
-		fail("Was expecting redirect '" + expectedRedirect + "' but received redirect '" + actualRedirect + "'");
-	    return;
-	}
+    if (response.containsHeader("Location")) {
+        ActionForward expectedRedirectForward = actionServlet.findMapping(actionPath).findForward(forwardName);
+        if (expectedRedirectForward == null)
+        fail("Cannot find forward '" + forwardName + "' - it is possible that it is not mapped correctly.");
+        String expectedRedirect = expectedRedirectForward.getPath();
+        String actualRedirect = response.getHeader("Location");
+        if (!expectedRedirect.equals(actualRedirect))
+        fail("Was expecting redirect '" + expectedRedirect + "' but received redirect '" + actualRedirect + "'");
+        return;
+    }
         RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
         Common.verifyForwardPath(actionServlet,actionPath,forwardName,dispatcher.getForward(),false);
     }
@@ -474,7 +476,7 @@ public class MockStrutsTestCase extends TestCase {
         Common.verifyNoActionErrors(request);
     }
 
-    
+
 
 }
 
