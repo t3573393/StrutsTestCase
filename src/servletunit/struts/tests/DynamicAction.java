@@ -38,7 +38,7 @@ public class DynamicAction extends Action {
         if ((!username.equals("deryl")) || (!password.equals("radar")))
             errors.add("password",new ActionError("error.password.mismatch"));
 
-        if (!errors.empty()) {
+        if (!errors.isEmpty()) {
             saveErrors(request,errors);
             return mapping.findForward("login");
         }

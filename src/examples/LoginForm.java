@@ -58,7 +58,7 @@ public class LoginForm extends ActionForm {
         if ((password == null) || (password.length() < 1))
             errors.add("password",new
                 ActionError("error.password.required"));
-	if (errors.empty())
+	if (errors.isEmpty())
 	    return null;
 	else
 	    return errors;

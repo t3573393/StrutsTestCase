@@ -37,7 +37,7 @@ public class InitParameterAction extends Action {
 		errors.add("",new ActionError("error.init.param"));
 	} else 
 	    errors.add("",new ActionError("error.no.context"));
-	if (!errors.empty())
+	if (!errors.isEmpty())
 	    saveErrors(request,errors);
 	return mapping.findForward("login");
     }

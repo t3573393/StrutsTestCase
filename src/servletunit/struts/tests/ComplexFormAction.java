@@ -44,7 +44,7 @@ public class ComplexFormAction extends Action {
         if ((!username.equals("deryl")) || (!password.equals("radar")) || (complexForm.getComplexObject() == null))
             errors.add("password",new ActionError("error.password.mismatch"));
 
-        if (!errors.empty()) {
+        if (!errors.isEmpty()) {
             saveErrors(request,errors);
             return mapping.findForward("login");
         }
