@@ -118,20 +118,27 @@
     </target>
 
     <!-- prepare code for public release -->
-    <target name="release">
-        <property name="servlet.version" value="2.3"/>
-	<property name="struts.version" value="1.1"/>
+    <target name="release" depends="package">
+        <!-- property name="servlet.version" value="2.3"/>
+	    <property name="struts.version" value="1.1"/ -->
         <condition property="servlet.version" value="2.2">
-	   <equals arg1="${build_2.2}" arg2="true"/>
+            <isset property="build_2.2"/>
         </condition>
-	<condition property="struts.version" value="1.0">
-	   <equals arg1="${build_1.0}" arg2="true"/>
+        <condition property="struts.version" value="1.0">
+            <isset property="build_1.0"/>
         </condition>
-	<echo message="creating release for servlet v${servlet.version} and struts v${struts.version}.."/>
+        <condition property="servlet.version" value="2.3">
+            <not>
+                <isset property="build_2.2"/>
+            </not>
+        </condition>
+        <condition property="struts.version" value="1.1">
+            <not>
+                <isset property="build_1.0"/>
+            </not>
+        </condition>
+        <echo message="creating release for servlet v${servlet.version} and struts v${struts.version}.."/>
         <zip zipFile="${basedir}/strutstest-${struts.version}_${servlet.version}.zip" basedir="${basedir}/dist"/>
-	<tar tarFile="${basedir}/strutstest.tar" basedir="${basedir}/dist"/>
-	<gzip src="${basedir}/strutstest.tar" zipfile="${basedir}/strutstest-${struts.version}_${servlet.version}.tar.gz"/>
-	<delete file="${basedir}/strutstest.tar"/>
     </target>
 
     <target name="release.src" depends="clean">
@@ -232,7 +239,7 @@
         </junit>
     </target>
 
-    <target name="deploy">
+    <target name="deploy" depends="package">
         <copy todir="${appserver.home}/webapps" file="${basedir}/test.war"/>
     </target>
 
