@@ -17,9 +17,10 @@
 			<forward name="success" path="/main/success.jsp"/>
 		</action>
 		<!-- Test message resources -->
-		<action path="/testMessage" type="examples.MessageAction" input="/login/login.jsp" scope="request">
+		<action path="/testMessage" type="servletunit.struts.tests.MessageAction" input="/login/login.jsp" scope="request">
 			<forward name="success" path="/main/success.jsp"/>
 			<forward name="failure" path="/main/failure.jsp"/>
 		</action>
+		<action path="/testSimpleForward" forward="/main/success.jsp"/>
 	</action-mappings>
 </struts-config>

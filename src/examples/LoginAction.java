@@ -40,11 +40,6 @@ public class LoginAction extends Action {
         String username = ((LoginForm) form).getUsername();
         String password = ((LoginForm) form).getPassword();
 
-	if (request instanceof MyServletRequestWrapper) 
-	    ((MyServletRequestWrapper) request).identify();
-	if (response instanceof MyServletResponseWrapper) 
-	    ((MyServletResponseWrapper) response).identify();
-
         ActionErrors errors = new ActionErrors();
 
         if ((!username.equals("deryl")) || (!password.equals("radar")))

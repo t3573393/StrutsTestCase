@@ -22,8 +22,6 @@ package examples.cactus;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import servletunit.struts.CactusStrutsTestCase;
-import examples.MyServletRequestWrapper;
-import examples.MyServletResponseWrapper;
 import java.io.IOException;
 
 public class TestCactusLoginAction extends CactusStrutsTestCase {
@@ -55,19 +53,6 @@ public class TestCactusLoginAction extends CactusStrutsTestCase {
 	verifyInputForward();
         verifyActionErrors(new String[] {"error.password.mismatch"});
         assertNull((String) getSession().getAttribute("authentication"));
-    }
-
-    public void testSuccessfulLoginWithWrapper() {
-	addRequestParameter("username","deryl");
-        addRequestParameter("password","radar");
-        setRequestPathInfo("/login");
-	setRequestWrapper(new MyServletRequestWrapper(getRequest()));
-	setResponseWrapper(new MyServletResponseWrapper(getResponse()));
-        actionPerform();
-        verifyForward("success");
-	verifyForwardPath("/main/success.jsp");
-        assertEquals("deryl",getSession().getAttribute("authentication"));
-        verifyNoActionErrors();
     }
 
 }

@@ -30,8 +30,6 @@ public class TestLoginAction extends MockStrutsTestCase {
         super(testName);
     }
 
-    
-
     public void testSuccessfulLogin() {
 
         addRequestParameter("username","deryl");
@@ -57,20 +55,6 @@ public class TestLoginAction extends MockStrutsTestCase {
         assertNull((String) getSession().getAttribute("authentication"));
     }
 
-    public void testSuccessfulLoginWithWrapper() {
-	addRequestParameter("username","deryl");
-        addRequestParameter("password","radar");
-        setRequestPathInfo("/login");
-	setRequestWrapper(new MyServletRequestWrapper(getRequest()));
-	setResponseWrapper(new MyServletResponseWrapper(getResponse()));
-        actionPerform();
-        verifyForward("success");
-	verifyForwardPath("/main/success.jsp");
-        assertEquals("deryl",getSession().getAttribute("authentication"));
-        verifyNoActionErrors();
-    }
-
-    
 
 }
 
