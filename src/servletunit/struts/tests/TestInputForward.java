@@ -38,7 +38,7 @@ public class TestInputForward extends MockStrutsTestCase {
     }
 
     public void testNoInputForward() {
-	setRequestPathInfo("/loginNoInput");
+	setRequestPathInfo("test","/loginNoInput");
 	try {
 	    actionPerform();
 	} catch (AssertionFailedError ex) {
