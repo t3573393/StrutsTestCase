@@ -49,6 +49,19 @@ public class TestNullPointerAction extends MockStrutsTestCase {
         }
     }
 
+    public void testNullPointerFromForm() throws Exception{
+        try{
+            this.setRequestPathInfo("/testNullPointerForm");
+            this.actionPerform();
+            fail("Exception expected");
+        }catch(ExceptionDuringTestError e){
+            //uncomment this to see a sample stack trace
+            //that users will see if their action throws an exception
+            //throw e;
+        }
+    }
+
+
     public static void main(String[] args) {
         junit.textui.TestRunner.run(TestNullPointerAction.class);
     }

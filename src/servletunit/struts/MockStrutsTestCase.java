@@ -370,9 +370,9 @@ public class MockStrutsTestCase extends TestCase {
             response = this.responseWrapper;
         try {
             this.getActionServlet().doPost(request,response);
-        }catch (Exception e) {
-            if(e instanceof java.lang.NullPointerException){
-                String message = "Error initializing action servlet: Unable to find struts config file.  "
+        }catch (NullPointerException npe) {
+                String message = "A NullPointerException was thrown.  This may indicate an error in your ActionForm, or "
+                               + "it may indicate that the Struts ActionServlet was unable to find struts config file.  "
                                + "TestCase is running from " + System.getProperty("user.dir") + " directory.  "
                                + "Context directory ";
                 if(this.context.getContextDirectory()==null){
@@ -382,10 +382,9 @@ public class MockStrutsTestCase extends TestCase {
                 }
                 message = message + ".  struts config file must be found under the context directory, "
                         + "the directory the test case is running from, or in the classpath.";
-                fail(message);
-            }else{
+                throw new ExceptionDuringTestError(message, npe);
+        }catch(Exception e){
                 throw new ExceptionDuringTestError("An uncaught exception was thrown during actionExecute()", e);
-            }
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting actionPerform()");
