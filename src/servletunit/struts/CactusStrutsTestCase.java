@@ -208,6 +208,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * version different from that provided in the Struts distribution.
      */
     public void setActionServlet(ActionServlet servlet) {
+        if (servlet == null)
+            throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
     }
 
