@@ -118,7 +118,7 @@
     </target>
 
     <!-- prepare code for public release -->
-    <target name="release" depends="package">
+    <target name="release" depends="package,docs">
         <!-- property name="servlet.version" value="2.3"/>
 	    <property name="struts.version" value="1.1"/ -->
         <condition property="servlet.version" value="2.2">
