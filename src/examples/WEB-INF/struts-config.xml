@@ -34,7 +34,8 @@
 		</action>
 		<action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
 		<action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
-		<action path="/testDynamicAction" type="servletunit.struts.tests.DynamicAction" name="dynamicLogin" scope="request">
+		<action path="/testDynamicAction" type="servletunit.struts.tests.DynamicAction" name="dynamicLogin" scope="request"/>
+		<action path="/userAction" type="servletunit.struts.tests.UserAction">
 		</action>
 	</action-mappings>
 </struts-config>
