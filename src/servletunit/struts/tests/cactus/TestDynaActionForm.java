@@ -27,7 +27,7 @@ public class TestDynaActionForm extends CactusStrutsTestCase {
     public void testForm() {
 	addRequestParameter("username","deryl");
 	addRequestParameter("password","radar");
-	setRequestPathInfo("/testDynamicAction");
+	setRequestPathInfo("test","/testDynamicAction");
 	actionPerform();
 	verifyNoActionErrors();
     }
