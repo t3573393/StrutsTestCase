@@ -80,12 +80,12 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
     }
 
     public void addParameter(String name, String value) {
-	if (super.getParameter(name) == null)
+	if ((super.getParameter(name) == null) && (name != null) && (value != null))
 	    parameters.put(name,value);
     }
 
     public void addParameter(String name, String[] values) {
-	if (super.getParameter(name) == null)
+	if ((super.getParameter(name) == null) && (name != null) && (values != null))
 	    parameters.put(name,values);
     }
 
