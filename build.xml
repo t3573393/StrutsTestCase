@@ -17,10 +17,12 @@
     <property name="distribute.dir" value="${basedir}/dist/strutstest"/>
     <property name="doc.dir"        value="${distribute.dir}/docs"/>
     <property name="test.dir"       value="${basedir}/test-results"/>
+    <property name="temp.dir"       value="${basedir}/temp"/>
+    <property name="lib.dir"        value="${basedir}/lib"/>
 
     <!-- set class.path to use with javac/jikes -->
     <path id="class.path">
-        <fileset dir="${basedir}/lib">
+        <fileset dir="${lib.dir}">
             <include name="*.jar" />
             <include name="*.zip" />
 	    <exclude name="struts-1.1b2.jar" if="build_1.0"/>
@@ -101,7 +103,7 @@
 	    <classes dir="${src.dir}">
 	         <include name="log4j.properties"/>
 	    </classes>
-	    <lib dir="${basedir}/lib">
+	    <lib dir="${lib.dir}">
 	         <exclude name="ant*.jar"/>
 		 <exclude name="servlet.jar"/>
 		 <exclude name="struts-1.1b2.jar" if="build_1.0"/>
@@ -205,7 +207,7 @@
 	       <pathelement location="${src.dir}/examples/"/>
 	       <pathelement location="${src.dir}/"/>
 	    </classpath>
-            <formatter type="plain" />
+            <formatter type="xml" />
 
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
@@ -225,7 +227,7 @@
             <classpath>
                 <pathelement location="${src.dir}/examples/cactus"/>
             </classpath>
-            <formatter type="plain" />
+            <formatter type="xml" />
             <!-- ugh. have to make sure the tiles test runs first, because other tests upset it. -->
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
@@ -243,8 +245,22 @@
         <copy todir="${appserver.home}/webapps" file="${basedir}/test.war"/>
     </target>
 
+    <target name="update.struts">
+        <tstamp/>
+        <delete dir="${temp.dir}"/>
+        <mkdir dir="${temp.dir}"/>
+        <get src="http://jakarta.apache.org/builds/jakarta-struts/nightly/jakarta-struts-${DSTAMP}.zip"
+            dest="${temp.dir}/jakarta-struts-nightly.zip"
+            verbose="on"/>
+        <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
+        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1b2.jar"/>
+        <!--<delete dir="${temp.dir}"/>-->
+    </target>
+
     <!-- Run all the build targets -->
     <target name="all" depends="clean,build,package,deploy"/>
+
+    <target name="auto.build" depends="clean,update.struts,build,test,package,deploy,test.cactus"/>
 
 </project>
 
