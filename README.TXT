@@ -56,6 +56,10 @@ and CactusStrutsTestCase)
 - Fixed bug where verifyInputForward() would fail if the input forward
 was defined using Tiles.  (MockStrutsTestCase and CactusStrutsTestCase)
 
+- Fixed bug where URL's were not properly processed if they included a
+jsessionid parameter name that was upper case.  (MockStrutsTestCase and
+CactusStrutsTestCase)
+
 
 Questions and comments are always welcome!
 
