@@ -21,7 +21,6 @@ import junit.framework.TestCase;
 import org.apache.commons.digester.Digester;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
-import org.apache.struts.action.RequestProcessor;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
@@ -315,7 +314,7 @@ public class MockStrutsTestCase extends TestCase {
                 if (!moduleName.endsWith("/"))
                     moduleName = moduleName + "/";
             }
-            this.request.setAttribute(RequestProcessor.INCLUDE_SERVLET_PATH, moduleName);
+            this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);
     }
@@ -557,8 +556,7 @@ public class MockStrutsTestCase extends TestCase {
     public void setActionForm(ActionForm form) {
         init();
         // make sure action servlet is intialized
-        getActionServlet();
-        Common.setActionForm(form,request,actionPath,context);
+        Common.setActionForm(form,request,actionPath,context,this.getActionServlet());
     }
 
 
