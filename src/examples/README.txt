@@ -40,7 +40,7 @@ described above:
 
 cactus.jar
 httpclient.jar
-aspectjrt.jar (only if you are using Cactus v1.3)
+aspectjrt.jar (only if you are using Cactus v1.3 or later)
 
 Additionally, you must set the CLASSPATH to point to the 'examples/cactus'
 directory, so that the Cactus test harness can find the cactus.properties
