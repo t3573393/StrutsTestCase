@@ -57,6 +57,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private String queryString;
     private String method;
     private String contentType;
+    private Locale locale;
     String remoteAddr;
     String remoteHost;
     private String remoteUser;
@@ -67,6 +68,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private Hashtable parameters;
     private Hashtable headers;
     private Hashtable requestDispatchers;
+    private Vector cookies;
 
     private HttpSession session;
 
@@ -96,6 +98,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         parameters = new Hashtable();
         headers = new Hashtable();
         requestDispatchers = new Hashtable();
+	cookies = new Vector();
         //if (getHeader("Accept")==null)
         //setHeader("Accept","dummy accept");
         
@@ -254,19 +257,72 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * This operation is not supported.
+     *
+     * Returns the portion of the request URI that indicates the context
+     * of the request.  The context path always comes first in a request
+     * URI.  The path starts with a "/" character but does not end with a "/"
+     * character.  For servlets in the default (root) context, this method
+     * returns "". The container does not decode this string.
+     *
+     *
+     * @return		a <code>String</code> specifying the
+     *			portion of the request URI that indicates the context
+     *			of the request
+     *
+     *
      */
     public String getContextPath()
     {
-	throw new UnsupportedOperationException("getContextPath operation is not supported!");
+	return contextPath;
     }
 
     /**
-     * This operation is not supported.
+     * Adds a cookie that can be retrieved from this request via the
+     * getCookies() method.
+     * 
+     * @param cookie a Cookie object to be retrieved from this
+     * request.
+     *
+     * @see #getCookies
+     */ 
+    public void addCookie(Cookie cookie) {
+	cookies.addElement(cookie);
+    }
+
+    /**
+     * Adds a set of cookies that can be retrieved from this request via the
+     * getCookies() method.
+     * 
+     * @param cookies an array of Cookie object to be retrieved from this
+     * request.
+     *
+     * @see #getCookies
+     */
+    public void setCookies(Cookie[] cookies) {
+	for (int i = 0; i < cookies.length; i++)
+	    this.cookies.addElement(cookies[i]);
+    }
+
+    /**
+     *
+     * Returns an array containing all of the <code>Cookie</code>
+     * objects the client sent with this request.
+     * This method returns <code>null</code> if no cookies were sent.
+     *
+     * @return		an array of all the <code>Cookies</code>
+     *			included with this request, or <code>null</code>
+     *			if the request has no cookies
+     *
+     *
      */
     public Cookie [] getCookies()
     {
-	throw new UnsupportedOperationException("getCookies operation is not supported!");
+	if (cookies.isEmpty())
+	    return null;
+	else {
+	    Cookie[] cookieArray = new Cookie[cookies.size()];
+	    return (Cookie []) cookies.toArray(cookieArray);
+	}
     }
 
     /**
@@ -384,12 +440,17 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * this method returns the default locale for the server.
      *
      *
-     * @return		<code>Locale.US</code> in all cases
+     * @return		the preferred <code>Locale</code> for the client,
+     *                  defaults to Locale.US if {@link #setLocale} has
+     *                  not been called.
      *
      */
     public  Locale getLocale()
     {
-        return Locale.US;
+	if (this.locale == null)
+	    return Locale.US;
+	else
+	    return this.locale;
     }
 
     /**
@@ -797,9 +858,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public HttpSession getSession()
     {
-	if( session == null )
-            session = new HttpSessionSimulator();
-        return session;
+        return getSession(true);
     }
 
     /**
@@ -1100,7 +1159,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     /**
      * Sets requested session ID to be used by {@link #getRequestedSessionId}.
      */
-    void setRequestedSessionId(String s)
+    public void setRequestedSessionId(String s)
     {
         reqSessionId = s;
     }
@@ -1124,8 +1183,26 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     /**
      * Sets servlet path to be used by {@link #getServletPath}.
      */
-    void setServletPath(String s)
+    public void setServletPath(String s)
     {
         servletPath = s;
     }
+
+    /**
+     * Sets the context path to be used by {@link #getContextPath}.
+     */
+    public void setContextPath(String s) 
+    {
+	contextPath = s;
+    }
+
+
+    /**
+     * Sets the locale to be used by {@link #getLocale}.
+     */
+    public void setLocale(Locale locale) {
+	this.locale = locale;
+    }
+	
+
 }
