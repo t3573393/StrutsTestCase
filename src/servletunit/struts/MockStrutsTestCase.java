@@ -104,13 +104,6 @@ public class MockStrutsTestCase extends TestCase {
         isInitialized = true;
         if (logger.isDebugEnabled())
             logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setUp()");
-
-        logger.debug("trace");
-        logger.debug("debug");
-        logger.info("info");
-        logger.warn("warn");
-        logger.error("error");
-        logger.fatal("fatal");
     }
 
     /**
