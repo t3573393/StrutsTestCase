@@ -7,6 +7,23 @@
 <body>
 <center><h2>Frequently Asked Questions About StrutsTestCase for JUnit</h2></center>
 <hr>
+<h3>Does StrutsTestCase support Tiles?  Whenever I use any of the <code>verifyForward()</code> methods, my tests fail complaining about mismatched forwards!</h3>
+StrutsTestCase does, indeed, support Tiles, but there is a known bug with Struts 1.1b2 and StrutsTestCase, whereby you
+are required to manually point to the Tiles definitions file.  So, for your tests to work properly, you will need to add
+something like the following to your <code><b>setUp()</b></code> method:
+<pre>
+    public void setUp() throws Exception {
+        super.setUp();
+        // set your tiles definitions configuration file here.
+        <font color=red>setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");</font>
+        // turn off debugging if you want.
+        <font color=red>setInitParameter("definitions-debug","0");</font>
+        setConfigFile("/WEB-INF/struts-config.xml");
+    }
+</pre>
+This is fixed when using the latest Struts nightly builds, and will be a permanent part of the next release when Struts
+1.1b3 comes around.  Also note that <code><b>verifyInputForward()</b></code> will not currently work using Tiles; this bug will also be fixed
+in the next release.
 <h3>Why does my test fail complaining about "Missing configuration resource for path /WEB-INF/struts-config.xml"?</h3>
 This usually occurs when your CLASSPATH is not set properly to point to the directory <i>that contains</i> the WEB-INF directory.  For example, if your struts-config.xml is located in the following directory:<br><br>
 <pre>/my/directory/WEB-INF/struts-config.xml</pre>
@@ -36,20 +53,20 @@ This is usually the case of overriding the <code>setUp()</code> method in your S
 StrutsTestCase follows a common JUnit practice of not saving state between unit tests.  This is to avoid side effects when running many unit tests at once, each of which should remain independent of one another.  If you wish to test an Action subclass that depends on another Action or Servlet having set up one or more state variables, you should simulate this behavior by setting the state variables in the session object (via the <code>getSession()</code> method) or the request object (via the <code>getRequest()</code> method).  Alternately, you can test several Action subclasses in a sequence by calling setRequestPathInfo() and actionPerform() for each one.  For more information, please see the <a href="http://www.junit.org">JUnit site</a>.
 <h3>How can I use the Struts transaction token support in my test cases?</h3>
 You can use the Struts transaction token in your tests by using the <b><code>addRequestParameter</code></b> method, thusly:<br><br>
-<pre><b>
+<pre>
      public void testTransactionToken() {
-	addRequestParameter(Constants.TOKEN_KEY, "test_token");
-	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
+	<font color=red>addRequestParameter(Constants.TOKEN_KEY, "test_token");
+	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</font>
         setRequestPathInfo("/testToken");
         actionPerform();
         verifyNoActionErrors();
      }
-</b></pre>
+</pre>
 <h3>Can I access the ActionForm for my test before and after the Action is executed?</h3>
-Yes, you can.  Both MockStrutsTestCase and CactusStrutsTestCase have a setActionForm() method for
-setting the ActionForm for a given test, and a getActionForm() method for retrieving an ActionForm instance
+Yes, you can.  Both MockStrutsTestCase and CactusStrutsTestCase have a <code><b>setActionForm()</b></code> method for
+setting the ActionForm for a given test, and a <code><b>getActionForm()</b></code> method for retrieving an ActionForm instance
 after the Action is executed.
-<h3>When I use setActionForm(), why are the form attributes I set not showing up in my Action class?</h3>
+<h3>When I use <code>setActionForm()</code>, why are the form attributes I set not showing up in my Action class?</h3>
 Even though you can pass an ActionForm instance to your Action, it does not mean you are subverting how
 Struts handles the form processing.  In particular, if you have overridden the ActionForm.reset() method,
 then you could potentially be resetting any attributes you had set in the ActionForm instance you
