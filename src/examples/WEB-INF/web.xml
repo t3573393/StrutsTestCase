@@ -42,10 +42,6 @@
             <param-value>3</param-value>
         </init-param>
         <init-param>
-            <param-name>mapping</param-name>
-            <param-value>org.apache.struts.action.RequestActionMapping</param-value>
-        </init-param>
-        <init-param>
             <param-name>validating</param-name>
             <param-value>false</param-value>
         </init-param>

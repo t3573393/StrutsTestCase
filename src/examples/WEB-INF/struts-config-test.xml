@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE struts-config PUBLIC
-          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
           "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
 
 <struts-config>
@@ -51,7 +51,7 @@
         </action>
         <action path="/testActionMessages" type="servletunit.struts.tests.MessageAction" />
         <action path="/testNullAction" type="servletunit.struts.tests.NullAction" />
-        <action path="/testCustomMapping" type="servletunit.struts.tests.CustomMappingAction"/>
+        <action path="/testCustomMapping" type="servletunit.struts.tests.CustomMappingAction" className="org.apache.struts.action.RequestActionMapping" />
         <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request"/>
         <action path="/testRedirectToExternalURL" type="servletunit.struts.tests.RedirectAction">
             <forward name="redirect" path="http://www.yahoo.com" redirect="true"/>

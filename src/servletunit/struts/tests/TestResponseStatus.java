@@ -27,7 +27,9 @@ public class TestResponseStatus extends MockStrutsTestCase {
         try {
             actionPerform();
         } catch (AssertionFailedError afe) {
-            assertEquals("unexpected response code",((HttpServletResponseSimulator) getResponse()).getStatusCode(),404);
+            int statusCode = ((HttpServletResponseSimulator) getResponse()).getStatusCode();
+            // todo: backwards compatible with struts 1.1
+            assertTrue("unexpected response code",statusCode == 404 || statusCode == 400);
             return;
         }
         fail("expected some error code!");
