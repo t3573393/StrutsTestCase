@@ -41,7 +41,7 @@
 	<!-- Cactus Servlet Redirector URL mapping -->
 	<servlet-mapping>
 		<servlet-name>ServletRedirector</servlet-name>
-		<url-pattern>/ServletRedirector/</url-pattern>
+		<url-pattern>/ServletRedirector</url-pattern>
 	</servlet-mapping>
 	<!-- Action Servlet Mapping -->
 	<servlet-mapping>
