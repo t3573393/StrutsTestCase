@@ -28,8 +28,9 @@ public class TestMessageAction extends CactusStrutsTestCase {
     }
 
     public void testGetResources() {
+
         setRequestPathInfo("/testMessage");
-	setInitParameter("application","examples.ApplicationResources");
+        //setInitParameter("application","examples.ApplicationResources");
         actionPerform();
         verifyForward("success");
         verifyNoActionErrors();
