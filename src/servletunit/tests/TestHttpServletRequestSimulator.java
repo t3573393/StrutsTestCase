@@ -20,9 +20,11 @@ import junit.framework.TestCase;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.ServletContextSimulator;
 
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Locale;
-import java.io.File;
 
 /**
  * A Junit based test of the HttpServletResponseSimulator class
@@ -45,30 +47,30 @@ public class TestHttpServletRequestSimulator extends TestCase {
     }
 
     public void testAddParameterArray() {
-	String[] values = { "value1", "value2" };
-	request.addParameter("name1",values);
-	String[] result = request.getParameterValues("name1");
-	if (result.length != 2) 
-	    fail();
-	if (!((result[0].equals("value1")) && (result[1].equals("value2"))))
-	    fail();
+        String[] values = { "value1", "value2" };
+        request.addParameter("name1",values);
+        String[] result = request.getParameterValues("name1");
+        if (result.length != 2)
+            fail();
+        if (!((result[0].equals("value1")) && (result[1].equals("value2"))))
+            fail();
     }
 
     public void testGetParameterValuesSingle() {
-	request.addParameter("name1","value1");
-	String[] result = request.getParameterValues("name1");
-	if (result.length != 1) 
-	    fail();
-	if (!(result[0].equals("value1")))
-	    fail();
+        request.addParameter("name1","value1");
+        String[] result = request.getParameterValues("name1");
+        if (result.length != 1)
+            fail();
+        if (!(result[0].equals("value1")))
+            fail();
     }
-    
+
     public void testGetParameterWithArray() {
-	String[] values = { "value1", "value2" };
-	request.addParameter("name1",values);
-	String result = request.getParameter("name1");
-	if (!(result.equals("value1")))
-	    fail();
+        String[] values = { "value1", "value2" };
+        request.addParameter("name1",values);
+        String result = request.getParameter("name1");
+        if (!(result.equals("value1")))
+            fail();
     }
 
     public void testSetAttributeNullValue() {
@@ -149,16 +151,19 @@ public class TestHttpServletRequestSimulator extends TestCase {
         fail();
     }
 
-    public void testGetDateHeader() {
-        request.setHeader("DATE_HEADER","05/23/73 8:05 PM, PDT");
-        assertEquals(107049900000L,request.getDateHeader("DATE_HEADER"));
+    public void testGetDateHeader() throws ParseException
+    {
+        String date = "05/23/73 8:05 PM, PST";
+        request.setHeader("DATE_HEADER",date);
+        long time = new SimpleDateFormat().parse(date).getTime();
+        assertEquals(time,request.getDateHeader("DATE_HEADER"));
     }
 
-     public void testGetRealPath() {
-         File file = new File(System.getProperty("basedir"));
-         context.setContextDirectory(file);
-         assertEquals(new File(file,"test.html").getAbsolutePath(),request.getRealPath("/test.html"));
-     }
+    public void testGetRealPath() {
+        File file = new File(System.getProperty("basedir"));
+        context.setContextDirectory(file);
+        assertEquals(new File(file,"test.html").getAbsolutePath(),request.getRealPath("/test.html"));
+    }
 
     public void testGetRealPathNotSet() {
         assertNull(request.getRealPath("/test.html"));
