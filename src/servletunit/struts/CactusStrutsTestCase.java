@@ -385,9 +385,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
             if (mapping.getValidate()) {
                 ActionErrors errors = form.validate(mapping,request);
                 if ((errors != null) && (!errors.empty())) {
-		    if (!failIfFormInvalid) 
+		    if (!failIfFormInvalid) {
 			getRequest().setAttribute(Action.ERROR_KEY, errors);
-		    else {
+			if (mapping.getInput() == null)
+			    fail("no input mapping defined!");
+			this.forward = new ActionForward(mapping.getInput());
+			return;
+		    } else {
 			StringBuffer errorText = new StringBuffer();
 			Iterator iterator = errors.get();
 			while (iterator.hasNext()) {
