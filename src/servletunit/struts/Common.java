@@ -19,7 +19,9 @@ package servletunit.struts;
 import junit.framework.AssertionFailedError;
 import org.apache.struts.action.*;
 import org.apache.struts.tiles.*;
-import org.apache.struts.config.ApplicationConfig;
+import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.Globals;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -223,9 +225,9 @@ public class Common {
     }
 
     protected static ActionMapping getActionConfig(ActionServlet actionServlet, String mappingName, HttpServletRequest request, ServletContext context) {
-        ApplicationConfig config = (ApplicationConfig) request.getAttribute(Action.APPLICATION_KEY);
+        ModuleConfig config = (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
         if (config == null) {
-            config = (ApplicationConfig) context.getAttribute(Action.APPLICATION_KEY);
+            config = (ModuleConfig) context.getAttribute(Globals.MODULE_KEY);
         }
         return (ActionMapping) config.findActionConfig(mappingName);
     }
