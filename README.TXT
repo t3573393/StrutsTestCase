@@ -5,7 +5,7 @@ This release resolves outstanding issues with Struts 1.1.
 
 The StrutsTestCase library is available as four distinct
 releases supporting both the 2.2 and 2.3 versions of the 
-Servlet specification, and the 1.1 versions of the Struts
+Servlet specification, and the 1.1 version of the Struts
 Framework.
 
 Change Log
@@ -14,8 +14,9 @@ Change Log
 New Features:
 ------------
 
-- The StrutsTestCase library is now supports just the Struts
-1.1 release, and as such, has removed all deprecated references.
+- The StrutsTestCase library is no longer backwards compatible
+with Struts 1.0, and as such, has removed all deprecated references.
+The last release to support Struts 1.0 is StrutsTestCase v2.0.
 
 - Greatly improved error messages for common cases such as missing
 configuration files.  As well, all exceptions that are thrown in
