@@ -55,6 +55,9 @@ properties.  Tests now read the properties from the config.xml properly.
 - Cleaned up error messages to be a bit more explicit.  (MockStrutsTestCase
 and CactusStrutsTestCase)
 
+- Fixed bug where verifyInputForward() would fail if the input forward
+was defined using Tiles.  (MockStrutsTestCase and CactusStrutsTestCase)
+
 
 Questions and comments are always welcome!
 
