@@ -77,23 +77,20 @@
             </webinf>
             <webinf dir="${src.dir}/examples/cactus">
                 <include name="cactus.properties"/>
-                <include name="log_server.properties"/>
             </webinf>
-            <classes dir="${src.dir}">
-                <include name="log4j.properties"/>
-            </classes>
             <lib dir="${lib.dir}">
                 <exclude name="ant*.jar"/>
                 <exclude name="servlet.jar"/>
                 <exclude name="struts-1.1.jar" if="build_1.0"/>
                 <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
-            <!-- do we want to remove test classes? -->
             <classes dir="${build.dir}"/>
-            <classes dir="${src.dir}/" includes="examples/ApplicationResources.properties"/>
+            <classes dir="${src.dir}">
+                <include name="examples/ApplicationResources.properties"/>
+                <include name="log4j.properties"/>
+            </classes>
             <classes dir="${src.dir}/examples/cactus">
                 <include name="cactus.properties"/>
-                <include name="log_server.properties"/>
             </classes>
         </war>
     </target>
@@ -204,6 +201,7 @@
             <sysproperty key="test.dir" value="${test.dir}" />
             <classpath refid="class.path" />
             <classpath>
+                <pathelement location="${src.dir}/"/>
                 <pathelement location="${src.dir}/examples/cactus"/>
             </classpath>
             <formatter type="xml" />
