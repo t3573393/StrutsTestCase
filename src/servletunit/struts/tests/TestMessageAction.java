@@ -17,6 +17,10 @@ package servletunit.struts.tests;
 
 import servletunit.struts.MockStrutsTestCase;
 import junit.framework.AssertionFailedError;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 
 public class TestMessageAction extends MockStrutsTestCase {
 
@@ -85,6 +89,20 @@ public class TestMessageAction extends MockStrutsTestCase {
             return;
         }
         fail("Expected AssertionFailedError!");
+    }
+
+    public void testVerifiesComplexErrorMessageScenario() {
+        ActionErrors errors = new ActionErrors();
+        errors.add("error1",new ActionError("error1"));
+        errors.add("error2",new ActionError("error2"));
+        errors.add("error1",new ActionError("error1"));
+        getRequest().setAttribute(Globals.ERROR_KEY,errors);
+        try {
+        verifyActionErrors(new String[] {"error1","error2","error2"});
+        } catch (AssertionFailedError ex) {
+            return;
+        }
+        fail("should not have passed!");
     }
 
     public static void main(String[] args) {

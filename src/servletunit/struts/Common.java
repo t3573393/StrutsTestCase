@@ -25,12 +25,16 @@ import org.apache.struts.config.ActionConfig;
 import org.apache.struts.Globals;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.iterators.TransformIterator;
+import org.apache.commons.collections.IteratorUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Iterator;
+import java.util.Arrays;
 
 
 /**
@@ -73,36 +77,52 @@ public class Common {
      */
     protected static void verifyActionMessages(HttpServletRequest request, String[] messageNames, String key, String messageLabel) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering verifyActionMessages() : request = " + request + ", messageNames = " + messageNames + ", key = " + key + ", messageLabel = " + messageLabel);
-        int actualLength = 0;
+                    logger.trace("Entering verifyActionMessages() : request = " + request + ", messageNames = " + messageNames + ", key = " + key + ", messageLabel = " + messageLabel);
 
-        ActionMessages messages = (ActionMessages) request.getAttribute(key);
-        if (logger.isDebugEnabled()) {
-            logger.debug("verifyNoActionMessages() : retrieved ActionMessages = " + messages);
-        }
-        if (messages == null) {
-            throw new AssertionFailedError("was expecting some " + messageLabel + " messages, but received none.");
-        } else {
-            Iterator iterator = messages.get();
-            while (iterator.hasNext()) {
-                actualLength++;
-                boolean throwError = true;
-                ActionMessage message = (ActionMessage) iterator.next();
-                for (int x = 0; x < messageNames.length; x++) {
-                    if (message.getKey().equals(messageNames[x]))
-                        throwError = false;
+                ActionMessages messages = (ActionMessages) request.getAttribute(key);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("verifyNoActionMessages() : retrieved ActionMessages = " + messages);
                 }
-                if (throwError) {
-                    throw new AssertionFailedError("received unexpected " + messageLabel + " message \"" + message.getKey() + "\"");
+
+                if (messages == null) {
+                    throw new AssertionFailedError("was expecting some " + messageLabel + " messages, but received none.");
                 }
+                /* check length of messages as optimization */
+                else if (messages.size() != messageNames.length) {
+                    throw new AssertionFailedError("was expecting " + messageNames.length + " " + messageLabel + " message(s), but received " + messages.size() + " " + messageLabel + " message(s)");
+                }
+                else  {
+                    /* alphabetize the two lists of message keys and compare them */
+
+                    Iterator iter = new TransformIterator( messages.get(),
+                                                           new Transformer(){
+                                                               public Object transform( Object input )
+                                                               {
+                                                                   return ((ActionMessage) input).getKey();
+                                                               }
+                                                           } );
+
+                    String[] messageKeys = (String[]) IteratorUtils.toArray(iter,String.class );
+
+                    Arrays.sort( messageKeys );
+                    Arrays.sort( messageNames );
+
+                    for ( int i = 0; i < messageNames.length;i++) {
+                        if ( !messageNames[i].equals(messageKeys[i])) {
+                            StringBuffer mks = new StringBuffer();
+                            StringBuffer mns = new StringBuffer();
+
+                            for ( int j = 0; j < messageKeys.length; j++) mks.append( messageKeys[j] + " " );
+                            for ( int k = 0; k < messageNames.length; k++) mns.append( messageNames[k] + " " );
+
+                            throw new AssertionFailedError("received " + messageLabel + " messages: (" + mks + ") but expected (" + mns + ")");
+                        }
+                    }
+                }
+                if (logger.isTraceEnabled())
+                    logger.trace("Exiting verifyActionMessages()");
             }
-            if (actualLength != messageNames.length) {
-                throw new AssertionFailedError("was expecting " + messageNames.length + " " + messageLabel + " message(s), but received " + actualLength + " " + messageLabel + " message(s)");
-            }
-        }
-        if (logger.isTraceEnabled())
-            logger.trace("Exiting verifyActionMessages()");
-    }
+
 
     /**
      * Retrieves a forward uri for tile - this is required for applications
