@@ -41,6 +41,8 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import java.util.Set;
 import java.util.Hashtable;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This class simulates a ServletContext.
@@ -51,6 +53,7 @@ public class ServletContextSimulator implements ServletContext
     private Hashtable initParameters;
     private Hashtable attributes;
     private RequestDispatcherSimulator dispatcher = null;
+    private static Log logger = LogFactory.getLog( ServletContextSimulator.class );
 
     public ServletContextSimulator() {
         this.initParameters = new Hashtable();
@@ -386,7 +389,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public void log(Exception exception, String msg)
     {
-        System.out.println(msg + "\n" + exception.getClass() + " - " + exception.getMessage());
+	logger.info(msg + "\n" + exception.getClass() + " - " + exception.getMessage());
     }
 
     /**
@@ -403,7 +406,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public void log(String msg)
     {
-        System.out.println(msg);
+	logger.info(msg);
     }
 
     /**
@@ -422,7 +425,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public void log(String message, Throwable throwable)
     {
-        System.out.println(message + "\n" + throwable.getClass() + " - " + throwable.getMessage());
+	logger.info(message + "\n" + throwable.getClass() + " - " + throwable.getMessage());
     }
 
     /**
