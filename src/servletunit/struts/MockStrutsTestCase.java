@@ -434,10 +434,16 @@ public class MockStrutsTestCase extends TestCase {
      * executing an Action object.
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
-    init();
-    RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
-    if (!Common.stripJSessionID(dispatcher.getForward()).equals(forwardPath))
-        throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + dispatcher.getForward() + "'");
+	init();
+	if (response.containsHeader("Location")) {
+	    String actualRedirect = response.getHeader("Location");
+	    if (!forwardPath.equals(actualRedirect))
+		fail("Was expecting redirect '" + forwardPath + "' but received redirect '" + actualRedirect + "'");
+	    return;
+	}
+	RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
+	if (!Common.stripJSessionID(dispatcher.getForward()).equals(forwardPath))
+	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + dispatcher.getForward() + "'");
     }
 
     /**
@@ -451,6 +457,8 @@ public class MockStrutsTestCase extends TestCase {
     public void verifyInputForward() {
     init();
         String inputPath = actionServlet.findMapping(actionPath).getInput();
+	if (inputPath == null)
+	    fail("No input mapping defined!");
         RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
         Common.verifyForwardPath(actionServlet,actionPath,inputPath,dispatcher.getForward(),true);
     }

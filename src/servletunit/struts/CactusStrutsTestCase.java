@@ -405,6 +405,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
 	init();
+	if (response.containsHeader("Location")) {
+	    String actualRedirect = Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
+	    if (!forwardPath.equals(actualRedirect))
+		fail("Was expecting redirect '" + forwardPath + "' but received redirect '" + actualRedirect + "'");
+	    return;
+	}
 	if (!Common.stripJSessionID(getActualForward()).equals(forwardPath))
 	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
     }
@@ -420,6 +426,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void verifyInputForward() {
 	init();
         String inputPath = actionServlet.findMapping(request.getPathInfo()).getInput();
+	if (inputPath == null)
+	    fail("No input mapping defined!");
         Common.verifyForwardPath(actionServlet,request.getPathInfo(),inputPath,getActualForward(),true);
     }
 
