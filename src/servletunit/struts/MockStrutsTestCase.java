@@ -54,17 +54,17 @@ import java.net.URL;
  */
 public class MockStrutsTestCase extends TestCase {
 
-    ActionServlet actionServlet;
-    HttpServletRequestSimulator request;
-    HttpServletResponseSimulator response;
-    HttpServletRequestWrapper requestWrapper;
-    HttpServletResponseWrapper responseWrapper;
-    ServletContextSimulator context;
-    ServletConfigSimulator config;
-    String actionPath;
-    boolean isInitialized = false;
-    boolean actionServletIsInitialized = false;
-    boolean requestPathSet = false;
+    protected ActionServlet actionServlet;
+    protected HttpServletRequestSimulator request;
+    protected HttpServletResponseSimulator response;
+    protected HttpServletRequestWrapper requestWrapper;
+    protected HttpServletResponseWrapper responseWrapper;
+    protected ServletContextSimulator context;
+    protected ServletConfigSimulator config;
+    protected String actionPath;
+    protected boolean isInitialized = false;
+    protected boolean actionServletIsInitialized = false;
+    protected boolean requestPathSet = false;
 
     /**
      * The set of public identifiers, and corresponding resource names, for
@@ -110,7 +110,7 @@ public class MockStrutsTestCase extends TestCase {
      * forms and turn off debugging, and creates a mock HttpServletRequest
      * and HttpServletResponse object to use in this test.
      */
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
         if (logger.isDebugEnabled())
             logger.debug("Entering setUp()");
         if (actionServlet == null)

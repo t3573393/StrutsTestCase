@@ -12,6 +12,13 @@
     <property name="release.version" value="${major.version}${minor.version}${point.version}"/>
     <property name="jar.name" value="strutstest-${major.version}.${minor.version}.${point.version}.jar"/>
 
+    <!-- targets this build for the Servlet 2.2 spec -->
+    <property name="build_2.2" value="false"/>
+
+    <!-- points to the top of a test application server -->
+    <!-- used for automatic deployment of the test code -->
+    <property name="appserver.home" value="~/develop/resin-2.1.4"/>
+
     <!-- compile options defaults -->
     <property name="comp.deprecate" value="off"/>
     <property name="comp.debug" value="on"/>

@@ -53,14 +53,14 @@ import java.util.Iterator;
  */
 public class CactusStrutsTestCase extends ServletTestCase {
 
-    ActionServlet actionServlet;
-    HttpServletRequestWrapper requestWrapper;
-    HttpServletResponseWrapper responseWrapper;
-    boolean isInitialized = false;
-    boolean actionServletIsInitialized = false;
-    boolean requestPathIsSet = false;
-    String moduleName;
-    String servletMapping = "*.do";
+    protected ActionServlet actionServlet;
+    protected HttpServletRequestWrapper requestWrapper;
+    protected HttpServletResponseWrapper responseWrapper;
+    protected boolean isInitialized = false;
+    protected boolean actionServletIsInitialized = false;
+    protected boolean requestPathIsSet = false;
+    protected String moduleName;
+    protected String servletMapping = "*.do";
 
     protected static Log logger = LogFactory.getLog(CactusStrutsTestCase.class);
 
@@ -84,7 +84,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     private void init() {
         if (!isInitialized) {
-            throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
+            throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() and tearDown() methods in your TestCase subclass to ensure proper initialization.");
         }
     }
 
@@ -93,7 +93,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * an instance of the ActionServlet, initializes it to validate
      * forms and turn off debugging, and clears all other parameters.
      */
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
         if (logger.isDebugEnabled())
             logger.debug("Entering setUp()");
         try {
@@ -127,7 +127,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         this.servletMapping = servletMapping;
     }
 
-    public void tearDown () throws Exception {
+    protected void tearDown () throws Exception {
         if (logger.isTraceEnabled())
             logger.trace("Entering");
 
