@@ -132,6 +132,7 @@
        <zip zipFile="${basedir}/strutstest-src.zip" basedir="${basedir}">
 	   <exclude name="*.tar.gz"/>
 	   <exclude name="*.zip"/>
+	   <exclude name="lib/*.jar"/>
 	</zip>
     </target>
 
@@ -158,7 +159,7 @@
 	<copy file="${basedir}/README.TXT" toDir="${distribute.dir}"/>
 	<mkdir dir="${distribute.dir}/examples" />
 	<copy todir="${distribute.dir}/examples" >
-	     <fileset dir="${src.dir}/examples"/>
+	     <fileset dir="${src.dir}/examples" excludes="**/tiles*.xml"/>
 	</copy>
         <javadoc packagenames="servletunit,servletunit.struts"
 	   sourcepath="${src.dir}"
