@@ -6,6 +6,8 @@ import org.apache.struts.tiles.ComponentDefinition;
 import org.apache.struts.tiles.DefinitionsFactoryException;
 import org.apache.struts.tiles.DefinitionsUtil;
 import org.apache.struts.tiles.NoSuchDefinitionException;
+import org.apache.struts.config.ApplicationConfig;
+import org.apache.struts.config.ActionConfig;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -129,12 +131,12 @@ public class Common {
      */
     protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
         if ((forwardName == null) && (isInputPath)) {
-            forwardName = actionServlet.findMapping(actionPath).getInput();
+            forwardName = getActionConfig(actionPath,request,context).getInput();
             if (forwardName == null)
                 throw new AssertionFailedError("no input mapping defined!");
         }
         if (!isInputPath) {
-            ActionForward expectedForward = actionServlet.findMapping(actionPath).findForward(forwardName);
+            ActionForward expectedForward = findForward(actionPath,forwardName,request,context);
             if (expectedForward == null)
                 expectedForward = actionServlet.findForward(forwardName);
             if (expectedForward == null)
@@ -186,18 +188,38 @@ public class Common {
     /**
      * Returns any ActionForm instance stored in the request or session, if available.
      */
-    protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request)
+    protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request, ServletContext context)
     {
         ActionForm form;
         // It's deprecated, I know.  It's a lot of trouble to do it differently for now.
-        ActionMapping mapping = actionServlet.findMapping(actionPath);
-        if ("request".equals(mapping.getScope())) {
-            form = (ActionForm) request.getAttribute(mapping.getAttribute());
+        ActionConfig actionConfig = getActionConfig(actionPath,request,context);
+        if ("request".equals(actionConfig.getScope())) {
+            form = (ActionForm) request.getAttribute(actionConfig.getAttribute());
         } else {
             HttpSession session = request.getSession();
-            form = (ActionForm) session.getAttribute(mapping.getAttribute());
+            form = (ActionForm) session.getAttribute(actionConfig.getAttribute());
         }
         return form;
     }
+
+    protected static ApplicationConfig getApplicationConfig(HttpServletRequest request, ServletContext context) {
+        ApplicationConfig config = (ApplicationConfig) request.getAttribute(Action.APPLICATION_KEY);
+        if (config == null) {
+            config = (ApplicationConfig)
+                    context.getAttribute(Action.APPLICATION_KEY);
+        }
+        return (config);
+
+    }
+
+    protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context) {
+        return (ActionForward) getActionConfig(mappingName,request,context).findForwardConfig(forwardName);
+    }
+
+    protected static ActionConfig getActionConfig(String mappingName, HttpServletRequest request, ServletContext context) {
+        ApplicationConfig config = getApplicationConfig(request, context);
+        return config.findActionConfig(mappingName);
+    }
+
 
 }
