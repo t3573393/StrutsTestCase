@@ -66,6 +66,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     private int status = 0;
     private String message = null;
     private HashMap headers = new HashMap();
+    private HashMap cookies = new HashMap();
 
     public static final int SC_CONTINUE = 100;
 
@@ -147,11 +148,19 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     public static final int SC_HTTP_VERSION_NOT_SUPPORTED = 505;
 
     /**
-     * This method is not supported.
+     * Add a cookie to this response, which will then be stored in the browser.
      */
-    public void addCookie(Cookie cookie)
+     public void addCookie(Cookie cookie)
     {
-	throw new UnsupportedOperationException("addCookie operation is not supported!");
+	cookies.put( cookie.getName(), cookie );
+    }
+
+    /**
+     * Returns a cookie with a given, or null if this cookie has
+     * not been added to the repsonse.
+     */
+    public Cookie findCookie( String name ) {
+	return (Cookie) cookies.get( name );
     }
 
     /**
