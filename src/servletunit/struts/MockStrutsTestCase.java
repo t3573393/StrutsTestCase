@@ -34,6 +34,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 
 /**
  * MockStrutsTestCase is an extension of the base JUnit testcase that
@@ -65,6 +66,19 @@ public class MockStrutsTestCase extends TestCase {
     String actionPath;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+
+    /**
+     * The set of public identifiers, and corresponding resource names, for
+     * the versions of the configuration file DTDs that we know about.  There
+     * <strong>MUST</strong> be an even number of Strings in this list!
+     */
+    protected String registrations[] = {
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN",
+        "/org/apache/struts/resources/web-app_2_2.dtd",
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN",
+        "/org/apache/struts/resources/web-app_2_3.dtd"
+    };
+
 
     protected static Log logger = LogFactory.getLog(MockStrutsTestCase.class);
 
@@ -503,11 +517,16 @@ public class MockStrutsTestCase extends TestCase {
         // web.xml file -- first the init-parameters
         Digester digester = new Digester();
         digester.push(this.config);
-        digester.setValidating(false);
+        digester.setValidating(true);
         digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
         digester.addCallParam("web-app/servlet/init-param/param-name", 0);
         digester.addCallParam("web-app/servlet/init-param/param-value", 1);
         try {
+            for (int i = 0; i < registrations.length; i += 2) {
+                URL url = context.getResource(registrations[i + 1]);
+                if (url != null)
+                    digester.register(registrations[i], url.toString());
+            }
             InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
@@ -519,12 +538,17 @@ public class MockStrutsTestCase extends TestCase {
 
         // now the context parameters..
         digester = new Digester();
-        digester.setValidating(false);
+        digester.setValidating(true);
         digester.push(this.context);
         digester.addCallMethod("web-app/context-param", "setInitParameter", 2);
         digester.addCallParam("web-app/context-param/param-name", 0);
         digester.addCallParam("web-app/context-param/param-value", 1);
         try {
+            for (int i = 0; i < registrations.length; i += 2) {
+                URL url = context.getResource(registrations[i + 1]);
+                if (url != null)
+                    digester.register(registrations[i], url.toString());
+            }
             InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
