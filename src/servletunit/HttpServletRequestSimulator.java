@@ -535,6 +535,9 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String getParameter( String s )
     {
+        if (s == null)
+            return null;
+
         Object param = parameters.get(s);
         if( null == param )
             return null;
@@ -582,6 +585,8 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String[] getParameterValues( String s )
     {
+        if (s == null)
+            return null;
         Object param = parameters.get( s );
         if( null == param )
             return null;

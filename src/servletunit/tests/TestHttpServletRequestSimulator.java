@@ -65,6 +65,18 @@ public class TestHttpServletRequestSimulator extends TestCase {
             fail();
     }
 
+    public void testGetParameterWithNullKey() {
+        String result = request.getParameter(null);
+        assertNull(result);
+
+    }
+
+     public void testGetParameterValuesWithNullKey() {
+        String[] result = request.getParameterValues(null);
+        assertNull(result);
+
+    }
+
     public void testGetParameterWithArray() {
         String[] values = { "value1", "value2" };
         request.addParameter("name1",values);
