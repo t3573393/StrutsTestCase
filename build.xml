@@ -52,8 +52,8 @@
 	    <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
 	</jar>
 
-	<war warfile="test.war" webxml="${src.dir}/servletunit/struts/examples/WEB-INF/web.xml">
-	    <webinf dir="${src.dir}/servletunit/struts/examples/WEB-INF">
+	<war warfile="test.war" webxml="${src.dir}/examples/WEB-INF/web.xml">
+	    <webinf dir="${src.dir}/examples/WEB-INF">
 	         <exclude name="web.xml"/>
 	    </webinf>
 	    <lib dir="${basedir}/lib">
@@ -91,7 +91,7 @@
 	<copy file="${basedir}/release.txt" toDir="${distribute.dir}"/>
 	<mkdir dir="${distribute.dir}/examples" />
 	<copy todir="${distribute.dir}/examples" >
-	     <fileset dir="${src.dir}/servletunit/struts/examples"/>
+	     <fileset dir="${src.dir}/examples"/>
 	</copy>
         <javadoc packagenames="servletunit,servletunit.struts"
            sourcepath="${src.dir}"
@@ -121,7 +121,7 @@
             <sysproperty key="test.dir" value="${test.dir}" />
             <classpath refid="class.path" />
 	    <classpath>
-	       <pathelement location="${src.dir}/servletunit/struts/examples/"/>
+	       <pathelement location="${src.dir}/examples/"/>
 	    </classpath>
             <formatter type="plain" />
 
@@ -141,7 +141,7 @@
             <sysproperty key="test.dir" value="${test.dir}" />
             <classpath refid="class.path" />
 	    <classpath>
-	       <pathelement location="${src.dir}/servletunit/struts/examples/cactus"/>
+	       <pathelement location="${src.dir}/examples/cactus"/>
 	    </classpath>
             <formatter type="plain" />
 
