@@ -88,22 +88,23 @@ public class MockStrutsTestCase extends TestCase {
      * and HttpServletResponse object to use in this test.
      */
     protected void init() {
-	if (!isInitialized) {
-	    try {
-		if (actionServlet == null)
-		    actionServlet = new ActionServlet();
-		config = new ServletConfigSimulator();
-		config.setInitParameter("debug","0");
-		config.setInitParameter("detail","0");
-		request = new HttpServletRequestSimulator();
-		response = new HttpServletResponseSimulator();
-		requestWrapper = null;
-		responseWrapper = null;
-		isInitialized = true;
-	    } catch (Exception e) {
-		throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
-	    }
-	}
+    if (!isInitialized) {
+        try {
+        if (actionServlet == null)
+            actionServlet = new ActionServlet();
+        config = new ServletConfigSimulator();
+        config.setInitParameter("debug","0");
+        config.setInitParameter("detail","0");
+        request = new HttpServletRequestSimulator();
+        response = new HttpServletResponseSimulator();
+        requestWrapper = null;
+        responseWrapper = null;
+        isInitialized = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
+        }
+    }
     }
 
     /**
@@ -113,7 +114,7 @@ public class MockStrutsTestCase extends TestCase {
      * and HttpServletResponse object to use in this test.
      */
     public void setUp() throws Exception {
-	init();
+    init();
     }
 
     /**
@@ -125,7 +126,7 @@ public class MockStrutsTestCase extends TestCase {
      * if this method is overridden in a subclass.
      */
     public void tearDown() throws Exception {
-	init();
+    init();
         try {
             actionServlet.destroy();
         } catch (Exception e) {
@@ -138,22 +139,22 @@ public class MockStrutsTestCase extends TestCase {
      * this test.
      */
     public HttpServletRequest getRequest() {
-	init();
+    init();
         return this.request;
     }
 
      /**
      * Returns a HttpServletRequestWrapper object that can be used
      * in this test. Note that if {@link #setRequestWrapper} has not been
-     * called, this method will return an instance of 
+     * called, this method will return an instance of
      * javax.servlet.http.HttpServletRequestWrapper.
      */
     public HttpServletRequestWrapper getRequestWrapper() {
-	init();
-	if (requestWrapper == null)
-	    return new HttpServletRequestWrapper(this.request);
-	else
-	    return requestWrapper;
+    init();
+    if (requestWrapper == null)
+        return new HttpServletRequestWrapper(this.request);
+    else
+        return requestWrapper;
     }
 
     /**
@@ -166,13 +167,13 @@ public class MockStrutsTestCase extends TestCase {
      * used when calling Action.perform().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
-	init();
-	if (wrapper == null)
-	    throw new IllegalArgumentException("wrapper class cannot be null!");
-	else {
-	    wrapper.setRequest(this.request);
-	    this.requestWrapper = wrapper;
-	}
+    init();
+    if (wrapper == null)
+        throw new IllegalArgumentException("wrapper class cannot be null!");
+    else {
+        wrapper.setRequest(this.request);
+        this.requestWrapper = wrapper;
+    }
     }
 
     /**
@@ -180,22 +181,22 @@ public class MockStrutsTestCase extends TestCase {
      * this test.
      */
     public HttpServletResponse getResponse() {
-	init();
+    init();
         return this.response;
     }
 
     /**
      * Returns an HttpServletResponseWrapper object that can be used in
      * this test.  Note that if {@link #setResponseWrapper} has not been
-     * called, this method will return an instance of 
+     * called, this method will return an instance of
      * javax.servlet.http.HttpServletResponseWrapper.
      */
     public HttpServletResponseWrapper getResponseWrapper() {
-	init();
-	if (responseWrapper == null)
-	    return new HttpServletResponseWrapper(this.response);
-	else
-	    return responseWrapper;
+    init();
+    if (responseWrapper == null)
+        return new HttpServletResponseWrapper(this.response);
+    else
+        return responseWrapper;
     }
 
     /**
@@ -208,13 +209,13 @@ public class MockStrutsTestCase extends TestCase {
      * used when calling Action.perform().
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
-	init();
-	if (wrapper == null)
-	    throw new IllegalArgumentException("wrapper class cannot be null!");
-	else {
-	    wrapper.setResponse(this.response);
-	    this.responseWrapper = wrapper;
-	}
+    init();
+    if (wrapper == null)
+        throw new IllegalArgumentException("wrapper class cannot be null!");
+    else {
+        wrapper.setResponse(this.response);
+        this.responseWrapper = wrapper;
+    }
     }
 
     /**
@@ -222,7 +223,7 @@ public class MockStrutsTestCase extends TestCase {
      * test.
      */
     public HttpSession getSession() {
-	init();
+    init();
         return this.request.getSession(true);
     }
 
@@ -232,7 +233,7 @@ public class MockStrutsTestCase extends TestCase {
      *
      */
     public ActionServlet getActionServlet() {
-	init();
+    init();
         try {
             this.actionServlet.init(config);
             return this.actionServlet;
@@ -247,7 +248,7 @@ public class MockStrutsTestCase extends TestCase {
      * version different from that provided in the Struts distribution.
      */
     public void setActionServlet(ActionServlet servlet) {
-	init();
+    init();
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
@@ -265,16 +266,16 @@ public class MockStrutsTestCase extends TestCase {
      *
      */
     public void actionPerform() {
-	init();
-	HttpServletRequest request = this.request;
-	HttpServletResponse response = this.response;
-	if (this.requestWrapper != null)
-	    request = this.requestWrapper;
-	if (this.responseWrapper != null)
-	    response = this.responseWrapper;
-	
+    init();
+    HttpServletRequest request = this.request;
+    HttpServletResponse response = this.response;
+    if (this.requestWrapper != null)
+        request = this.requestWrapper;
+    if (this.responseWrapper != null)
+        response = this.responseWrapper;
+
         try {
-	    this.getActionServlet().doPost(request,response);
+        this.getActionServlet().doPost(request,response);
         } catch (ServletException e) {
             throw new AssertionFailedError("ServletException: " + e.getMessage());
         } catch (IOException e) {
@@ -290,7 +291,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void addRequestParameter(String parameterName, String parameterValue)
     {
-	init();
+    init();
         this.request.addParameter(parameterName,parameterValue);
     }
 
@@ -303,7 +304,7 @@ public class MockStrutsTestCase extends TestCase {
      * appear in an HTML or JSP source file.
      */
     public void setRequestPathInfo(String pathInfo) {
-	init();
+    init();
         this.actionPath = Common.stripActionPath(pathInfo);
         this.request.setPathInfo(actionPath);
     }
@@ -323,7 +324,7 @@ public class MockStrutsTestCase extends TestCase {
      * with a "/" character.
      */
     public void setConfigFile(String pathname) {
-	init();
+    init();
         // ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');
@@ -333,32 +334,32 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     public void setServletConfigFile(String pathname) {
-	init();
-	 // ugly hack to get this to play ball with Class.getResourceAsStream()
+    init();
+     // ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');
             pathname = "/" + prefix + "/" + pathname;
         }
-	// pull in the appropriate parts of the
-	// web.xml file.
-	Digester digester = new Digester();
-	    URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
-	    if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
-	    digester.push(this.config);
-	    digester.setDebug(0);
-	    digester.setValidating(false);
-	    digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
-	    digester.addCallParam("web-app/servlet/init-param/param-name", 0);
-	    digester.addCallParam("web-app/servlet/init-param/param-value", 1);
-	    try {
-		InputStream input = getClass().getResourceAsStream(pathname);
-		if(input==null) 
-		    throw new AssertionFailedError("Invalid pathname: " + pathname);
-		digester.parse(input);
-		input.close();
-	    } catch (Exception e) {
-		throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
-	    }
+    // pull in the appropriate parts of the
+    // web.xml file.
+    Digester digester = new Digester();
+        URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
+        if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
+        digester.push(this.config);
+        digester.setDebug(0);
+        digester.setValidating(false);
+        digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
+        digester.addCallParam("web-app/servlet/init-param/param-name", 0);
+        digester.addCallParam("web-app/servlet/init-param/param-value", 1);
+        try {
+        InputStream input = getClass().getResourceAsStream(pathname);
+        if(input==null)
+            throw new AssertionFailedError("Invalid pathname: " + pathname);
+        digester.parse(input);
+        input.close();
+        } catch (Exception e) {
+        throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
+        }
     }
 
     /**
@@ -373,7 +374,7 @@ public class MockStrutsTestCase extends TestCase {
      * executing an Action object.
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
-	init();
+    init();
         RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
         Common.verifyForwardPath(actionServlet,actionPath,forwardName,dispatcher.getForward(),false);
     }
@@ -384,16 +385,16 @@ public class MockStrutsTestCase extends TestCase {
      *
      * @param forwardPath an absolute pathname to which the request
      * is to be forwarded.
-     * 
+     *
      * @exception AssertionFailedError if the ActionServlet controller
      * used a different forward path than <code>forwardPath</code> after
      * executing an Action object.
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
-	init();
-	RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
-	if (!dispatcher.getForward().equals(forwardPath))
-	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + dispatcher.getForward() + "'");
+    init();
+    RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
+    if (!dispatcher.getForward().equals(forwardPath))
+        throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + dispatcher.getForward() + "'");
     }
 
     /**
@@ -405,7 +406,7 @@ public class MockStrutsTestCase extends TestCase {
      * executing an Action object.
      */
     public void verifyInputForward() {
-	init();
+    init();
         String inputPath = actionServlet.findMapping(actionPath).getInput();
         RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
         Common.verifyForwardPath(actionServlet,actionPath,inputPath,dispatcher.getForward(),true);
@@ -426,7 +427,7 @@ public class MockStrutsTestCase extends TestCase {
      */
 
     public void verifyActionErrors(String[] errorNames) {
-	init();
+    init();
         Common.verifyActionErrors(request,errorNames);
     }
 
@@ -438,8 +439,20 @@ public class MockStrutsTestCase extends TestCase {
      * sent any error messages after excecuting and Action object.
      */
     public void verifyNoActionErrors() {
-	init();
+    init();
         Common.verifyNoActionErrors(request);
+    }
+
+    /**
+     * Sets an initialization parameter on the
+     * ActionServlet.  Allows you to simulate an init parameter
+     * that would normally have been found in web.xml,
+     * but is not available while testing with mock objects.
+     * @param key the name of the initialization parameter
+     * @parame value the value of the intialization parameter
+     */
+    public void setInitParameter(String key, String value){
+        config.setInitParameter(key, value);
     }
 
 }
