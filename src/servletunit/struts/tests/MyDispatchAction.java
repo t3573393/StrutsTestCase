@@ -34,4 +34,13 @@ public class MyDispatchAction extends DispatchAction {
         return mapping.findForward("action2");
     }
 
+    public ActionForward actionThree(ActionMapping mapping,
+                                   ActionForm form,
+                                   HttpServletRequest request,
+                                   HttpServletResponse response)
+            throws IOException, ServletException
+    {
+        return new ActionForward(mapping.getInput());
+    }
+
 }

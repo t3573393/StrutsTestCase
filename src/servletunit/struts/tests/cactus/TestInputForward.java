@@ -31,5 +31,13 @@ public class TestInputForward extends CactusStrutsTestCase {
 	verifyInputForward();
     }
 
+    public void testModuleInputForward() {
+        addRequestParameter("method","actionThree");
+        setRequestPathInfo("test","/testDispatchAction");
+        actionPerform();
+        verifyNoActionErrors();
+        verifyInputForward();
+    }
+
 
 }

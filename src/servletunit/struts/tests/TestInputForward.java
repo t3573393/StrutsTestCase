@@ -46,4 +46,12 @@ public class TestInputForward extends MockStrutsTestCase {
 	}
 	fail("Should have thrown an error!");
     }
+
+    public void testModuleInputForward() {
+        addRequestParameter("method","actionThree");
+        setRequestPathInfo("test","/testDispatchAction");
+        actionPerform();
+        verifyNoActionErrors();
+        verifyInputForward();
+    }
 }
