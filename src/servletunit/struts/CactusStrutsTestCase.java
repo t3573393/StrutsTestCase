@@ -347,12 +347,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		response = this.responseWrapper;
 	    
 	    ActionServlet actionServlet = this.getActionServlet();
-	    
 	    actionServlet.doPost(request,response);
 	    
 	} catch (ServletException se) {
+	    se.getRootCause().printStackTrace();
 	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (Exception e) {
+	    e.printStackTrace();
             fail("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
 	}
     }
