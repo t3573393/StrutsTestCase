@@ -1,16 +1,15 @@
-BODY {background: white; color: black; font-size: small; font-family: Verdana, Helvetica, Arial, sans-serif; }
-
-H1 {font-style: italic; }
-H2 {font-style: italic; background: #a6caf0; }
-H3 {font-style: italic; }
-
-tt {font-size: medium; }
+BODY {background: white; color: black; font-size: 12px; font-family: Verdana, Helvetica, Arial, sans-serif; }
 
 /* link settings */
 A {text-decoration:none; }
 A:hover,A:active { text-decoration: underline; }
 
-/* header settings */
+/* header/footer settings */
+H1 {font-style: italic; font-size: 26px; }
+H2 {font-style: italic; font-size: 20px; background: silver; }
+H3 {font-style: italic; font-size: 14px; }
+H3 em {font-size: 14px; }
+
 DIV.header {text-align: center; }
 .announce {color: red; }
 .copyright {text-align: center; font-size: xx-small; }
@@ -18,8 +17,10 @@ DIV.header {text-align: center; }
 /* general font settings */
 .warning {color: red; font-weight: bold; }
 
-/* code example settings */
-pre { font-size: medium; }
-pre.code { margin: 0 20% 0 20%; background: #FEEACB; padding: 1em; }
+/* fixed settings */
+tt {font-size: 12px; }
+pre { font-size: 12px; }
 pre em { font-style: normal; color: red; }
+pre.code { margin: 0 15% 0 15%; background: #FEEACB; padding: 1em; }
+
 
