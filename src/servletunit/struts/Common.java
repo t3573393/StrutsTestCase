@@ -165,6 +165,8 @@ public class Common {
         if (logger.isTraceEnabled())
             logger.trace("Entering verifyForwardPath() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", forwardName = " + forwardName + ", actualForwardPath = " + actualForwardPath);
 
+        boolean usesTiles = false;
+
         if ((forwardName == null) && (isInputPath)) {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : processing an input forward");
@@ -178,6 +180,7 @@ public class Common {
             String tilesForward = getTilesForward(forwardName, request, context, config);
             if (tilesForward != null) {
                 forwardName = tilesForward;
+                usesTiles = true;
                 if (logger.isDebugEnabled()) {
                     logger.debug("verifyForwardPath() : retrieved tiles definition for forward = " + forwardName);
                 }
@@ -204,6 +207,8 @@ public class Common {
             String tilesForward = getTilesForward(forwardName, request, context, config);
             if (tilesForward != null) {
                 forwardName = tilesForward;
+
+                usesTiles = true;
                 if (logger.isDebugEnabled()) {
                     logger.debug("verifyForwardPath() : retrieved tiles definition for forward = " + forwardName);
                 }
@@ -215,7 +220,11 @@ public class Common {
             moduleName = moduleName.substring(moduleName.indexOf('/'),moduleName.lastIndexOf('/'));
         if (!forwardName.startsWith("/"))
             forwardName = "/" + forwardName;
-        forwardName = request.getContextPath() + moduleName + forwardName;
+
+        if (usesTiles || isInputPath)
+            forwardName = request.getContextPath() + forwardName;
+        else
+            forwardName = request.getContextPath() + moduleName + forwardName;
         if (logger.isDebugEnabled()) {
             logger.debug("verifyForwardPath() : added context path and module name to forward = " + forwardName);
         }
