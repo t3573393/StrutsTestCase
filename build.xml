@@ -253,7 +253,7 @@
             dest="${temp.dir}/jakarta-struts-nightly.zip"
             verbose="false"/>
         <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
-        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1b2.jar"/>
+        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1b2.jar" overwrite="true"/>
         <!--<delete dir="${temp.dir}"/>-->
     </target>
 
