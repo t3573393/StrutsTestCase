@@ -310,8 +310,8 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
-     * Sets the location of the Struts configuration file.  This method
-     * should only be called if the configuration file is different than
+     * Sets the location of the Struts configuration file for the default module.
+     * This method should only be called if the configuration file is different than
      * the default value of /WEB-INF/struts-config.xml.<br><br>
      * The rules for searching for the configuration files are the same
      * as the rules associated with calling Class.getResourceAsStream().
@@ -324,14 +324,28 @@ public class MockStrutsTestCase extends TestCase {
      * with a "/" character.
      */
     public void setConfigFile(String pathname) {
-    init();
+        init();
+        setConfigFile(null,pathname);
+    }
+
+    /**
+     * Sets the struts configuration file for a given sub-application.
+     *
+     * @param moduleName the name of the sub-application, or null if this is the default application
+     * @param pathName the location of the configuration file for this sub-application
+     */
+    public void setConfigFile(String moduleName, String pathname) {
+        init();
         // ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');
             pathname = "/" + prefix + "/" + pathname;
         }
-        this.config.setInitParameter("config",pathname);
-	actionServletIsInitialized = false;
+        if (moduleName == null)
+            this.config.setInitParameter("config",pathname);
+        else
+            this.config.setInitParameter("config/" + moduleName,pathname);
+        actionServletIsInitialized = false;
     }
 
     /**
@@ -495,7 +509,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public ActionForm getActionForm() {
         init();
-        return Common.getActionForm(actionServlet,actionPath,request);
+        return Common.getActionForm(actionServlet,actionPath,request,context);
     }
 
 
