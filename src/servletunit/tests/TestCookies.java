@@ -11,7 +11,7 @@ public class TestCookies extends TestCase {
     HttpServletRequestSimulator request;
 
     public TestCookies(String testName) {
-    super(testName);
+        super(testName);
     }
 
     public void setUp() {
