@@ -45,13 +45,13 @@ import java.util.HashMap;
 /**
  * CactusStrutsTestCase is an extension of the base JUnit testcase that
  * provides additional methods to aid in testing Struts Action
- * objects.  It uses an in-container approach to run the servlet
- * container, and tests the execution of Action objects as they
- * are actually run through the Struts ActionServlet.  CactusStrutsTestCase
- * provides methods that set up the request path, request parameters
- * for ActionForm subclasses, as well as methods that can verify
- * that the correct ActionForward was used and that the proper
- * ActionError messages were supplied.
+ * objects.  It uses an in-container approach based on the Cactus
+ * testing framework to run the servlet container, and tests the execution
+ * of Action objects as thet are actually run through the Struts
+ * ActionServlet.  CactusStrutsTestCase provides methods that set up
+ * the request path, request parameters for ActionForm subclasses, as
+ * well as methods that can verify that the correct ActionForward was
+ * used and that the proper ActionError messages were supplied.
  *
  */
 public class CactusStrutsTestCase extends ServletTestCase {
