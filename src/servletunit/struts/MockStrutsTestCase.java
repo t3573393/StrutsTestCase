@@ -269,7 +269,7 @@ public class MockStrutsTestCase extends TestCase {
                         throwError = false;
                 }
                 if (throwError) {
-                    throw new AssertionFailedError("received unexpected error '" + error.getKey() + "'");
+                    throw new AssertionFailedError("received unexpected error \"" + error.getKey() + "\"");
                 }
             }
             if (actualLength != errorNames.length) {
@@ -290,7 +290,13 @@ public class MockStrutsTestCase extends TestCase {
         if (errors != null) {
             Iterator iterator = errors.get();
             if (iterator.hasNext()) {
-                throw new AssertionFailedError("was expecting no error messages, but received some.");
+                StringBuffer errorText = new StringBuffer();
+                while (iterator.hasNext()) {
+                    errorText.append(" \"");
+                    errorText.append(((ActionError) iterator.next()).getKey());
+                    errorText.append("\"");
+                }
+                throw new AssertionFailedError("was expecting no error messages, but received: " + errorText.toString());
             }
         }
     }
