@@ -92,6 +92,9 @@
 	         <include name="cactus.properties"/>
 		 <include name="log_server.properties"/>
 	    </webinf>
+	    <classes dir="${src.dir}">
+	         <include name="log4j.properties"/>
+	    </classes>
 	    <lib dir="${basedir}/lib">
 	         <exclude name="ant*.jar"/>
 		 <exclude name="servlet.jar"/>
