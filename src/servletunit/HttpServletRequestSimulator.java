@@ -327,11 +327,18 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * This operation is not supported.
+     * Returns the value of the specified request header as a long value that represents a Date object. Use this
+     * method with headers that contain dates, such as If-Modified-Since.
+     * <br><br>
+     * The date is returned as the number of milliseconds since January 1, 1970 GMT. The header name is case insensitive.
+     * <br><br>
+     * If the request did not have a header of the specified name, this method returns -1. If the header can't be converted to a date, the method throws an IllegalArgumentException.
+     * @param name a String specifying the name of the header
+     * @return a <code>long</code> value representing the date specified in the header expressed as the number of milliseconds since January 1, 1970 GMT, or -1 if the named header was not included with the reqest.
      */
-    public long getDateHeader(String s)
+    public long getDateHeader(String name)
     {
-        String s1 = getHeader(s);
+        String s1 = getHeader(name);
         if(s1 == null)
             return -1L;
         try
@@ -465,8 +472,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * This operation is not supported.
+     * Returns an Enumeration of Locale objects indicating, in decreasing order starting with the preferred locale, the locales that are acceptable to the client based on the Accept-Language header. If the client request doesn't provide an Accept-Language header, this method returns an Enumeration containing one Locale, the default locale for the server.
+     * @return an <code>Enumeration</code> of preferred Locale objects for the client
      */
+
+
+
     public Enumeration getLocales()
     {
         return java.util.Collections.enumeration(Collections.singleton(getLocale()));
@@ -801,8 +812,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
 
 
     /**
-     * This operation is not supported.
+     * Reconstructs the URL the client used to make the request. The returned URL contains a protocol, server name, port number, and server path, but it does not include query string parameters.
+     * <br><br>
+     * Because this method returns a StringBuffer, not a string, you can modify the URL easily, for example, to append query parameters.
+     * <br><br>
+     * This method is useful for creating redirect messages and for reporting errors.
+     * @return a <code>StringBuffer</code> object containing the reconstructed URL
      */
+
     public StringBuffer getRequestURL()
     {
         return new StringBuffer(requestURL);
@@ -835,7 +852,8 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * This operation is not supported.
+     * Returns the port number on which this request was received. For HTTP servlets, same as the value of the CGI variable SERVER_PORT.
+     * @return an integer specifying the port number
      */
     public int getServerPort() {
         return this.port;
