@@ -391,7 +391,6 @@ public class MockStrutsTestCase extends TestCase {
         // web.xml file -- first the init-parameters
         Digester digester = new Digester();
         digester.push(this.config);
-        digester.setDebug(0);
         digester.setValidating(false);
         digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
         digester.addCallParam("web-app/servlet/init-param/param-name", 0);
@@ -408,7 +407,6 @@ public class MockStrutsTestCase extends TestCase {
 
         // now the context parameters..
         digester = new Digester();
-        digester.setDebug(0);
         digester.setValidating(false);
         digester.push(this.context);
         digester.addCallMethod("web-app/context-param", "setInitParameter", 2);
