@@ -43,6 +43,11 @@ CactusStrutsTestCase)
 - Fixed NullPointerException when using OC4J (patch 831139 for
 CactusStrutsTestCase)
 
+- Added patch to fix problem where running Cactus tests renders
+a web application unusable.  NOTE: This is still a work in progress,
+so the fix may work for you, or it may not.  (CactusStrutsTestCase
+only)
+
 
 Deryl Seale
 http://strutstestcase.sourceforge.net
