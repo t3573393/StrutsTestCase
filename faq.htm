@@ -45,6 +45,16 @@ You can use the Struts transaction token in your tests by using the <b><code>add
         verifyNoActionErrors();
      }
 </b></pre>
+<h3>Can I access the ActionForm for my test before and after the Action is executed?</h3>
+Yes, you can.  Both MockStrutsTestCase and CactusStrutsTestCase have a setActionForm() method for
+setting the ActionForm for a given test, and a getActionForm() method for retrieving an ActionForm instance
+after the Action is executed.
+<h3>When I use setActionForm(), why are the form attributes I set not showing up in my Action class?</h3>
+Even though you can pass an ActionForm instance to your Action, it does not mean you are subverting how
+Struts handles the form processing.  In particular, if you have overridden the ActionForm.reset() method,
+then you could potentially be resetting any attributes you had set in the ActionForm instance you
+pass to setActionForm().  Likewise, any request parameters you pass along that correspond to attributes
+in your ActionForm instance will replace whatever you set in your test method.
 <br>
 <br>
 <br>
