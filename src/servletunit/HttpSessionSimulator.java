@@ -92,6 +92,9 @@ public class HttpSessionSimulator implements HttpSession
         return -1;
     }
 
+    /**
+     * This method is not supported.
+     */
     public HttpSessionContext getSessionContext()
     {
         throw new UnsupportedOperationException("getSessionContext not supported!");
