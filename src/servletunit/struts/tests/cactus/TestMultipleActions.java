@@ -34,12 +34,9 @@ public class TestMultipleActions extends CactusStrutsTestCase {
         verifyForwardPath("/main/success.jsp");
         assertEquals("deryl",getSession().getAttribute("authentication"));
         verifyNoActionErrors();
-        addRequestParameter("useranme","foo");
-        addRequestParameter("password","bar");
-        setRequestPathInfo("/login");
+        setRequestPathInfo("/testContextParams");
         actionPerform();
-        verifyInputForward();
-        verifyActionErrors(new String[] {"error.password.mismatch"});
+        verifyNoActionErrors();
     }
 
     public static void main(String[] args) {

@@ -39,11 +39,9 @@ public class TestMultipleActions extends MockStrutsTestCase {
         verifyForwardPath("/main/success.jsp");
         assertEquals("deryl",getSession().getAttribute("authentication"));
         verifyNoActionErrors();
-        addRequestParameter("username","foo");
-        addRequestParameter("password","bar");
-        setRequestPathInfo("/test", "/testDynamicAction");
+        setRequestPathInfo("/test", "/testContextParams");
         actionPerform();
-        verifyActionErrors(new String[] {"error.password.mismatch"});
+        verifyNoActionErrors();
     }
 
     public static void main(String[] args) {
