@@ -50,6 +50,9 @@
         </action>
         <action path="/testActionMessages" type="servletunit.struts.tests.MessageAction" />
         <action path="/testNullAction" type="servletunit.struts.tests.NullAction" />
+        <action path="/testCustomMapping" type="servletunit.struts.tests.CustomMappingAction">
+            <forward name="failure" path="/main/failure.jsp"/>
+        </action>
         <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request"/>
     </action-mappings>
     <message-resources parameter="examples.ApplicationResources"/>
