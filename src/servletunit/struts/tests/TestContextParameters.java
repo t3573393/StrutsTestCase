@@ -31,14 +31,13 @@ public class TestContextParameters extends MockStrutsTestCase {
     }
 
     public void testContextParameters() {
-        setRequestPathInfo("/testContextParams");
-        setServletConfigFile("/WEB-INF/web.xml");
+        setRequestPathInfo("test","/testContextParams");
         actionPerform();
         verifyNoActionErrors();
     }
 
     public void testContextParametersAbsolutePath() {
-        setRequestPathInfo("/testContextParams");
+        setRequestPathInfo("test","/testContextParams");
         setServletConfigFile(System.getProperty("basedir") + "/src/examples/WEB-INF/web.xml");
         actionPerform();
         verifyNoActionErrors();

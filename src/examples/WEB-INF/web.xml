@@ -29,6 +29,10 @@
             <param-name>config/tiles</param-name>
             <param-value>/WEB-INF/struts-config-tiles.xml</param-value>
         </init-param>
+        <init-param>
+            <param-name>config/test</param-name>
+            <param-value>/WEB-INF/struts-config-test.xml</param-value>
+        </init-param>
 		<init-param>
 			<param-name>debug</param-name>
 			<param-value>3</param-value>

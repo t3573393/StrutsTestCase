@@ -25,7 +25,7 @@ public class TestContextParameters extends CactusStrutsTestCase {
     }
     
     public void testContextParameters() {
-	setRequestPathInfo("/testContextParams");
+	setRequestPathInfo("test","/testContextParams");
         actionPerform();
         verifyNoActionErrors();
     }
