@@ -37,8 +37,8 @@
             <exclude name="struts-1.0.jar" unless="build_1.0"/>
             <exclude name="servletapi-2.3.jar" if="build_2.2"/>
             <exclude name="servletapi-2.2.jar" unless="build_2.2"/>
-            <exclude name="cactus-13-1.4.1.jar" if="build_2.2"/>
-            <exclude name="cactus-12-1.4.1.jar" unless="build_2.2"/>
+            <exclude name="cactus-13-1.5.jar" if="build_2.2"/>
+            <exclude name="cactus-12-1.5.jar" unless="build_2.2"/>
         </fileset>
         <pathelement location="${build.dir}"/>
     </path>
