@@ -112,7 +112,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     protected void setUp() throws Exception {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setUp()");
+            logger.debug("Entering");
         if (actionServlet == null)
             actionServlet = new ActionServlet();
         config = new ServletConfigSimulator();
@@ -123,7 +123,7 @@ public class MockStrutsTestCase extends TestCase {
         responseWrapper = null;
         isInitialized = true;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setUp()");
+            logger.debug("Exiting");
     }
 
     protected void tearDown() throws Exception {
@@ -138,10 +138,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletRequest getRequest() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getRequest()");
+            logger.debug("Entering");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting getRequest()");
+            logger.debug("Exiting");
         return this.request;
     }
 
@@ -153,18 +153,18 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletRequestWrapper getRequestWrapper() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getRequestWrapper()");
+            logger.debug("Entering");
         init();
         if (requestWrapper == null) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting getRequestWrapper()");
+                logger.debug("Exiting");
             return new HttpServletRequestWrapper(this.request);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("getRequestWrapper() : wrapper class is '" + requestWrapper.getClass() + "'");
+                logger.debug("wrapper class is '" + requestWrapper.getClass() + "'");
             }
             if (logger.isDebugEnabled())
-                logger.debug("Exiting getRequestWrapper()");
+                logger.debug("Exiting");
             return requestWrapper;
         }
     }
@@ -180,7 +180,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setRequestWrapper() : wrapper = " + wrapper);
+            logger.debug("Entering - wrapper = " + wrapper);
         init();
         if (wrapper == null)
             throw new IllegalArgumentException("wrapper class cannot be null!");
@@ -190,17 +190,21 @@ public class MockStrutsTestCase extends TestCase {
             this.requestWrapper = wrapper;
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setRequestWrapper()");
+            logger.debug("Exiting");
     }
 
     /**
      * Clears all request parameters previously set.
      */
     public void clearRequestParameters() {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering");
         this.request.getParameterMap().clear();
 
         // also, clear out the redirect header if it's there.
         response.removeHeader("Location");
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
     }
 
     /**
@@ -209,10 +213,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletResponse getResponse() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getResponse()");
+            logger.debug("Entering");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting getResponse()");
+            logger.debug("Exiting");
         return this.response;
     }
 
@@ -224,18 +228,18 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpServletResponseWrapper getResponseWrapper() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getResponseWrapper()");
+            logger.debug("Entering");
         init();
         if (responseWrapper == null) {
             if (logger.isDebugEnabled())
-                logger.debug("Exiting getResponseWrapper()");
+                logger.debug("Exiting");
             return new HttpServletResponseWrapper(this.response);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("getRequestWrapper() : wrapper class is '" + responseWrapper.getClass() + "'");
+                logger.debug("wrapper class is '" + responseWrapper.getClass() + "'");
             }
             if (logger.isDebugEnabled())
-                logger.debug("Exiting getResponseWrapper()");
+                logger.debug("Exiting");
             return responseWrapper;
         }
     }
@@ -251,7 +255,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setResponseWrapper() : wrapper = " + wrapper);
+            logger.debug("Entering - wrapper = " + wrapper);
         init();
         if (wrapper == null)
             throw new IllegalArgumentException("wrapper class cannot be null!");
@@ -261,7 +265,7 @@ public class MockStrutsTestCase extends TestCase {
             this.responseWrapper = wrapper;
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setResponseWrapper()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -270,6 +274,11 @@ public class MockStrutsTestCase extends TestCase {
      * unavailable through the normal Servlet API.
      */
     public HttpServletRequestSimulator getMockRequest() {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering");
+        init();
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
         return this.request;
     }
 
@@ -279,6 +288,11 @@ public class MockStrutsTestCase extends TestCase {
      * unavailable through the normal Servlet API.
      */
     public HttpServletResponseSimulator getMockResponse() {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering");
+        init();
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
         return this.response;
     }
 
@@ -288,10 +302,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public HttpSession getSession() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getSession()");
+            logger.debug("Entering");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting getSession()");
+            logger.debug("Exiting");
         return this.request.getSession(true);
     }
 
@@ -302,12 +316,12 @@ public class MockStrutsTestCase extends TestCase {
      */
     public ActionServlet getActionServlet() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getActionServlet()");
+            logger.debug("Entering");
         init();
         try {
             if (!actionServletIsInitialized) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("getActionServlet() : intializing actionServlet");
+                    logger.debug("intializing actionServlet");
                 }
                 this.actionServlet.init(config);
                 actionServletIsInitialized = true;
@@ -331,7 +345,7 @@ public class MockStrutsTestCase extends TestCase {
             }
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting getActionServlet()");
+            logger.debug("Exiting");
         return actionServlet;
     }
 
@@ -342,13 +356,13 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setActionServlet(ActionServlet servlet) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setActionServlet() : servlet = " + servlet);
+            logger.debug("Entering - servlet = " + servlet);
         init();
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setActionServlet()");
+            logger.debug("Exiting");
         actionServletIsInitialized = false;
     }
 
@@ -365,7 +379,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void actionPerform() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering actionPerform()");
+            logger.debug("Entering");
         if(!this.requestPathSet){
             throw new IllegalStateException("You must call setRequestPathInfo() prior to calling actionPerform().");
         }
@@ -395,7 +409,7 @@ public class MockStrutsTestCase extends TestCase {
                 throw new ExceptionDuringTestError("An uncaught exception was thrown during actionExecute()", e);
         }
         if (logger.isDebugEnabled())
-            logger.debug("Exiting actionPerform()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -407,11 +421,11 @@ public class MockStrutsTestCase extends TestCase {
     public void addRequestParameter(String parameterName, String parameterValue)
     {
         if (logger.isDebugEnabled())
-            logger.debug("Entering addRequestParameter() : parameterName = " + parameterName + ", parameterValue = " + parameterValue);
+            logger.debug("Entering - parameterName = " + parameterName + ", parameterValue = " + parameterValue);
         init();
         this.request.addParameter(parameterName,parameterValue);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting addRequestParameter()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -423,11 +437,11 @@ public class MockStrutsTestCase extends TestCase {
     public void addRequestParameter(String parameterName, String[] parameterValues)
     {
         if (logger.isDebugEnabled())
-            logger.debug("Entering addRequestParameter() : parameterName = " + parameterName + ", parameteValue = " + parameterValues);
+            logger.debug("Entering - parameterName = " + parameterName + ", parameteValue = " + parameterValues);
         init();
         this.request.addParameter(parameterName,parameterValues);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting addRequestParameter()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -440,11 +454,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setRequestPathInfo(String pathInfo) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setRequestPathInfo() : pathInfo = " + pathInfo);
+            logger.debug("Entering - pathInfo = " + pathInfo);
         init();
         this.setRequestPathInfo("",pathInfo);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setRequestPathInfo()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -463,7 +477,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setRequestPathInfo() : moduleName = " + moduleName + ", pathInfo = " + pathInfo);
+            logger.debug("Entering - moduleName = " + moduleName + ", pathInfo = " + pathInfo);
         init();
         this.actionPath = Common.stripActionPath(pathInfo);
         if (moduleName != null) {
@@ -474,14 +488,14 @@ public class MockStrutsTestCase extends TestCase {
                     moduleName = moduleName + "/";
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
+                logger.debug("setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
             }
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);
         this.requestPathSet = true;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setRequestPathInfo()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -494,12 +508,12 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setInitParameter(String key, String value){
         if (logger.isDebugEnabled())
-            logger.debug("Entering setInitParameter() : key = " + key + ", value = " + value);
+            logger.debug("Entering - key = " + key + ", value = " + value);
         init();
         config.setInitParameter(key, value);
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setInitParameter()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -510,12 +524,12 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setContextDirectory(File contextDirectory) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setContextDirectory() : contextDirectory = " + contextDirectory);
+            logger.debug("Entering - contextDirectory = " + contextDirectory);
         init();
         context.setContextDirectory(contextDirectory);
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setContextDirectory()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -526,11 +540,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setConfigFile(String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setConfigFile() : pathName = " + pathname);
+            logger.debug("Entering - pathName = " + pathname);
         init();
         setConfigFile(null,pathname);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setConfigFile()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -544,7 +558,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setConfigFile(String moduleName, String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setConfigFile() : moduleName = " + moduleName + ", pathname =" + pathname);
+            logger.debug("Entering - moduleName = " + moduleName + ", pathname =" + pathname);
         init();
         if (moduleName == null)
             this.config.setInitParameter("config",pathname);
@@ -552,7 +566,7 @@ public class MockStrutsTestCase extends TestCase {
             this.config.setInitParameter("config/" + moduleName,pathname);
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setConfigFile()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -566,7 +580,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setServletConfigFile(String pathname) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setServletConfigFile() : pathname = " + pathname);
+            logger.debug("Entering - pathname = " + pathname);
         init();
 
         // pull in the appropriate parts of the
@@ -615,7 +629,7 @@ public class MockStrutsTestCase extends TestCase {
         }
         actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setServletConfigFile()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -623,21 +637,21 @@ public class MockStrutsTestCase extends TestCase {
      */
     protected String getActualForward() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getActualForward()");
+            logger.debug("Entering");
         if (response.containsHeader("Location")) {
             return Common.stripJSessionID(response.getHeader("Location"));
         } else
             try  {
                 String strippedForward = request.getContextPath() + Common.stripJSessionID(((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator().getForward());
                 if (logger.isDebugEnabled()) {
-                    logger.debug("getActualForward() : stripped forward and added context path - " + strippedForward);
+                    logger.debug("stripped forward and added context path - " + strippedForward);
                 }
                 if (logger.isDebugEnabled())
-                    logger.debug("Exiting getActualForward()");
+                    logger.debug("Exiting");
                 return strippedForward;
             } catch (NullPointerException npe) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("getActualForward() : caught NullPointerException - returning null",npe);
+                    logger.debug("caught NullPointerException - returning null",npe);
                 }
                 return null;
             }
@@ -656,11 +670,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
         if (logger.isDebugEnabled())
-            logger.debug("Entering verifyForward() : forwardName = " + forwardName);
+            logger.debug("Entering - forwardName = " + forwardName);
         init();
         Common.verifyForwardPath(actionPath,forwardName,getActualForward(),false,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting verifyForward()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -676,7 +690,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
         if (logger.isDebugEnabled())
-            logger.debug("Entering verifyForwardPath() : forwardPath = " + forwardPath);
+            logger.debug("Entering - forwardPath = " + forwardPath);
         init();
         String actualForward = getActualForward();
         if ((actualForward == null) && (forwardPath == null)) {
@@ -688,17 +702,17 @@ public class MockStrutsTestCase extends TestCase {
 
         if (actualForward == null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");
+                logger.debug("actualForward is null - this usually means it is not mapped properly.");
             }
             throw new AssertionFailedError("Was expecting '" + forwardPath + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("verifyForwardPath() : expected forward = '" + forwardPath + "' - actual forward = '" + actualForward + "'");
+            logger.debug("expected forward = '" + forwardPath + "' - actual forward = '" + actualForward + "'");
         }
         if (!(actualForward.equals(forwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + actualForward + "'");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting verifyForwardPath()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -711,11 +725,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyInputForward() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering verifyInputForward()");
+            logger.debug("Entering");
         init();
         Common.verifyForwardPath(actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting verifyInputForward()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -733,8 +747,12 @@ public class MockStrutsTestCase extends TestCase {
      * executing an Action object.
      */
     public void verifyTilesForward(String forwardName, String definitionName) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering - forwardName=" + forwardName + ", definitionName=" + definitionName);
         init();
         Common.verifyTilesForward(actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
     }
 
     /**
@@ -749,8 +767,12 @@ public class MockStrutsTestCase extends TestCase {
      * executing an Action object.
      */
     public void verifyInputTilesForward(String definitionName) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering - definitionName=" + definitionName);
         init();
         Common.verifyTilesForward(actionPath,null,definitionName,true,request,config.getServletContext(),config);
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
     }
 
     /**
@@ -769,11 +791,11 @@ public class MockStrutsTestCase extends TestCase {
 
     public void verifyActionErrors(String[] errorNames) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering verifyActionErrors() : errorNames = " + errorNames);
+            logger.debug("errorNames = " + errorNames);
         init();
         Common.verifyActionMessages(request,errorNames,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting verifyActionErrors()");
+            logger.debug("Exiting");
     }
 
 
@@ -786,11 +808,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyNoActionErrors() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering verifyNoActionErrors()");
+            logger.debug("Entering");
         init();
         Common.verifyNoActionMessages(request,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting verifyNoActionErrors()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -808,11 +830,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyActionMessages(String[] messageNames) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering verifyActionMessages() : messageNames = " + messageNames);
+            logger.debug("Entering - messageNames = " + messageNames);
         init();
         Common.verifyActionMessages(request,messageNames,Globals.MESSAGE_KEY,"action");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting verifyActionMessages()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -824,11 +846,11 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyNoActionMessages() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering verifyNoActionMessages()");
+            logger.debug("Entering");
         init();
         Common.verifyNoActionMessages(request,Globals.MESSAGE_KEY,"action");
         if (logger.isDebugEnabled())
-            logger.debug("Exiting verifyNoActionMessages()");
+            logger.debug("Exiting");
     }
 
     /**
@@ -840,10 +862,10 @@ public class MockStrutsTestCase extends TestCase {
      */
     public ActionForm getActionForm() {
         if (logger.isDebugEnabled())
-            logger.debug("Entering getActionForm()");
+            logger.debug("Entering");
         init();
         if (logger.isDebugEnabled())
-            logger.debug("Exiting getActionForm()");
+            logger.debug("Exiting");
         return Common.getActionForm(actionPath,request,context);
     }
 
@@ -859,13 +881,13 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setActionForm(ActionForm form) {
         if (logger.isDebugEnabled())
-            logger.debug("Entering setActionForm() : form = " + form);
+            logger.debug("Entering - form = " + form);
         init();
         // make sure action servlet is intialized
         getActionServlet();
         Common.setActionForm(form,request,actionPath,context);
         if (logger.isDebugEnabled())
-            logger.debug("Exiting setActionForm()");
+            logger.debug("Exiting");
     }
 
 

@@ -52,10 +52,10 @@ public class Common {
      */
     protected static void verifyNoActionMessages(HttpServletRequest request, String key, String messageLabel) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering verifyNoActionMessages() : request = " + request + ", key = " + key + ", messageLabel = " + messageLabel);
+            logger.trace("Entering - request = " + request + ", key = " + key + ", messageLabel = " + messageLabel);
         ActionMessages messages = (ActionMessages) request.getAttribute(key);
         if (logger.isDebugEnabled()) {
-            logger.debug("verifyNoActionMessages() : retrieved ActionMessages = " + messages);
+            logger.debug("retrieved ActionMessages = " + messages);
         }
         if (messages != null) {
             Iterator iterator = messages.get();
@@ -70,7 +70,7 @@ public class Common {
             }
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting verifyNoActionMessages()");
+            logger.trace("Exiting");
     }
 
     /**
@@ -78,11 +78,11 @@ public class Common {
      */
     protected static void verifyActionMessages(HttpServletRequest request, String[] messageNames, String key, String messageLabel) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering verifyActionMessages() : request = " + request + ", messageNames = " + messageNames + ", key = " + key + ", messageLabel = " + messageLabel);
+            logger.trace("Entering - request = " + request + ", messageNames = " + messageNames + ", key = " + key + ", messageLabel = " + messageLabel);
 
         ActionMessages messages = (ActionMessages) request.getAttribute(key);
         if (logger.isDebugEnabled()) {
-            logger.debug("verifyNoActionMessages() : retrieved ActionMessages = " + messages);
+            logger.debug("retrieved ActionMessages = " + messages);
         }
 
         if (messages == null) {
@@ -121,7 +121,7 @@ public class Common {
             }
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting verifyActionMessages()");
+            logger.trace("verifyActionMessages()");
     }
 
 
@@ -133,7 +133,7 @@ public class Common {
     protected static ComponentDefinition getTilesForward(String forwardPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
 
         if (logger.isTraceEnabled())
-            logger.trace("Entering getTilesForward() : forwardPath = " + forwardPath + ", request = " + request + ", context = " + context + ", config = " + config);
+            logger.trace("Entering - forwardPath = " + forwardPath + ", request = " + request + ", context = " + context + ", config = " + config);
 
         String result = null;
         try {
@@ -144,14 +144,14 @@ public class Common {
             definition = TilesUtil.getDefinition(forwardPath, request, context);
             if (definition != null) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("getTilesForward() : found tiles definition - '" + forwardPath + "' = '" + result + "'");
+                    logger.debug("found tiles definition - '" + forwardPath + "' = '" + result + "'");
                 }
             }
 
             actionDefinition = DefinitionsUtil.getActionDefinition(request);
             if (actionDefinition != null) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("getTilesForward() : found tiles definition for action - '" + forwardPath + "' = '" + result + "'");
+                    logger.debug("found tiles definition for action - '" + forwardPath + "' = '" + result + "'");
                 }
             }
 
@@ -166,16 +166,16 @@ public class Common {
             }
         } catch (NoSuchDefinitionException nsde) {
             if (logger.isTraceEnabled())
-                logger.trace("Exiting getTilesForward(): caught NoSuchDefinitionException");
+                logger.trace("Exiting - caught NoSuchDefinitionException");
             return null;
         } catch (DefinitionsFactoryException dfe) {
             if (logger.isTraceEnabled())
-                logger.trace("Exiting getTilesForward(): caught DefinitionsFactoryException");
+                logger.trace("Exiting - caught DefinitionsFactoryException");
             return null;
         } catch (NullPointerException npe) {
             // can happen if tiles is not at all used.
             if (logger.isDebugEnabled()) {
-                logger.debug("Exiting getTilesForward() : caught NullPointerException");
+                logger.debug("Exiting - caught NullPointerException");
             }
             return null;
         }
@@ -188,17 +188,17 @@ public class Common {
      */
     protected static void verifyTilesForward(String actionPath, String forwardName, String expectedDefinition, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering verifyTilesForward() : actionPath = " + actionPath + ", forwardName = " + forwardName + ", expectedDefinition = " + expectedDefinition);
+            logger.trace("Entering - actionPath = " + actionPath + ", forwardName = " + forwardName + ", expectedDefinition = " + expectedDefinition);
 
         String definitionName = null;
 
         if ((forwardName == null) && (isInputPath)) {
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyTilesForward() : processing an input forward");
+                logger.debug("processing an input forward");
             }
             forwardName = getActionConfig(actionPath, request, context).getInput();
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyTilesForward() : retrieved input forward name = " + forwardName);
+                logger.debug("retrieved input forward name = " + forwardName);
             }
             if (forwardName == null)
                 throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
@@ -209,14 +209,14 @@ public class Common {
 
         if (!isInputPath) {
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyTilesForward() : processing normal forward");
+                logger.debug("processing normal forward");
             }
             ForwardConfig expectedForward = findForward(actionPath, forwardName, request, context);
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyTilesForward() : retrieved forward name = " + forwardName);
+                logger.debug("retrieved forward name = " + forwardName);
             }
 
             ComponentDefinition definition = getTilesForward(forwardName, request, context, config);
@@ -227,6 +227,8 @@ public class Common {
             throw new AssertionFailedError("Could not find tiles definition mapped to forward '" + forwardName + "'");
         if (!definitionName.equals(expectedDefinition))
             throw new AssertionFailedError("Was expecting tiles definition '" + expectedDefinition + "' but received '" + definitionName + "'");
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
     }
 
     /**
@@ -237,18 +239,18 @@ public class Common {
     protected static void verifyForwardPath(String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
 
         if (logger.isTraceEnabled())
-            logger.trace("Entering verifyForwardPath() : actionPath = " + actionPath + ", forwardName = " + forwardName + ", actualForwardPath = " + actualForwardPath);
+            logger.trace("Entering - actionPath = " + actionPath + ", forwardName = " + forwardName + ", actualForwardPath = " + actualForwardPath);
 
         boolean usesTiles = false;
         boolean useModules = false;
 
         if ((forwardName == null) && (isInputPath)) {
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyForwardPath() : processing an input forward");
+                logger.debug("processing an input forward");
             }
             forwardName = getActionConfig(actionPath, request, context).getInput();
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyForwardPath() : retrieved input forward name = " + forwardName);
+                logger.debug("retrieved input forward name = " + forwardName);
             }
             if (forwardName == null)
                 throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
@@ -260,13 +262,13 @@ public class Common {
                 forwardName = tilesForward;
                 usesTiles = true;
                 if (logger.isDebugEnabled()) {
-                    logger.debug("verifyForwardPath() : retrieved tiles definition for forward = " + forwardName);
+                    logger.debug("retrieved tiles definition for forward = " + forwardName);
                 }
             }
         }
         if (!isInputPath) {
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyForwardPath() : processing normal forward");
+                logger.debug("processing normal forward");
             }
 
             // check for a null forward, now allowed in Struts 1.1
@@ -282,7 +284,7 @@ public class Common {
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyForwardPath() : retrieved forward name = " + forwardName);
+                logger.debug("retrieved forward name = " + forwardName);
             }
 
             String tilesForward = null;
@@ -294,7 +296,7 @@ public class Common {
 
                 usesTiles = true;
                 if (logger.isDebugEnabled()) {
-                    logger.debug("verifyForwardPath() : retrieved tiles definition for forward = " + forwardName);
+                    logger.debug("retrieved tiles definition for forward = " + forwardName);
                 }
             }
             // some fowards cross outside modules - check if we need the module
@@ -322,21 +324,21 @@ public class Common {
         else
             forwardName = request.getContextPath() + forwardName;
         if (logger.isDebugEnabled()) {
-            logger.debug("verifyForwardPath() : added context path and module name to forward = " + forwardName);
+            logger.debug("added context path and module name to forward = " + forwardName);
         }
         if (actualForwardPath == null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("verifyForwardPath() : actualForwardPath is null - this usually means it is not mapped properly.");
+                logger.debug("actualForwardPath is null - this usually means it is not mapped properly.");
             }
             throw new AssertionFailedError("Was expecting '" + forwardName + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("verifyForwardPath() : expected forward = '" + forwardName + "' - actual forward = '" + actualForwardPath + "'");
+            logger.debug("expected forward = '" + forwardName + "' - actual forward = '" + actualForwardPath + "'");
         }
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
         if (logger.isTraceEnabled())
-            logger.trace("Exiting verifyForwardPath()");
+            logger.trace("Exiting");
     }
 
     /**
@@ -344,7 +346,7 @@ public class Common {
      */
     protected static String stripActionPath(String path) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering stripActionPath() : path = " + path);
+            logger.trace("Entering - path = " + path);
         if (path == null)
             return null;
 
@@ -353,7 +355,7 @@ public class Common {
         if ((period >= 0) && (period > slash))
             path = path.substring(0, period);
         if (logger.isTraceEnabled())
-            logger.trace("Exiting stripActionPath() - returning path = " + path);
+            logger.trace("Exiting - returning path = " + path);
         return path;
     }
 
@@ -363,7 +365,7 @@ public class Common {
      */
     protected static String stripJSessionID(String path) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering stripJSessionID() : path = " + path);
+            logger.trace("Entering - path = " + path);
         if (path == null)
             return null;
 
@@ -381,7 +383,7 @@ public class Common {
                 path = buf.delete(jsess_idx, buf.length()).toString();
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting stripJSessionID() - returning path = " + path);
+            logger.trace("Exiting - returning path = " + path);
         return path;
     }
 
@@ -390,23 +392,23 @@ public class Common {
      */
     protected static ActionForm getActionForm(String actionPath, HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering getActionForm() : actionPath = " + actionPath + ", request = " + request + ", context = " + context);
+            logger.trace("Entering - actionPath = " + actionPath + ", request = " + request + ", context = " + context);
         ActionForm form;
         ActionConfig actionConfig = getActionConfig(actionPath, request, context);
         if ("request".equals(actionConfig.getScope())) {
             if (logger.isDebugEnabled()) {
-                logger.debug("getActionForm() : looking for form in request scope");
+                logger.debug("looking for form in request scope");
             }
             form = (ActionForm) request.getAttribute(actionConfig.getAttribute());
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("getActionForm() : looking for form in session scope");
+                logger.debug("looking for form in session scope");
             }
             HttpSession session = request.getSession();
             form = (ActionForm) session.getAttribute(actionConfig.getAttribute());
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting getActionForm()");
+            logger.trace("Exiting");
         return form;
     }
 
@@ -416,7 +418,7 @@ public class Common {
      */
     protected static ForwardConfig findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering findForward() : mappingName = " + mappingName + ", forwardName = " + forwardName + ", request = " + request + ", context = " + context);
+            logger.trace("Entering - mappingName = " + mappingName + ", forwardName = " + forwardName + ", request = " + request + ", context = " + context);
         ForwardConfig forward = null;
         // first, look for forward in mapping (if it's defined)
         if (mappingName != null) {
@@ -426,15 +428,15 @@ public class Common {
         // if it's not there, check for global forwards
         if (forward == null) {
             if (logger.isDebugEnabled())
-                logger.debug("findForward() : looking for forward globally");
+                logger.debug("looking for forward globally");
             ModuleConfig moduleConfig = getModuleConfig(request,context);
             forward = moduleConfig.findForwardConfig(forwardName);
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("findForward() : retrieved forward = " + forward);
+            logger.debug("retrieved forward = " + forward);
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting findForward()");
+            logger.trace("Exiting");
         return forward;
     }
 
@@ -443,14 +445,14 @@ public class Common {
      */
     protected static ActionConfig getActionConfig(String mappingName, HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering getActionConfig() : mappingName = " + mappingName + ", request = " + request + ", context = " + context);
+            logger.trace("Entering - mappingName = " + mappingName + ", request = " + request + ", context = " + context);
         ModuleConfig config = getModuleConfig(request, context);
         ActionMapping actionMapping = (ActionMapping) config.findActionConfig(mappingName);
         if (logger.isDebugEnabled()) {
-            logger.debug("getActionConfig() : retrieved mapping = " + actionMapping);
+            logger.debug("retrieved mapping = " + actionMapping);
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting getActionConfig()");
+            logger.trace("Exiting");
         return actionMapping;
     }
 
@@ -459,19 +461,19 @@ public class Common {
      */
     protected static ModuleConfig getModuleConfig(HttpServletRequest request, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering getModuleConfig() : request = " + request + ", context = " + context);
+            logger.trace("Entering - request = " + request + ", context = " + context);
         if (logger.isDebugEnabled()) {
-            logger.debug("getModuleConfig() : looking for config in request context");
+            logger.debug("looking for config in request context");
         }
         ModuleConfig config = (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
         if (config == null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("getModuleConfig() : looking for config in application context");
+                logger.debug("looking for config in application context");
             }
             config = (ModuleConfig) context.getAttribute(Globals.MODULE_KEY);
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting getModuleConfig() : returning " + config);
+            logger.trace("Exiting - returning " + config);
         return config;
 
     }
@@ -481,7 +483,7 @@ public class Common {
      */
     protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context) {
         if (logger.isTraceEnabled())
-            logger.trace("Entering setActionForm() : form = " + form + ", request = " + request + ", actionPath = " + actionPath + ", context = " + context);
+            logger.trace("Entering - form = " + form + ", request = " + request + ", actionPath = " + actionPath + ", context = " + context);
 
         if (actionPath == null || actionPath.equalsIgnoreCase(""))
             throw new IllegalStateException("You must call setRequestPathInfo() before calling setActionForm()!");
@@ -494,17 +496,17 @@ public class Common {
 
         if (actionConfig.getScope().equals("request"))  {
             if (logger.isDebugEnabled()) {
-                logger.debug("setActionForm() : setting form in request context");
+                logger.debug("setting form in request context");
             }
             request.setAttribute(actionConfig.getAttribute(), form);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("setActionForm() : setting form in session context");
+                logger.debug("setting form in session context");
             }
             request.getSession().setAttribute(actionConfig.getAttribute(), form);
         }
         if (logger.isTraceEnabled())
-            logger.trace("Exiting setActionForm()");
+            logger.trace("Exiting");
     }
 
 }
