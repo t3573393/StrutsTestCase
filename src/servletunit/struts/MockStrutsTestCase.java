@@ -227,10 +227,9 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
-     * Returns an ActionServlet controller to be used in this
+     * Returns the ActionServlet controller used in this
      * test.
      *
-     * @deprecated use actionPerform() instead
      */
     public ActionServlet getActionServlet() {
 	init();
