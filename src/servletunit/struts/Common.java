@@ -223,6 +223,7 @@ public class Common {
             logger.trace("Entering verifyForwardPath() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", forwardName = " + forwardName + ", actualForwardPath = " + actualForwardPath);
 
         boolean usesTiles = false;
+        boolean useModules = false;
 
         if ((forwardName == null) && (isInputPath)) {
             if (logger.isDebugEnabled()) {
@@ -285,6 +286,9 @@ public class Common {
                     logger.debug("verifyForwardPath() : retrieved tiles definition for forward = " + forwardName);
                 }
             }
+            // some fowards cross outside modules - check if we need the module
+            // in the path or not.
+            useModules = !expectedForward.getContextRelative ();
         }
         String moduleName = (String) request.getAttribute(INCLUDE_SERVLET_PATH);
         if ((moduleName != null) && (moduleName.length() > 0))
@@ -295,8 +299,10 @@ public class Common {
 
         if (usesTiles)
             forwardName = request.getContextPath() + forwardName;
-        else
+        else if (useModules || isInputPath)
             forwardName = request.getContextPath() + moduleName + forwardName;
+        else
+            forwardName = request.getContextPath() + forwardName;
         if (logger.isDebugEnabled()) {
             logger.debug("verifyForwardPath() : added context path and module name to forward = " + forwardName);
         }
