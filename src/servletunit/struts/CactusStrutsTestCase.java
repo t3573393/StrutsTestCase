@@ -346,16 +346,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Sets the behavior of this test when validating ActionForm instances.
-     * Set to false if you do not want your test to fail if a form
-     * does not pass validation.  By default, this is is set to true.
-     *
-     * @deprecated This method no longer affects the flow of control.
-     */
-    public void setFailIfInvalid(boolean flag) {
-    }
-
-    /**
      * Executes the Action instance to be tested.  This method initializes
      * the ActionServlet, sets up and optionally validates the ActionForm
      * bean associated with the Action to be tested, and then calls the
