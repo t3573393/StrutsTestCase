@@ -20,10 +20,6 @@
 package servletunit.struts;
 
 import org.apache.struts.action.ActionServlet;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionForward;
 import org.apache.commons.digester.Digester;
 import junit.framework.TestCase;
 import junit.framework.AssertionFailedError;
@@ -31,11 +27,7 @@ import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletContextSimulator;
 import servletunit.ServletConfigSimulator;
-import servletunit.RequestDispatcherSimulator;
-import java.util.Iterator;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -312,7 +304,7 @@ public class MockStrutsTestCase extends TestCase {
      * that would normally have been found in web.xml,
      * but is not available while testing with mock objects.
      * @param key the name of the initialization parameter
-     * @parame value the value of the intialization parameter
+     * @param value the value of the intialization parameter
      */
     public void setInitParameter(String key, String value){
         config.setInitParameter(key, value);

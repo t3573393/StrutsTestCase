@@ -21,8 +21,6 @@ package servletunit.struts;
 
 import org.apache.struts.action.ActionServlet;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 import org.apache.cactus.ServletTestCase;
 import junit.framework.AssertionFailedError;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +30,6 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletConfig;
 
 /**
  * CactusStrutsTestCase is an extension of the Cactus ServletTestCase 

@@ -35,7 +35,6 @@ package servletunit;
 // dfoster@equitytg.com
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 import java.io.IOException;
 import javax.servlet.ServletOutputStream;
 import java.io.*;

@@ -34,9 +34,7 @@ package servletunit;
 // Deryl Seale (deryl@acm.org) 10/31/2001
 
 import java.io.*;
-import java.util.*;
 import javax.servlet.*;
-import javax.servlet.http.*;
 
 /**
  * Simulates a <code>javax.servlet.RequestDispatcher</code> object.

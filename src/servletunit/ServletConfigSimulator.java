@@ -123,7 +123,7 @@ public class ServletConfigSimulator implements ServletConfig
      * Sets a named initialization parameter with the supplied
      * <code>String</code> value.
      *
-     * @param name      a <code>String</code> specifying the name
+     * @param key      a <code>String</code> specifying the name
      *                  of the initialization parameter
      *
      * @param value     a <code>String</code> value for this initialization

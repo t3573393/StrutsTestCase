@@ -29,7 +29,7 @@ import javax.servlet.ServletResponse;
  *
  *
  * @author     Sean Pritchard
- * @created    May 11, 2002
+ * May 11, 2002
  * @version    1.0
  */
 

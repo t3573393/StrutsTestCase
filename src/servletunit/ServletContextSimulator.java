@@ -31,7 +31,6 @@ package servletunit;
 // Deryl Seale (deryl@acm.org) 10/31/2001
 
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Enumeration;
@@ -130,13 +129,13 @@ public class ServletContextSimulator implements ServletContext
      * webmaster's email address or the name of a system that holds
      * critical data.
      *
-     * @param   name    a <code>String</code> containing the name of the
+     * @param   s    a <code>String</code> containing the name of the
      *                  parameter whose value is requested
      *
      * @return          a <code>String</code> containing at least the
      *                  servlet container name and version number
      *
-     * @see ServletConfig#getInitParameter
+     * @see javax.servlet.ServletConfig#getInitParameter
      */
     public String getInitParameter(String s)
     {
@@ -153,7 +152,7 @@ public class ServletContextSimulator implements ServletContext
      *                  objects containing the names of the context's
      *                  initialization parameters
      *
-     * @see ServletConfig#getInitParameter
+     * @see javax.servlet.ServletConfig#getInitParameter
      */
     public Enumeration getInitParameterNames()
     {
@@ -164,7 +163,7 @@ public class ServletContextSimulator implements ServletContext
      * Sets a named initialization parameter with the supplied
      * <code>String</code> value.
      *
-     * @param name      a <code>String</code> specifying the name
+     * @param key      a <code>String</code> specifying the name
      *                  of the initialization parameter
      *
      * @param value     a <code>String</code> value for this initialization
@@ -239,7 +238,7 @@ public class ServletContextSimulator implements ServletContext
      * This method returns <code>null</code> if the <code>ServletContext</code>
      * cannot return a <code>RequestDispatcher</code>.
      *
-     * @param path      a <code>String</code> specifying the pathname
+     * @param urlpath      a <code>String</code> specifying the pathname
      *                  to the resource
      *
      * @return          a <code>RequestDispatcher</code> object
@@ -296,7 +295,7 @@ public class ServletContextSimulator implements ServletContext
      * which uses a class loader.
      *
      *
-     * @param name      a <code>String</code> specifying the path
+     * @param path     a <code>String</code> specifying the path
      *                  to the resource
      *
      * @return          the <code>InputStream</code> returned to the
@@ -379,7 +378,7 @@ public class ServletContextSimulator implements ServletContext
 
     /**
      * @deprecated  As of Java Servlet API 2.1, use
-     *                      {@link log(String message, Throwable throwable)}
+     *                      @link ServletContext.log(String message, Throwable throwable)
      *                      instead.
      *
      * <p>This method was originally defined to write an

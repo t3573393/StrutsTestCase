@@ -20,12 +20,10 @@
 package servletunit.struts;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 import java.io.IOException;
 import javax.servlet.ServletOutputStream;
 import java.io.*;
 import java.util.Locale;
-import java.util.HashMap;
 import javax.servlet.http.Cookie;
 
 /**

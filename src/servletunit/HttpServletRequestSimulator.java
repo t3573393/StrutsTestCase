@@ -51,7 +51,6 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private String protocol = "HTTP/1.1";
     private String requestURI;
     private String contextPath = "";
-    private String lookupPath;
     private String servletPath;
     private String pathInfo;
     private String queryString;
@@ -170,7 +169,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * names. This specification reserves names matching <code>java.*</code>,
      * <code>javax.*</code>, and <code>sun.*</code>.
      *
-     * @param name	a <code>String</code> specifying the name of
+     * @param s	a <code>String</code> specifying the name of
      *			the attribute
      *
      * @return		an <code>Object</code> containing the value
@@ -351,7 +350,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * The header name is case insensitive. You can use
      * this method with any request header.
      *
-     * @param name		a <code>String</code> specifying the
+     * @param s		a <code>String</code> specifying the
      *				header name
      *
      * @return			a <code>String</code> containing the
@@ -416,7 +415,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      * <p>The header name is case insensitive.
      *
-     * @param name		a <code>String</code> specifying the name
+     * @param s		a <code>String</code> specifying the name
      *				of a request header
      *
      * @return			an integer expressing the value
@@ -510,7 +509,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * #getInputStream} or {@link #getReader} can interfere
      * with the execution of this method.
      *
-     * @param name 	a <code>String</code> specifying the
+     * @param s 	a <code>String</code> specifying the
      *			name of the parameter
      *
      * @return		a <code>String</code> representing the
@@ -557,7 +556,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * <p>If the parameter has a single value, the array has a length
      * of 1.
      *
-     * @param name	a <code>String</code> containing the name of
+     * @param s	a <code>String</code> containing the name of
      *			the parameter whose value is requested
      *
      * @return		an array of <code>String</code> objects
@@ -730,7 +729,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * ServletContext#getRequestDispatcher} is that this method can take a
      * relative path.
      *
-     * @param path      a <code>String</code> specifying the pathname
+     * @param url      a <code>String</code> specifying the pathname
      *                  to the resource
      *
      * @return          a <code>RequestDispatcher</code> object
@@ -897,7 +896,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      *
      *
-     * @param		<code>true</code> to create
+     * @param b	<code>true</code> to create
      *			a new session for this request if necessary;
      *			<code>false</code> to return <code>null</code>
      *			if there's no current session
@@ -1029,7 +1028,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * defined using deployment descriptors.  If the user has not been
      * authenticated, the method returns <code>false</code>.
      *
-     * @param role		a <code>String</code> specifying the name
+     * @param s		a <code>String</code> specifying the name
      *				of the role
      *
      * @return		<code>false</code> in all cases
@@ -1052,7 +1051,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * reserved for use by Sun Microsystems.
      *
      *
-     * @param name			a <code>String</code> specifying
+     * @param s			a <code>String</code> specifying
      *					the name of the attribute to remove
      *
      */
