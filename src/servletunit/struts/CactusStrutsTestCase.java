@@ -492,5 +492,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
         return Common.getActionForm(actionServlet,request.getPathInfo(),request,config.getServletContext());
     }
 
+    public void setActionForm(ActionForm form) {
+        init();
+        // make sure ActionServlet is initialized.
+        this.getActionServlet();
+        Common.setActionForm(form,request,request.getPathInfo(),config.getServletContext());
+    }
+
 }
 
