@@ -5,6 +5,12 @@
     <!-- set jikes as the java compiler -->
     <property name="build.compiler" value="jikes" />
 
+    <!-- set the release version -->
+    <property name="major.version" value="1"/>
+    <property name="minor.version" value="9"/>
+    <property name="point.version" value="5"/>
+    <property name="release.version" value="${major.version}${minor.version}${point.version}"/>
+
     <!-- compile options defaults -->
     <property name="comp.deprecate"      value="off" />
     <property name="comp.debug"          value="on" />
@@ -19,6 +25,7 @@
     <property name="test.dir"       value="${basedir}/test-results"/>
     <property name="temp.dir"       value="${basedir}/temp"/>
     <property name="lib.dir"        value="${basedir}/lib"/>
+    <property name="jar.name"       value="strutstest-${major.version}.${minor.version}.${point.version}.jar" />
 
     <!-- set class.path to use with javac/jikes -->
     <path id="class.path">
@@ -77,7 +84,7 @@
     <!-- package the application for deployment.  -->
     <target name="package" description="package all Java classes">
         <mkdir dir="${distribute.dir}"/>
-        <jar jarfile="${distribute.dir}/strutstest.jar">
+        <jar jarfile="${distribute.dir}/${jar.name}">
             <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**,**/tests/**"/>
         </jar>
 
@@ -94,7 +101,7 @@
                 <exclude name="struts-1.1.jar" if="build_1.0"/>
                 <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
-            <lib dir="${distribute.dir}" includes="strutstest.jar"/>
+            <lib dir="${distribute.dir}" includes="${jar.name}"/>
             <classes dir="${build.dir}" includes="**/tests/**,**/examples/**"/>
             <classes dir="${src.dir}">
                 <include name="examples/ApplicationResources.properties"/>
@@ -109,12 +116,11 @@
     <!-- prepare code for public release -->
     <target name="release" depends="init,package,docs">
         <echo message="creating release for servlet v${servlet.version} and struts v${struts.version}.."/>
-        <zip zipFile="${basedir}/strutstest-${struts.version}_${servlet.version}.zip" basedir="${basedir}/dist"/>
+        <zip zipFile="${basedir}/strutstest${release.version}-${struts.version}_${servlet.version}.zip" basedir="${basedir}/dist"/>
     </target>
 
     <target name="release.src" depends="clean">
-        <zip zipFile="${basedir}/strutstest-src.zip" basedir="${basedir}">
-            <exclude name="*.tar.gz"/>
+        <zip zipFile="${basedir}/strutstest-${release.version}-src.zip" basedir="${basedir}">
             <exclude name="*.zip"/>
             <exclude name="lib/*.jar"/>
         </zip>
@@ -128,9 +134,6 @@
         <delete file="${basedir}/test.war"/>
         <delete>
             <fileset dir="${basedir}" includes="strutstest*.zip"/>
-        </delete>
-        <delete>
-            <fileset dir="${basedir}" includes="strutstest*.tar.gz"/>
         </delete>
     </target>
 
