@@ -143,6 +143,7 @@
         <mkdir dir="${doc.dir}/api"/>
         <copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
         <copy file="${basedir}/faq.htm" toDir="${doc.dir}"/>
+        <copy file="${basedir}/stylesheet.css" toDir="${doc.dir}"/>
         <copy file="${basedir}/LICENSE.TXT" toDir="${distribute.dir}"/>
         <copy file="${basedir}/README.TXT" toDir="${distribute.dir}"/>
         <mkdir dir="${distribute.dir}/examples"/>
