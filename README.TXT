@@ -24,6 +24,14 @@ New Features:
 This change comes in advance of StrutsTestCase's inclusion in the Struts 1.2
 development road map.
 
+- Added setActionForm() method for setting an ActionForm instance to be used in
+a unit test, allowing for setting complex objects in an ActionForm.  It's important
+to note that this method merely makes the ActionForm instance available for the
+unit test; it does not subvert how Struts manages the ActionForm for a given Action.
+In particular, if your ActionForm class overrides the reset() method, then you could
+potentially reset anything you've set in the ActionForm instance you pass to this
+method.
+
 Bug Fixes:
 ---------
 
