@@ -69,12 +69,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Sets up the test fixture for this test.  
+     * Sets up the test fixture for this test.
      */
     public void setUp() {
         try {
-	    parameters.clear();
-	    forward = null;
+            parameters.clear();
+            forward = null;
             actionServlet = new ActionServlet();
             config.setInitParameter("debug","0");
             config.setInitParameter("detail","0");
@@ -128,7 +128,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void addRequestParameter(String parameterName, String parameterValue)
     {
-	parameters.put(parameterName,parameterValue);
+        parameters.put(parameterName,parameterValue);
     }
 
     /**
@@ -167,7 +167,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Executes the Action instance to be tested.
+     * Executes the Action instance to be tested.  This method
+     * sets up the ActionForm associated with this Action, optionally
+     * performing validation on the form, and then calls the Action.perform
+     * method directly.  It stores any results for further verification.
      *
      * @exception AssertionFailedError if there are any execution
      * errors while calling Action.perform()
@@ -176,11 +179,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void actionPerform() {
 
         // set up the ActionServlet
-	try {
-	    actionServlet.init(config);
-	} catch (ServletException e) {
-	    throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
-	}
+        try {
+            actionServlet.init(config);
+        } catch (ServletException e) {
+            throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
+        }
 
         // set up  the ActionMapping
         ActionMapping mapping = actionServlet.findMapping(this.actionPath);
@@ -189,21 +192,22 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
         // set up the ActionForm
         ActionForm form = null;
-	if (mapping.getAttribute() != null) {
-	    String formType = actionServlet.findFormBean(mapping.getAttribute()).getType();
-	    try {
-		form = (ActionForm) Class.forName(formType).newInstance();
-		form.reset(mapping,request);
-		BeanUtils.populate(form,parameters);
-	    } catch (Exception e) {
-		throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getMessage());
-	    }
-	}
+        if (mapping.getAttribute() != null) {
+            String formType = actionServlet.findFormBean(mapping.getAttribute()).getType();
+            try {
+                form = (ActionForm) Class.forName(formType).newInstance();
+                form.reset(mapping,request);
+                BeanUtils.populate(form,parameters);
+            } catch (Exception e) {
+                throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getMessage());
+            }
+        }
 
-	// set up Action
+        // set up Action
         Action action = null;
         try {
             action = (Action) Class.forName(mapping.getType()).newInstance();
+            action.setServlet(actionServlet);
         } catch (Exception e) {
             throw new AssertionFailedError("Error trying to set up Action: " + e.getMessage());
         }
@@ -211,17 +215,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (mapping.getValidate()) {
             ActionErrors errors = form.validate(mapping,request);
             if (!errors.empty())
-		throw new AssertionFailedError("Error while validating ActionForm: ");
+                throw new AssertionFailedError("Error while validating ActionForm.");
         }
 
         try {
             this.forward = action.perform(mapping,form,request,response);
         } catch (ServletException e) {
-            e.printStackTrace();
-            throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
+            throw new AssertionFailedError("ServletException while running action.perform(): " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
+            throw new AssertionFailedError("IOException while running action.perform(): " + e.getMessage());
         }
     }
 
@@ -237,16 +239,16 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
-        
-	if (forward == null)
-	    throw new AssertionFailedError("did not receive any ActionForward");
-	ActionForward expectedForward = actionServlet.findMapping(actionPath).findForward(forwardName);
+
+        if (forward == null)
+            throw new AssertionFailedError("did not receive any ActionForward");
+        ActionForward expectedForward = actionServlet.findMapping(actionPath).findForward(forwardName);
         if (expectedForward == null)
             expectedForward = actionServlet.findForward(forwardName);
         if (expectedForward == null)
             throw new AssertionFailedError("cannot find forward '" + forwardName + "'");
-	if (!expectedForward.getName().equals(forward.getName()))
-	    throw new AssertionFailedError("was expecting '" + expectedForward.getName() + "' but received '" + forward.getName() + "'");
+        if (!expectedForward.getName().equals(forward.getName()))
+            throw new AssertionFailedError("was expecting '" + expectedForward.getName() + "' but received '" + forward.getName() + "'");
     }
 
     /**
