@@ -34,9 +34,9 @@ public class InitParameterAction extends Action {
 	ServletContext context = getServlet().getServletContext();
 	if (context != null) {
 	    if (context.getInitParameter("username") == null)
-		errors.add("",new ActionError("error.init.param"));
+		errors.add("",new ActionMessage("error.init.param"));
 	} else 
-	    errors.add("",new ActionError("error.no.context"));
+	    errors.add("",new ActionMessage("error.no.context"));
 	if (!errors.isEmpty())
 	    saveErrors(request,errors);
 	return mapping.findForward("login");

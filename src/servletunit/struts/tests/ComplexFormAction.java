@@ -42,7 +42,7 @@ public class ComplexFormAction extends Action {
         ActionErrors errors = new ActionErrors();
 
         if ((!username.equals("deryl")) || (!password.equals("radar")) || (complexForm.getComplexObject() == null))
-            errors.add("password",new ActionError("error.password.mismatch"));
+            errors.add("password",new ActionMessage("error.password.mismatch"));
 
         if (!errors.isEmpty()) {
             saveErrors(request,errors);

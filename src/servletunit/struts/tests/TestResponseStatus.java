@@ -27,10 +27,10 @@ public class TestResponseStatus extends MockStrutsTestCase {
         try {
             actionPerform();
         } catch (AssertionFailedError afe) {
-            if (((HttpServletResponseSimulator) getResponse()).getStatusCode() == 400)
-                return;
+            assertEquals("unexpected response code",((HttpServletResponseSimulator) getResponse()).getStatusCode(),400);
+            return;
         }
-        fail("expected error 400!");
+        fail("expected some error code!");
 
     }
 

@@ -31,7 +31,7 @@ public class TokenAction extends Action {
 	ActionErrors errors = new ActionErrors();
 
 	if (!isTokenValid(request,true)) {
-	    errors.add("password",new ActionError("error.token"));
+	    errors.add("password",new ActionMessage("error.token"));
 	    saveErrors(request,errors);
         }
 	return mapping.findForward("login");
