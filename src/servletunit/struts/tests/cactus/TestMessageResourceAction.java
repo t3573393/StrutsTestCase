@@ -24,6 +24,12 @@ public class TestMessageResourceAction extends CactusStrutsTestCase {
         super(testName);
     }
 
+    public void setUp() throws Exception {
+        super.setUp();
+        // todo: still needed for Struts 1.0 for some reason.
+        setInitParameter("application","examples.ApplicationResources");
+    }
+
     public void testGetResources() {
 
         setRequestPathInfo("/testMessage");

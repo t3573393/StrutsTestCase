@@ -53,6 +53,8 @@
             <!-- Build the Servlet 2.2 or Struts 1.0.2 version if specified -->
             <exclude name="**/1_0/**" unless="build_1.0"/>
             <exclude name="**/struts/Common.java" if="build_1.0"/>
+            <exclude name="**/struts/CactusStrutsTestCase.java" if="build_1.0" />
+            <exclude name="**/struts/MockStrutsTestCase.java" if="build_1.0" />
             <exclude name="**/2_2/**" unless="build_2.2"/>
             <exclude name="**/struts/CactusStrutsTestCase.java" if="build_2.2"/>
             <exclude name="**/struts/MockStrutsTestCase.java" if="build_2.2"/>
@@ -60,6 +62,8 @@
             <exclude name="**/*Token*.java" if="build_1.0"/>
             <exclude name="**/*Dyna*.java" if="build_1.0"/>
             <exclude name="**/*Tiles*.java" if="build_1.0"/>
+            <exclude name="**/tests/**/MessageAction.java" if="build_1.0" />
+            <exclude name="**/tests/**/TestMessageAction.java" if="build_1.0" />
             <exclude name="**/Filter*.java" if="build_2.2"/>
         </javac>
     </target>
