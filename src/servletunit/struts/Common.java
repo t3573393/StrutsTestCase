@@ -90,44 +90,37 @@ public class Common {
      * be fetched from the tile definition.
      */
     protected static String getTilesForward(String forwardPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
-	
-	String result = null;
-	try {
-	    ComponentDefinition definition;
-	    try {
-		// Get definition of tiles/component corresponding to uri.
-		definition = DefinitionsUtil.createDefinitionsFactory(context, config).getDefinition(forwardPath, request, context);
-		if( definition != null ) {
-		    // We have a definition.
-		    // We use it to complete missing attribute in context.
-		    // We also get uri, controller.
-		    result = definition.getPath();
-		}
-	    } catch (NullPointerException npe) {
-		// This is a hack to replace the previous null check.
-		// Struts 1.1b1 and 1.1 nightly build have different
-		// return types for DefinitionsUtil.createDefinitionsFactory()
-		// so we have to do this to keep compatible.
-	    }
-	    definition = DefinitionsUtil.getActionDefinition(request);
-	    if( definition != null ) {
-		// We have a definition.
-		// We use it to complete missing attribute in context.
-		// We also overload uri and controller if set in definition.
-		if(definition.getPath()!= null)
-		    result = definition.getPath();
-	    }
-	    return result;
-	} catch (NoSuchDefinitionException nsde) {
-	    return null;
-	} catch (DefinitionsFactoryException dfe) {
-	    return null;
-	} catch (NullPointerException npe) {
-	    // can happen if tiles is not at all used.
-	    return null;
-	}
+
+        String result = null;
+        try {
+            ComponentDefinition definition;
+            // Get definition of tiles/component corresponding to uri.
+            definition = DefinitionsUtil.createDefinitionsFactory(context, config).getDefinition(forwardPath, request, context);
+            if( definition != null ) {
+                // We have a definition.
+                // We use it to complete missing attribute in context.
+                // We also get uri, controller.
+                result = definition.getPath();
+            }
+            definition = DefinitionsUtil.getActionDefinition(request);
+            if( definition != null ) {
+                // We have a definition.
+                // We use it to complete missing attribute in context.
+                // We also overload uri and controller if set in definition.
+                if(definition.getPath()!= null)
+                    result = definition.getPath();
+            }
+            return result;
+        } catch (NoSuchDefinitionException nsde) {
+            return null;
+        } catch (DefinitionsFactoryException dfe) {
+            return null;
+        } catch (NullPointerException npe) {
+            // can happen if tiles is not at all used.
+            return null;
+        }
     }
-    
+
     /**
      * Verifies that ActionServlet used this logical forward or input mapping.
      *
@@ -135,10 +128,10 @@ public class Common {
      */
     protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
         if ((forwardName == null) && (isInputPath)) {
-	    forwardName = actionServlet.findMapping(actionPath).getInput();
-	    if (forwardName == null)
-		throw new AssertionFailedError("no input mapping defined!");
-	}
+            forwardName = actionServlet.findMapping(actionPath).getInput();
+            if (forwardName == null)
+                throw new AssertionFailedError("no input mapping defined!");
+        }
         if (!isInputPath) {
             ActionForward expectedForward = actionServlet.findMapping(actionPath).findForward(forwardName);
             if (expectedForward == null)
@@ -146,14 +139,12 @@ public class Common {
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
-	    if (actionServlet instanceof org.apache.struts.tiles.ActionComponentServlet) {
-		// only run this check if we're using TILES
-		String tilesForward = getTilesForward(forwardName,request,context,config);
-		if (tilesForward != null)
-		    forwardName = tilesForward;
-	    }
-	}
-	forwardName = request.getContextPath() + forwardName;
+
+            String tilesForward = getTilesForward(forwardName,request,context,config);
+            if (tilesForward != null)
+                forwardName = tilesForward;
+        }
+        forwardName = request.getContextPath() + forwardName;
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
     }
@@ -162,34 +153,34 @@ public class Common {
      * Strips off *.do from action paths specified as such.
      */
     protected static String stripActionPath(String path) {
-	if (path == null)
-	    return null;
-	
+        if (path == null)
+            return null;
+
         int slash = path.lastIndexOf("/");
         int period = path.lastIndexOf(".");
         if ((period >= 0) && (period > slash))
             path = path.substring(0, period);
         return path;
     }
-    
+
     /**
      * Strip ;jsessionid=<sessionid> from path.
      * @return stripped path
      */
     protected static String stripJSessionID(String path)
     {
-         if (path == null)
-             return null;
-	 
-         int jsess_idx = path.indexOf(";jsessionid=");
-         if (jsess_idx > 0)
-	     {
-		 // Strip jsessionid from obtained path
-		 StringBuffer buf = new StringBuffer(path);
-		 path = buf.delete(jsess_idx, jsess_idx + 44).toString();
-	     }
-         return path;
-      }
-  
+        if (path == null)
+            return null;
+
+        int jsess_idx = path.indexOf(";jsessionid=");
+        if (jsess_idx > 0)
+        {
+            // Strip jsessionid from obtained path
+            StringBuffer buf = new StringBuffer(path);
+            path = buf.delete(jsess_idx, jsess_idx + 44).toString();
+        }
+        return path;
+    }
+
 
 }

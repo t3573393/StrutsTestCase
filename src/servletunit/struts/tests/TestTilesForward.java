@@ -28,21 +28,22 @@ public class TestTilesForward extends MockStrutsTestCase {
     }
 
     public void setUp() throws Exception {
-	super.setUp();
-	setActionServlet(new org.apache.struts.tiles.ActionComponentServlet());
-	setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");
-	setInitParameter("definitions-debug","0");
-	setConfigFile("/WEB-INF/tiles-struts-config.xml");
+        super.setUp();
+        // For some reason, I have to pass these values in here; the plugin
+        // properties don't seem to work.
+        setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");
+        setInitParameter("definitions-debug","0");
+        setConfigFile("/WEB-INF/tiles-struts-config.xml");
     }
 
-    
+
     public void testTilesForward() {
-	addRequestParameter("username","deryl");
-	addRequestParameter("password","radar");
-	setRequestPathInfo("/tilesForward");
-	actionPerform();
-	verifyForward("success");
-	verifyForwardPath("/layouts/pageLayout.jsp");
+        addRequestParameter("username","deryl");
+        addRequestParameter("password","radar");
+        setRequestPathInfo("/tilesForward");
+        actionPerform();
+        verifyForward("success");
+        verifyForwardPath("/layouts/pageLayout.jsp");
     }
 
 
