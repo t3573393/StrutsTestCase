@@ -17,6 +17,9 @@
 package servletunit.struts.tests;
 
 import servletunit.struts.MockStrutsTestCase;
+import servletunit.ServletContextSimulator;
+
+import java.io.File;
 
 public class TestAbsolutePath extends MockStrutsTestCase {
 
@@ -34,6 +37,19 @@ public class TestAbsolutePath extends MockStrutsTestCase {
 
     public void testSuccessfulLogin() {
         setConfigFile(rootPath + "/src/examples/WEB-INF/struts-config.xml");
+        addRequestParameter("username","deryl");
+        addRequestParameter("password","radar");
+        setRequestPathInfo("/login");
+        actionPerform();
+        verifyForward("success");
+        verifyForwardPath("/main/success.jsp");
+        assertEquals("deryl",getSession().getAttribute("authentication"));
+        verifyNoActionErrors();
+    }
+
+    public void testContextDirectory() {
+        ((ServletContextSimulator) this.getSession().getServletContext()).setContextDirectory(new File(rootPath + "/src/examples"));
+        setConfigFile("/WEB-INF/struts-config.xml");
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
         setRequestPathInfo("/login");
