@@ -19,12 +19,12 @@ public class TestDispatchAction extends MockStrutsTestCase {
 
     public void testDispatchAction() {
         addRequestParameter("method","actionOne");
-        setRequestPathInfo("/testDispatchAction");
+        setRequestPathInfo("test","/testDispatchAction");
         actionPerform();
         verifyNoActionErrors();
         verifyForward("action1");
         addRequestParameter("method","actionTwo");
-        setRequestPathInfo("/testDispatchAction");
+        setRequestPathInfo("test","/testDispatchAction");
         actionPerform();
         verifyNoActionErrors();
         verifyForward("action2");

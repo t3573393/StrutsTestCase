@@ -32,7 +32,7 @@ public class TestDynaActionForm extends MockStrutsTestCase {
     public void testForm() {
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
-        setRequestPathInfo("/testDynamicAction");
+        setRequestPathInfo("test","/testDynamicAction");
         actionPerform();
         verifyNoActionErrors();
     }

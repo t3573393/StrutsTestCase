@@ -30,8 +30,7 @@ public class TestMessageResourceAction extends MockStrutsTestCase {
     }
 
     public void testGetResources() {
-        setRequestPathInfo("/testMessage");
-	setServletConfigFile("/WEB-INF/web.xml");
+        setRequestPathInfo("test","/testMessage");
         actionPerform();
         verifyForward("success");
         verifyNoActionErrors();

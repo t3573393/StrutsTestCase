@@ -32,7 +32,7 @@ public class TestMessageResourceAction extends CactusStrutsTestCase {
 
     public void testGetResources() {
 
-        setRequestPathInfo("/testMessage");
+        setRequestPathInfo("test","/testMessage");
         actionPerform();
         verifyForward("success");
         verifyNoActionErrors();
