@@ -113,19 +113,19 @@ public class Common {
         try {
             ComponentDefinition definition;
             // Get definition of tiles/component corresponding to uri.
-            definition = TilesUtil.getDefinition(forwardPath,request,context);
-            if( definition != null ) {
+            definition = TilesUtil.getDefinition(forwardPath, request, context);
+            if (definition != null) {
                 // We have a definition.
                 // We use it to complete missing attribute in context.
                 // We also get uri, controller.
                 result = definition.getPath();
             }
             definition = DefinitionsUtil.getActionDefinition(request);
-            if( definition != null ) {
+            if (definition != null) {
                 // We have a definition.
                 // We use it to complete missing attribute in context.
                 // We also overload uri and controller if set in definition.
-                if(definition.getPath()!= null)
+                if (definition.getPath() != null)
                     result = definition.getPath();
             }
             return result;
@@ -147,19 +147,22 @@ public class Common {
     protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
 
         if ((forwardName == null) && (isInputPath)) {
-            forwardName = getActionConfig(actionServlet,actionPath,request,context).getInput();
+            forwardName = getActionConfig(actionServlet, actionPath, request, context).getInput();
             if (forwardName == null)
                 throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
+            String tilesForward = getTilesForward(forwardName, request, context, config);
+            if (tilesForward != null)
+                forwardName = tilesForward;
         }
         if (!isInputPath) {
-            ActionForward expectedForward = findForward(actionPath,forwardName,request,context, actionServlet);
+            ActionForward expectedForward = findForward(actionPath, forwardName, request, context, actionServlet);
             if (expectedForward == null)
                 expectedForward = actionServlet.findForward(forwardName);
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
 
-            String tilesForward = getTilesForward(forwardName,request,context,config);
+            String tilesForward = getTilesForward(forwardName, request, context, config);
             if (tilesForward != null)
                 forwardName = tilesForward;
         }
@@ -189,14 +192,12 @@ public class Common {
      * Strip ;jsessionid=<sessionid> from path.
      * @return stripped path
      */
-    protected static String stripJSessionID(String path)
-    {
+    protected static String stripJSessionID(String path) {
         if (path == null)
             return null;
 
         int jsess_idx = path.indexOf(";jsessionid=");
-        if (jsess_idx > 0)
-        {
+        if (jsess_idx > 0) {
             // Strip jsessionid from obtained path
             StringBuffer buf = new StringBuffer(path);
             path = buf.delete(jsess_idx, jsess_idx + 44).toString();
@@ -207,10 +208,9 @@ public class Common {
     /**
      * Returns any ActionForm instance stored in the request or session, if available.
      */
-    protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request, ServletContext context)
-    {
+    protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request, ServletContext context) {
         ActionForm form;
-        ActionMapping actionConfig = getActionConfig(actionServlet,actionPath,request,context);
+        ActionMapping actionConfig = getActionConfig(actionServlet, actionPath, request, context);
         if ("request".equals(actionConfig.getScope())) {
             form = (ActionForm) request.getAttribute(actionConfig.getAttribute());
         } else {
@@ -221,7 +221,7 @@ public class Common {
     }
 
     protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context, ActionServlet actionServlet) {
-        return getActionConfig(actionServlet,mappingName,request,context).findForward(forwardName);
+        return getActionConfig(actionServlet, mappingName, request, context).findForward(forwardName);
     }
 
     protected static ActionMapping getActionConfig(ActionServlet actionServlet, String mappingName, HttpServletRequest request, ServletContext context) {
@@ -233,11 +233,11 @@ public class Common {
     }
 
     protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context, ActionServlet actionServlet) {
-        ActionMapping actionConfig = getActionConfig(actionServlet,actionPath,request,context);
+        ActionMapping actionConfig = getActionConfig(actionServlet, actionPath, request, context);
         if (actionConfig.getScope().equals("request"))
-            request.setAttribute(actionConfig.getAttribute(),form);
+            request.setAttribute(actionConfig.getAttribute(), form);
         else
-            request.getSession().setAttribute(actionConfig.getAttribute(),form);
+            request.getSession().setAttribute(actionConfig.getAttribute(), form);
     }
 
 
