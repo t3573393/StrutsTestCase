@@ -16,8 +16,6 @@
 
 package servletunit.struts.tests;
 
-import examples.LoginForm;
-import org.apache.struts.action.ActionForm;
 import servletunit.struts.MockStrutsTestCase;
 
 public class TestSetActionForm extends MockStrutsTestCase {
@@ -28,6 +26,8 @@ public class TestSetActionForm extends MockStrutsTestCase {
 
     public void testSuccessfulLogin() {
         ComplexForm form = new ComplexForm();
+        form.setUsername("deryl");
+        form.setPassword("radar");
         form.setComplexObject(new Object());
         setRequestPathInfo("/testSetActionForm");
         setActionForm(form);
