@@ -58,6 +58,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private String method;
     private String contentType;
     private Locale locale;
+    private Principal principal;
     String remoteAddr;
     String remoteHost;
     private String remoteUser;
@@ -904,11 +905,20 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * This operation is not supported.
+     *
+     * Returns a <code>java.security.Principal</code> object containing
+     * the name of the current authenticated user. If the user has not been
+     * authenticated, the method returns <code>null</code>.
+     *
+     * @return		a <code>java.security.Principal</code> containing
+     *			the name of the user making this request;
+     *			<code>null</code> if the user has not been 
+     *			authenticated
+     *
      */
     public Principal getUserPrincipal()
     {
-	throw new UnsupportedOperationException("getUserPrincipal operation is not supported!");
+	return this.principal;
     }
 
     /**
@@ -1204,5 +1214,11 @@ public class HttpServletRequestSimulator implements HttpServletRequest
 	this.locale = locale;
     }
 	
+    /**
+     * Sets the Principal used by {@link #getUserPrincipal}.
+     */
+    public void setUserPrincipal(Principal principal) {
+	this.principal = principal;
+    }
 
 }
