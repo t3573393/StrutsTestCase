@@ -1,4 +1,6 @@
 build
 dist
-docs
 test-results
+servletunit.tar.gz
+servletunit.zip
+
