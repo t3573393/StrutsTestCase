@@ -261,6 +261,13 @@ public class ServletContextSimulator implements ServletContext
     {
         try {
             File file = new File(path);
+
+            // If the path is relative then apply the contextDirectory path if it exists.
+            if (!file.exists() && (getContextDirectory() != null))
+            {
+                file = new File(getContextDirectory().getAbsolutePath() + path);
+            }
+
             if (file.exists()) {
                 return file.toURL();
             }
