@@ -29,6 +29,8 @@ public class TestSetActionForm extends MockStrutsTestCase {
         setServletConfigFile("/WEB-INF/web.xml");
     }
 
+    // todo: this does not seem to work in sub-modules.
+
     public void testSetActionForm() {
         ComplexForm form = new ComplexForm();
         form.setUsername("deryl");
