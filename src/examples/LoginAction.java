@@ -32,7 +32,7 @@ import org.apache.struts.action.ActionMapping;
 
 public class LoginAction extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
+    public ActionForward perform(ActionMapping mapping,
                                  ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
