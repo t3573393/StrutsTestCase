@@ -1,4 +1,4 @@
-StrutsTestCase for JUnit - release 2.1.0
+StrutsTestCase for JUnit - release 2.1.1
 ----------------------------------------
 
 This release resolves outstanding issues with Struts 1.1.
