@@ -18,6 +18,7 @@
 <li> <a href="#7">How can I use the Struts transaction token support in my test cases? </a>
 <li> <a href="#8">Can I access the ActionForm for my test before and after the Action is executed?</a>
 <li> <a href="#9">When I use <tt>setActionForm()</tt>, why are the form attributes I set not showing up in my Action class?   </a>
+<li> <a href="#11">How can I test uploading a file using StrutsTestCase?</a>
 </ul>
 
 <h3 id=10>Is there a discussion group for StrutsTestCase?</h3>
@@ -85,6 +86,8 @@ then you could potentially be resetting any attributes you had set in the Action
 pass to setActionForm().  Likewise, any request parameters you pass along that correspond to attributes
 in your ActionForm instance will replace whatever you set in your test method.
 
+<h3 id=11>How can I test uploading a file using StrutsTestCase?</h3>
+This is a tricky operation to test, but at least one enterprising user has found <a href="https://sourceforge.net/forum/message.php?msg_id=1812671">a way to do it</a>.
 
 <br>
 <br>
