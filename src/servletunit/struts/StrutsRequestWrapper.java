@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * A wrapper for the HttpServletRequest class.  This is used in
+ * CactusStrutsTestCase so that we can add our own request parameters
+ * outside of the beginXXX and endXXX methods.  This allows us to
+ * to use the ActionServlet as a black box, rather than mimic its
+ * behavior as was previously the case.
+ */
 public class StrutsRequestWrapper extends HttpServletRequestWrapper {
 
     private String pathInfo;

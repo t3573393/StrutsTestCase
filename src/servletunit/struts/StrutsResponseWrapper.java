@@ -8,8 +8,14 @@ import java.io.*;
 import java.util.Locale;
 import java.util.HashMap;
 import javax.servlet.http.Cookie;
-import junit.framework.AssertionFailedError;
 
+/**
+ * A wrapper for the HttpServletResponse class.  This is used in
+ * CactusStrutsTestCase so that we can retrieve the redirect URL
+ * set by the ActionServlet in processing an action. This allows
+ * us to use the ActionServlet as a black box, rather than mimic
+ * its behavior as was previously the case.
+ */
 public class StrutsResponseWrapper implements HttpServletResponse
 {
     
