@@ -13,36 +13,27 @@
     <!-- ========== Global Forward Definitions ============================== -->
     <global-forwards>
         <forward name="login" path="/login/login.jsp"/>
+        <forward name="success" path="/main/success.jsp"/>
+        <forward name="redirect" path="/main/success.jsp" redirect="true"/>
     </global-forwards>
     <!-- ========== Action Mapping Definitions ============================== -->
     <action-mappings>
         <!-- Process a user logon -->
-        <action path="/login" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request">
-            <forward name="success" path="/main/success.jsp"/>
-        </action>
+        <action path="/login" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request" />
         <!-- The following mappings are for internal testing -->
         <!-- only, and can be safely ignored.                -->
-        <action path="/testMessage" type="servletunit.struts.tests.MessageAction" input="/login/login.jsp" scope="request">
-            <forward name="success" path="/main/success.jsp"/>
+        <action path="/testMessage" type="servletunit.struts.tests.MessageResourceAction" input="/login/login.jsp" scope="request">
             <forward name="failure" path="/main/failure.jsp"/>
         </action>
         <action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
-        <action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
-            <forward name="redirect" path="/main/success.jsp" redirect="true"/>
-        </action>
-        <action path="/testRelativeRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
-            <forward name="redirect" path="/main/success.jsp" redirect="true"/>
-        </action>
+        <action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request" />
+        <action path="/testRelativeRedirect" type="servletunit.struts.tests.RedirectAction" scope="request"/>
         <action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
         <action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
         <action path="/testDynamicAction" type="servletunit.struts.tests.DynamicAction" name="dynamicLogin" scope="request"/>
         <action path="/userAction" type="servletunit.struts.tests.UserAction"/>
-        <action path="/loginNoInput" type="examples.LoginAction" name="loginForm" scope="request">
-            <forward name="success" path="/main/success.jsp"/>
-        </action>
-        <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request">
-            <forward name="success" path="/main/success.jsp"/>
-        </action>
+        <action path="/loginNoInput" type="examples.LoginAction" name="loginForm" scope="request"/>
+        <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request"/>
         <action path="/testDispatchAction"
             type="servletunit.struts.tests.MyDispatchAction"
             parameter="method"
@@ -50,5 +41,6 @@
             <forward name="action1" path="/main/action1.jsp"/>
             <forward name="action2" path="/main/action2.jsp"/>
         </action>
+        <action path="/testActionMessages" type="servletunit.struts.tests.MessageAction" />
     </action-mappings>
 </struts-config>

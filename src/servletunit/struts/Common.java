@@ -38,66 +38,49 @@ public class Common {
     protected static final String INCLUDE_SERVLET_PATH = RequestProcessor.INCLUDE_SERVLET_PATH;
 
     /**
-     * Verifies if the ActionServlet controller sent these error messages.
-     * There must be an exact match between the provided error messages, and
-     * those sent by the controller, in both name and number.
-     *
-     * @param request HttpServletRequest used in this test.
-     * @param errorNames a String array containing the error message keys
-     * to be verified, as defined in the application resource properties
-     * file.
-     *
-     * @exception AssertionFailedError if the ActionServlet controller
-     * sent different error messages than those in <code>errorNames</code>
-     * after executing an Action object.
+     * Common method to verify action errors and action messages.
      */
-    protected static void verifyActionErrors(HttpServletRequest request, String[] errorNames) {
-        int actualLength = 0;
-
-        ActionErrors errors = (ActionErrors) request.getAttribute(Action.ERROR_KEY);
-        if (errors == null) {
-            throw new AssertionFailedError("was expecting some error messages, but received none.");
-        } else {
-            Iterator iterator = errors.get();
-            while (iterator.hasNext()) {
-                actualLength++;
-                boolean throwError = true;
-                ActionError error = (ActionError) iterator.next();
-                for (int x = 0; x < errorNames.length; x++) {
-                    if (error.getKey().equals(errorNames[x]))
-                        throwError = false;
+    protected static void verifyNoActionMessages(HttpServletRequest request, String key, String messageLabel) {
+        ActionMessages messages = (ActionMessages) request.getAttribute(key);
+        if (messages != null) {
+            Iterator iterator = messages.get();
+            if (iterator.hasNext()) {
+                StringBuffer messageText = new StringBuffer();
+                while (iterator.hasNext()) {
+                    messageText.append(" \"");
+                    messageText.append(((ActionMessage) iterator.next()).getKey());
+                    messageText.append("\"");
                 }
-                if (throwError) {
-                    throw new AssertionFailedError("received unexpected error \"" + error.getKey() + "\"");
-                }
-            }
-            if (actualLength != errorNames.length) {
-                throw new AssertionFailedError("was expecting " + errorNames.length + " error(s), but received " + actualLength + " error(s)");
+                throw new AssertionFailedError("was expecting no " + messageLabel + " messages, but received: " + messageText.toString());
             }
         }
     }
 
     /**
-     * Verifies that the ActionServlet controller sent no error messages upon
-     * executing an Action object.
-     *
-     * @param request HttpServletRequest used in this test.
-     *
-     * @exception AssertionFailedError if the ActionServlet controller
-     * sent any error messages after excecuting and Action object.
+     * Common method to verify action errors and action messages.
      */
-    protected static void verifyNoActionErrors(HttpServletRequest request) {
-        ActionErrors errors = (ActionErrors) request.getAttribute(Action.ERROR_KEY);
-        if (errors != null) {
-            Iterator iterator = errors.get();
-            if (iterator.hasNext()) {
-                StringBuffer errorText = new StringBuffer();
-                while (iterator.hasNext()) {
-                    errorText.append(" \"");
-                    errorText.append(((ActionError) iterator.next()).getKey());
-                    errorText.append("\"");
+    protected static void verifyActionMessages(HttpServletRequest request, String[] messageNames, String key, String messageLabel) {
+        int actualLength = 0;
+
+        ActionMessages messages = (ActionMessages) request.getAttribute(key);
+        if (messages == null) {
+            throw new AssertionFailedError("was expecting some " + messageLabel + " messages, but received none.");
+        } else {
+            Iterator iterator = messages.get();
+            while (iterator.hasNext()) {
+                actualLength++;
+                boolean throwError = true;
+                ActionMessage message = (ActionMessage) iterator.next();
+                for (int x = 0; x < messageNames.length; x++) {
+                    if (message.getKey().equals(messageNames[x]))
+                        throwError = false;
                 }
-                throw new AssertionFailedError("was expecting no error messages, but received: " + errorText.toString());
+                if (throwError) {
+                    throw new AssertionFailedError("received unexpected " + messageLabel + " message \"" + message.getKey() + "\"");
+                }
+            }
+            if (actualLength != messageNames.length) {
+                throw new AssertionFailedError("was expecting " + messageNames.length + " " + messageLabel + " message(s), but received " + actualLength + " " + messageLabel + " message(s)");
             }
         }
     }

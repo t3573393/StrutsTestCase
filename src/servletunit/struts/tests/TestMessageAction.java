@@ -14,12 +14,12 @@
 //                                                                             test
 //  You may view the full text here: http://www.apache.org/LICENSE.txt
 
-package servletunit.struts.tests.cactus;
+package servletunit.struts.tests;
 
-import servletunit.struts.CactusStrutsTestCase;
+import servletunit.struts.MockStrutsTestCase;
 import junit.framework.AssertionFailedError;
 
-public class TestMessageAction extends CactusStrutsTestCase {
+public class TestMessageAction extends MockStrutsTestCase {
 
     public TestMessageAction(String testName) {
         super(testName);
@@ -43,7 +43,7 @@ public class TestMessageAction extends CactusStrutsTestCase {
         verifyActionMessages(new String[] {"test.message"});
     }
 
-    public void testMessageExistsExpectedNone() {
+     public void testMessageExistsExpectedNone() {
         setRequestPathInfo("/testActionMessages");
         actionPerform();
         verifyForward("success");
@@ -89,4 +89,3 @@ public class TestMessageAction extends CactusStrutsTestCase {
 
 
 }
-

@@ -21,6 +21,8 @@ import junit.framework.TestCase;
 import org.apache.commons.digester.Digester;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.Action;
+import org.apache.struts.Globals;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
@@ -509,8 +511,9 @@ public class MockStrutsTestCase extends TestCase {
 
     public void verifyActionErrors(String[] errorNames) {
         init();
-        Common.verifyActionErrors(request,errorNames);
+        Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
     }
+
 
     /**
      * Verifies that the ActionServlet controller sent no error messages upon
@@ -521,7 +524,37 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyNoActionErrors() {
         init();
-        Common.verifyNoActionErrors(request);
+        Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
+    }
+
+    /**
+     * Verifies if the ActionServlet controller sent these action messages.
+     * There must be an exact match between the provided action messages, and
+     * those sent by the controller, in both name and number.
+     *
+     * @param messageNames a String array containing the action message keys
+     * to be verified, as defined in the application resource properties
+     * file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * sent different action messages than those in <code>messageNames</code>
+     * after executing an Action object.
+     */
+    public void verifyActionMessages(String[] messageNames) {
+        init();
+        Common.verifyActionMessages(request,messageNames,Globals.MESSAGE_KEY,"action");
+    }
+
+    /**
+     * Verifies that the ActionServlet controller sent no action messages upon
+     * executing an Action object.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * sent any action messages after excecuting and Action object.
+     */
+    public void verifyNoActionMessages() {
+        init();
+        Common.verifyNoActionMessages(request,Globals.MESSAGE_KEY,"action");
     }
 
     /**
