@@ -92,8 +92,9 @@ public class MockStrutsTestCase extends TestCase {
 	    if (actionServlet == null)
 		actionServlet = new ActionServlet();
 	    config = new ServletConfigSimulator();
-	    request = new HttpServletRequestSimulator();
+	    request = new HttpServletRequestSimulator(config.getServletContext());
 	    response = new HttpServletResponseSimulator();
+	    context = (ServletContextSimulator) config.getServletContext();
 	    requestWrapper = null;
 	    responseWrapper = null;
 	    isInitialized = true;
@@ -119,14 +120,14 @@ public class MockStrutsTestCase extends TestCase {
      * if this method is overridden in a subclass.
      */
     public void tearDown() throws Exception {
-    init();
-        try {
-            actionServlet.destroy();
-        } catch (Exception e) {
-            throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
-        }
+	init();
+	try {
+	    actionServlet.destroy();
+	} catch (Exception e) {
+	    throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
+	}
     }
-
+    
     /**
      * Returns an HttpServletRequest object that can be used in
      * this test.
@@ -327,15 +328,15 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     public void setServletConfigFile(String pathname) {
-    init();
-     // ugly hack to get this to play ball with Class.getResourceAsStream()
+	init();
+	// ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');
             pathname = "/" + prefix + "/" + pathname;
         }
-    // pull in the appropriate parts of the
-    // web.xml file.
-    Digester digester = new Digester();
+	// pull in the appropriate parts of the
+	// web.xml file -- first the init-parameters
+	Digester digester = new Digester();
         URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
         if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
         digester.push(this.config);
@@ -351,8 +352,28 @@ public class MockStrutsTestCase extends TestCase {
 	    digester.parse(input);
 	    input.close();
         } catch (Exception e) {
-        throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
+	    throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
         }
+
+	// now the context parameters..
+	digester = new Digester();
+	if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
+        digester.setDebug(0);
+        digester.setValidating(false);
+        digester.push(this.context);
+	digester.addCallMethod("web-app/context-param", "setInitParameter", 2);
+        digester.addCallParam("web-app/context-param/param-name", 0);
+        digester.addCallParam("web-app/context-param/param-value", 1);
+        try {
+	    InputStream input = getClass().getResourceAsStream(pathname);
+	    if(input==null)
+		throw new AssertionFailedError("Invalid pathname: " + pathname);
+	    digester.parse(input);
+	    input.close();
+        } catch (Exception e) {
+	    throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
+        }
+	
     }
 
     /**
