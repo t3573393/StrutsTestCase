@@ -247,23 +247,24 @@ public class MockStrutsTestCase extends TestCase {
      *
      */
     public void actionPerform() {
-    init();
-    HttpServletRequest request = this.request;
-    HttpServletResponse response = this.response;
-    if (this.requestWrapper != null)
-        request = this.requestWrapper;
-    if (this.responseWrapper != null)
-        response = this.responseWrapper;
-
-        try {
-        this.getActionServlet().doPost(request,response);
-        } catch (ServletException e) {
-            throw new AssertionFailedError("ServletException: " + e.getMessage());
-        } catch (IOException e) {
-            throw new AssertionFailedError("IOException: " + e.getMessage());
-        }
+	init();
+	HttpServletRequest request = this.request;
+	HttpServletResponse response = this.response;
+	if (this.requestWrapper != null)
+	    request = this.requestWrapper;
+	if (this.responseWrapper != null)
+	    response = this.responseWrapper;
+	
+	try {
+	    this.getActionServlet().doPost(request,response);
+	} catch (ServletException se) {
+	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
+	} catch (Exception ex) {
+	    ex.printStackTrace();
+            fail("Error running action.perform(): " + ex.getClass() + " - " + ex.getMessage());
+	}
     }
-
+    
     /**
      * Adds an HttpServletRequest parameter to be used in setting up the
      * ActionForm instance to be used in this test.  Each parameter added
@@ -272,7 +273,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void addRequestParameter(String parameterName, String parameterValue)
     {
-    init();
+	init();
         this.request.addParameter(parameterName,parameterValue);
     }
 
@@ -302,6 +303,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setInitParameter(String key, String value){
         config.setInitParameter(key, value);
+	actionServletIsInitialized = false;
     }
 
     /**
