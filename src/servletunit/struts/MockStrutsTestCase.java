@@ -85,6 +85,13 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Default constructor.
      */
+    public MockStrutsTestCase() {
+        super();
+    }
+
+    /**
+     * Constructor that takes test name parameter, for backwards compatibility with older versions on JUnit.
+     */
     public MockStrutsTestCase(String testName) {
         super(testName);
     }

@@ -62,6 +62,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
     /**
      * Default constructor.
      */
+    public CactusStrutsTestCase() {
+        super();
+    }
+
+    /**
+     * Constructor that takes test name parameter, for backwards compatibility with older versions on JUnit.
+     */
     public CactusStrutsTestCase(String testName) {
         super(testName);
     }

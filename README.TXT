@@ -14,12 +14,14 @@ Change Log
 New Features:
 ------------
 
+- Added no argument constructors, which is now supported in
+the latest JUnit release. (MockStrutsTestCase and CactusStrutsTestCase)
 
 Bug Fixes:
 ---------
 
 - Fixed a bug where the jsessionid was not properly stripped
-if it was longer than 44 characters.  (MockStrutsTestCase and
+if it was longer than 44 characters. (MockStrutsTestCase and
 CactusStrutsTestCase)
 
 
