@@ -252,6 +252,9 @@ public class MockStrutsTestCase extends TestCase {
         init();
         try {
             if (!actionServletIsInitialized) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("servletunit.struts.MockStrutsTestCase.getActionServlet() : intializing actionServlet");
+                }
                 this.actionServlet.init(config);
                 actionServletIsInitialized = true;
             }
@@ -394,6 +397,9 @@ public class MockStrutsTestCase extends TestCase {
                 if (!moduleName.endsWith("/"))
                     moduleName = moduleName + "/";
             }
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.MockStrutsTestCase.setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
+            }
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);
@@ -430,6 +436,7 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Entering+servletunit.struts.MockStrutsTestCase.setContextDirectory() : contextDirectory = " + contextDirectory);
         init();
         context.setContextDirectory(contextDirectory);
+        actionServletIsInitialized = false;
         if (logger.isDebugEnabled())
             logger.debug("Exiting-servletunit.struts.MockStrutsTestCase.setContextDirectory()");
     }
@@ -534,7 +541,6 @@ public class MockStrutsTestCase extends TestCase {
             return Common.stripJSessionID(response.getHeader("Location"));
         } else
             try  {
-
                 String strippedForward = request.getContextPath() + Common.stripJSessionID(((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator().getForward());
                 if (logger.isDebugEnabled()) {
                     logger.debug("servletunit.struts.MockStrutsTestCase.getActualForward() : stripped forward and added context path - " + strippedForward);
