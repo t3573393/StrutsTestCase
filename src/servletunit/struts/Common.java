@@ -87,8 +87,11 @@ public class Common {
      * @throws AssertionFailedError if expected and actual paths do not match.
      */
     protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath) {
-        if ((forwardName == null) && (isInputPath))
-            throw new AssertionFailedError("no input mapping defined!");
+        if ((forwardName == null) && (isInputPath)) {
+	    forwardName = actionServlet.findMapping(actionPath).getInput();
+	    if (forwardName == null)
+		throw new AssertionFailedError("no input mapping defined!");
+	}
         if (!isInputPath) {
             ActionForward expectedForward = actionServlet.findMapping(actionPath).findForward(forwardName);
             if (expectedForward == null)

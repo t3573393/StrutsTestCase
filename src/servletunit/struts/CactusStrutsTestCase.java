@@ -360,6 +360,16 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Returns the forward sent to RequestDispatcher.
+     */
+    private String getActualForward() {
+	if (response.containsHeader("Location")) {
+	    return Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
+	} else
+	    return Common.stripJSessionID(((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward());
+    }
+    
+    /**
      * Verifies if the ActionServlet controller used this forward.
      *
      * @param forwardName the logical name of a forward, as defined
@@ -372,24 +382,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
 	init();
-	if (response.containsHeader("Location")) {
-	    ActionForward expectedRedirectForward = actionServlet.findMapping(request.getPathInfo()).findForward(forwardName);
-	    if (expectedRedirectForward == null)
-		fail("Cannot find forward '" + forwardName + "' - it is possible that it is not mapped correctly.");
-	    String expectedRedirect = expectedRedirectForward.getPath();
-	    String actualRedirect = Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
-	    if (!expectedRedirect.equals(actualRedirect))
-		fail("Was expecting redirect '" + expectedRedirect + "' but received redirect '" + actualRedirect + "'");
-	    return;
-	}
         Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,getActualForward(),false);
-    }
-
-    /**
-     * Returns the forward sent to RequestDispatcher.
-     */
-    private String getActualForward() {
-	return ((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward();
     }
 
     /**
@@ -405,16 +398,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
 	init();
-	if (response.containsHeader("Location")) {
-	    String actualRedirect = Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
-	    if (!forwardPath.equals(actualRedirect))
-		fail("Was expecting redirect '" + forwardPath + "' but received redirect '" + actualRedirect + "'");
-	    return;
-	}
-	if (!Common.stripJSessionID(getActualForward()).equals(forwardPath))
+	if (!(getActualForward().equals(forwardPath)))
 	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
     }
-
+    
     /**
      * Verifies if the ActionServlet controller forwarded to the defined
      * input path.
@@ -425,10 +412,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyInputForward() {
 	init();
-        String inputPath = actionServlet.findMapping(request.getPathInfo()).getInput();
-	if (inputPath == null)
-	    fail("No input mapping defined!");
-        Common.verifyForwardPath(actionServlet,request.getPathInfo(),inputPath,getActualForward(),true);
+        Common.verifyForwardPath(actionServlet,request.getPathInfo(),null,getActualForward(),true);
     }
 
     /**
