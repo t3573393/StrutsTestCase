@@ -21,6 +21,6 @@
 			<forward name="success" path="/main/success.jsp"/>
 			<forward name="failure" path="/main/failure.jsp"/>
 		</action>
-		<action path="/testSimpleForward" forward="/main/success.jsp"/>
+		<action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
 	</action-mappings>
 </struts-config>

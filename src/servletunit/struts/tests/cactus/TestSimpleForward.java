@@ -35,7 +35,6 @@ public class TestSimpleForward extends CactusStrutsTestCase {
 	try {
 	    setRequestPathInfo("/testSimpleForward");
 	    actionPerform();
-	    System.out.println("back from test");
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    throw new AssertionFailedError("caught exception " + e.getClass() + " : " + e.getMessage());
