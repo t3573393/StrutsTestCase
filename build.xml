@@ -112,7 +112,7 @@
     </target>
 
     <!-- prepare code for public release -->
-    <target name="release" depends="package,docs">
+    <target name="release">
         <property name="servlet.version" value="2.3"/>
 	<property name="struts.version" value="1.1"/>
         <condition property="servlet.version" value="2.2">
@@ -183,7 +183,7 @@
     </target>
 
     <!-- Run unit tests -->
-    <target name="test" depends="build">
+    <target name="test">
         <mkdir dir="${test.dir}" />
         <junit printsummary="yes" haltonfailure="yes">
             <sysproperty key="test.dir" value="${test.dir}" />
@@ -204,7 +204,7 @@
         </junit>
     </target>
 
-    <target name="test.cactus" depends="build">
+    <target name="test.cactus">
         <mkdir dir="${test.dir}" />
         <junit printsummary="yes" haltonfailure="yes">
             <sysproperty key="test.dir" value="${test.dir}" />
