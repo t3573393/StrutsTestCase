@@ -376,7 +376,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
         // set up the ActionForm
         ActionForm form = null;
-	System.out.println("mapping.getAttribute = " + mapping.getAttribute());
         if (mapping.getAttribute() != null) {
             String formType = actionServlet.findFormBean(mapping.getAttribute()).getType();
             try {
@@ -404,6 +403,19 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 }
             }
         }
+
+	// Check to see if this is a simple forward.  If so,
+	// try it out to see if it works and return.  Errors
+	// should be reported as test failure.
+	String forward = mapping.getForward();
+        if ( forward != null ) {
+	    try {
+		actionServlet.getServletContext().getRequestDispatcher(forward).forward(request, response);
+		return;
+	    } catch (Exception e) {
+		throw new AssertionFailedError("Error while validating forward '" + forward + "' : " + e.getClass() + " - " + e.getMessage());
+	    }
+	}
 
         // set up Action
         Action action = null;
