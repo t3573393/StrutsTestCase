@@ -33,8 +33,6 @@
         <fileset dir="${lib.dir}">
             <include name="*.jar"/>
             <include name="*.zip"/>
-            <exclude name="struts-1.1.jar" if="build_1.0"/>
-            <exclude name="struts-1.0.jar" unless="build_1.0"/>
             <exclude name="servletapi-2.3.jar" if="build_2.2"/>
             <exclude name="servletapi-2.2.jar" unless="build_2.2"/>
             <exclude name="cactus-13-1.5.jar" if="build_2.2"/>
@@ -50,19 +48,12 @@
         <condition property="servlet.version" value="2.2">
             <isset property="build_2.2"/>
         </condition>
-        <condition property="struts.version" value="1.0">
-            <isset property="build_1.0"/>
-        </condition>
         <condition property="servlet.version" value="2.3">
             <not>
                 <isset property="build_2.2"/>
             </not>
         </condition>
-        <condition property="struts.version" value="1.1">
-            <not>
-                <isset property="build_1.0"/>
-            </not>
-        </condition>
+        <property name="struts.version" value="1.1"/>
     </target>
 
     <!-- Compile the application classes -->
@@ -99,8 +90,6 @@
             <lib dir="${lib.dir}">
                 <exclude name="ant*.jar"/>
                 <exclude name="servlet.jar"/>
-                <exclude name="struts-1.1.jar" if="build_1.0"/>
-                <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
             <lib dir="${distribute.dir}" includes="${jar.name}"/>
             <classes dir="${build.dir}" includes="**/tests/**,**/examples/**"/>
