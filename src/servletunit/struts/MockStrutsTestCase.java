@@ -65,6 +65,7 @@ public class MockStrutsTestCase extends TestCase {
     String actionPath;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+    boolean requestPathSet = false;
 
     /**
      * The set of public identifiers, and corresponding resource names, for
@@ -357,6 +358,9 @@ public class MockStrutsTestCase extends TestCase {
     public void actionPerform() {
         if (logger.isDebugEnabled())
             logger.debug("Entering actionPerform()");
+        if(!this.requestPathSet){
+            throw new IllegalStateException("You must call setRequestPathInfo() prior to calling actionPerform().");
+        }
         init();
         HttpServletRequest request = this.request;
         HttpServletResponse response = this.response;
@@ -432,6 +436,7 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Entering setRequestPathInfo() : pathInfo = " + pathInfo);
         init();
         this.setRequestPathInfo("",pathInfo);
+        this.requestPathSet = true;
         if (logger.isDebugEnabled())
             logger.debug("Exiting setRequestPathInfo()");
     }
@@ -468,6 +473,7 @@ public class MockStrutsTestCase extends TestCase {
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);
+        this.requestPathSet = true;
         if (logger.isDebugEnabled())
             logger.debug("Exiting setRequestPathInfo()");
     }
