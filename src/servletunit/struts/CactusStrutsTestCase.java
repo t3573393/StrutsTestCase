@@ -382,17 +382,21 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
             if (mapping.getValidate()) {
                 ActionErrors errors = form.validate(mapping,request);
-                if (((errors != null) && (!errors.empty())) && (failIfFormInvalid)) {
-                    StringBuffer errorText = new StringBuffer();
-                    Iterator iterator = errors.get();
-                    while (iterator.hasNext()) {
-                        errorText.append(" \"");
-                        errorText.append(((ActionError) iterator.next()).getKey());
-                        errorText.append("\"");
-                    }
-                    throw new AssertionFailedError("Error while validating ActionForm: " + errorText.toString());
-                }
-            }
+                if ((errors != null) && (!errors.empty())) {
+		    if (!failIfFormInvalid) 
+			getRequest().setAttribute(Action.ERROR_KEY, errors);
+		    else {
+			StringBuffer errorText = new StringBuffer();
+			Iterator iterator = errors.get();
+			while (iterator.hasNext()) {
+			    errorText.append(" \"");
+			    errorText.append(((ActionError) iterator.next()).getKey());
+			    errorText.append("\"");
+			}
+			throw new AssertionFailedError("Error while validating ActionForm: " + errorText.toString());
+		    }
+		}
+	    }
         }
 
 	// Check to see if this is a simple forward.  If so,
