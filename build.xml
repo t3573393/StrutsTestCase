@@ -88,6 +88,8 @@
                 <include name="cactus.properties"/>
             </webinf>
             <lib dir="${lib.dir}">
+                <exclude name="cactus-13-1.6.1.jar" if="build_2.2"/>
+                <exclude name="servletapi-2.3.jar" if="build_2.2"/>
                 <exclude name="ant*.jar"/>
                 <exclude name="servlet.jar"/>
             </lib>

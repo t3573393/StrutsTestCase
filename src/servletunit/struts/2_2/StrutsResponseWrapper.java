@@ -125,6 +125,11 @@ public class StrutsResponseWrapper implements HttpServletResponse
         this.response.reset();
     }
 
+    public void resetBuffer()
+    {
+        
+    }
+
     public void sendError(int sc) throws IOException
     {
         this.response.sendError(sc);
