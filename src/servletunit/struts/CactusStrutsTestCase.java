@@ -52,6 +52,11 @@ import java.util.HashMap;
  * for ActionForm subclasses, as well as methods that can verify
  * that the correct ActionForward was used and that the proper
  * ActionError messages were supplied.
+ * 
+ * Please note that this class is meant to run in the Cactus
+ * framework, and you must configure your test environment
+ * accordingly.  Please see http://jakarta.apache.org/cactus
+ * for more details.
  *
  */
 public class CactusStrutsTestCase extends ServletTestCase {
@@ -167,10 +172,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Executes the Action instance to be tested.
+     * Executes the Action instance to be tested.  This method initializes
+     * the ActionServlet, sets up and optionally validates the ActionForm
+     * bean associated with the Action to be tested, and then calls the
+     * Action.perform() method.  Results are stored for further validation.
      *
      * @exception AssertionFailedError if there are any execution
-     * errors while calling Action.perform()
+     * errors while calling Action.perform() or ActionForm.validate().
      *
      */
     public void actionPerform() {
@@ -210,6 +218,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         Action action = null;
         try {
             action = (Action) Class.forName(mapping.getType()).newInstance();
+	    action.setServlet(actionServlet);
         } catch (Exception e) {
             throw new AssertionFailedError("Error trying to set up Action: " + e.getMessage());
         }

@@ -147,7 +147,7 @@ public class MockStrutsTestCase extends TestCase {
      * calls the ActionServlet.doPost() method to execute the
      * Action instance to be tested, passing along any parameters
      * set in the HttpServletRequest object.  It stores any results
-     * for further verification.
+     * for further validation.
      *
      * @exception AssertionFailedError if there are any execution
      * errors while calling Action.perform()
