@@ -67,6 +67,7 @@
     <!-- prepare code for public release -->
     <target name="release" depends="package,docs">
         <zip zipFile="${basedir}/strutstest.zip" basedir="${basedir}/dist"/>
+	<zip zipFile="${basedir}/strutstest-src.zip" basedir="${basedir}/src"/>
 	<tar tarFile="${basedir}/strutstest.tar" basedir="${basedir}/dist"/>
 	<gzip src="${basedir}/strutstest.tar" zipfile="${basedir}/strutstest.tar.gz"/>
 	<delete file="${basedir}/strutstest.tar"/>
@@ -85,7 +86,9 @@
     <target name="docs">
         <mkdir dir="${doc.dir}/api" />
 	<copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
+	<copy file="${basedir}/faq.htm" toDir="${doc.dir}"/>
 	<copy file="${basedir}/LICENSE.TXT" toDir="${distribute.dir}"/>
+	<copy file="${basedir}/release.txt" toDir="${distribute.dir}"/>
 	<mkdir dir="${distribute.dir}/examples" />
 	<copy todir="${distribute.dir}/examples" >
 	     <fileset dir="${src.dir}/servletunit/struts/examples"/>
