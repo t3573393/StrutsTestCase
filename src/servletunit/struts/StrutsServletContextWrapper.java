@@ -14,7 +14,6 @@ public class StrutsServletContextWrapper extends ServletContextWrapper {
     }
 
     public RequestDispatcher getRequestDispatcher(String path) {
-	System.out.println("\n\n\nMY CONTEXT WAS CALLED!!!!!\n\n\n");
 	dispatchedResource = path;
 	return new RequestDispatcherSimulator(path);
     }

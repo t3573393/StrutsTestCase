@@ -31,7 +31,6 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
     }
 
     public String getParameter(String name) {
-	System.out.println("getParameter: " + name);
 	String[] result = getParameterValues(name);
 	if ((result != null) && (result.length > 0)) {
 	    return result[0];
@@ -40,7 +39,6 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
     }
 
     public String[] getParameterValues(String name) {
-	System.out.println("getParameterValues: " + name);
 	Object result = super.getParameterValues(name);
 	if ((result == null) && (parameters.containsKey(name))) {
 	    result = parameters.get(name);
@@ -53,7 +51,6 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
     }
 
     public Enumeration getParameterNames() {
-	System.out.println("getParameterName");
 	Enumeration superNames = super.getParameterNames();
 	List nameList = new ArrayList(parameters.keySet());
 	while (superNames.hasMoreElements()) {
@@ -63,7 +60,6 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
     }
 
     public void addParameter(String name, String value) {
-	System.out.println("addParameter: " + name + "," + value);
 	if (super.getParameter(name) == null)
 	    parameters.put(name,value);
     }
