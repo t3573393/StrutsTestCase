@@ -34,7 +34,7 @@ public class HttpSessionSimulator implements HttpSession
 
     public HttpSessionSimulator(ServletContext context)
     {
-	this.context = context;
+        this.context = context;
         values = new Hashtable();
     }
 
@@ -125,7 +125,10 @@ public class HttpSessionSimulator implements HttpSession
     public void setAttribute(String s, Object obj) throws IllegalStateException
     {
         checkValid();
-        values.put(s,obj);
+        if (obj == null)
+            removeValue(s);
+        else
+            values.put(s,obj);
     }
 
     public void setMaxInactiveInterval(int i)
@@ -133,7 +136,7 @@ public class HttpSessionSimulator implements HttpSession
     }
 
     public ServletContext getServletContext() {
-	return this.context;
+        return this.context;
     }
 
     private void checkValid() throws IllegalStateException {
