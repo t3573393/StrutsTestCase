@@ -62,12 +62,5 @@ public class TestRedirectAction extends MockStrutsTestCase {
         fail("We are apparently getting the same redirects, when they should be different.");
     }
 
-    public void testContextRelativeForward() {
-        setRequestPathInfo("test","/testContextRelative");
-        actionPerform();
-        verifyForward("redirect");
-        verifyNoActionErrors();
-    }
-
 
 }

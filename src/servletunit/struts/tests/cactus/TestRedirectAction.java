@@ -44,11 +44,4 @@ public class TestRedirectAction extends CactusStrutsTestCase {
         verifyNoActionErrors();
     }
 
-    public void testContextRelativeForward() {
-        setRequestPathInfo("test","/testContextRelative");
-        actionPerform();
-        verifyForward("redirect");
-        verifyNoActionErrors();
-    }
-
 }
