@@ -22,5 +22,6 @@
 			<forward name="failure" path="/main/failure.jsp"/>
 		</action>
 		<action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
+		<action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
 	</action-mappings>
 </struts-config>
