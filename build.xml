@@ -8,7 +8,7 @@
     <!-- set the release version -->
     <property name="major.version" value="1"/>
     <property name="minor.version" value="9"/>
-    <property name="point.version" value="5"/>
+    <property name="point.version" value="6"/>
     <property name="release.version" value="${major.version}${minor.version}${point.version}"/>
     <property name="jar.name" value="strutstest-${major.version}.${minor.version}.${point.version}.jar"/>
 
