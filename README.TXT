@@ -30,7 +30,7 @@ to note that this method merely makes the ActionForm instance available for the
 unit test; it does not subvert how Struts manages the ActionForm for a given Action.
 In particular, if your ActionForm class overrides the reset() method, then you could
 potentially reset anything you've set in the ActionForm instance you pass to this
-method.
+method.  (MockStrutsTestCase and CactusStrutsTestCase)
 
 Bug Fixes:
 ---------
@@ -39,7 +39,10 @@ Bug Fixes:
 resulting in a NullPointerException.  (MockStrutsTestCase and CactusStrutsTestCase)
 
 - Fixed bug where calls to HttpServletRequestSimulator.setAttribute() would
-throw a NullPointerException if an argument was null.
+throw a NullPointerException if an argument was null.  (MockStrutsTestCase)
+
+- Cleaned up error messages to be a bit more explicit.  (MockStrutsTestCase and
+CactusStrutsTestCase)
 
 
 Questions and comments are always welcome!
