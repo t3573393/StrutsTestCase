@@ -25,7 +25,7 @@
         <fileset dir="${lib.dir}">
             <include name="*.jar" />
             <include name="*.zip" />
-            <exclude name="struts-1.1b2.jar" if="build_1.0"/>
+            <exclude name="struts-1.1.jar" if="build_1.0"/>
             <exclude name="struts-1.0.jar" unless="build_1.0"/>
             <exclude name="servletapi-2.3.jar" if="build_2.2"/>
             <exclude name="servletapi-2.2.jar" unless="build_2.2"/>
@@ -85,7 +85,7 @@
             <lib dir="${lib.dir}">
                 <exclude name="ant*.jar"/>
                 <exclude name="servlet.jar"/>
-                <exclude name="struts-1.1b2.jar" if="build_1.0"/>
+                <exclude name="struts-1.1.jar" if="build_1.0"/>
                 <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
             <!-- do we want to remove test classes? -->
@@ -232,7 +232,7 @@
             dest="${temp.dir}/jakarta-struts-nightly.zip"
             verbose="false"/>
         <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
-        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1b2.jar" overwrite="true"/>
+        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1.jar" overwrite="true"/>
         <!--<delete dir="${temp.dir}"/>-->
     </target>
 
