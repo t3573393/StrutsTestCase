@@ -88,10 +88,6 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
 	    parameters.put(name,values);
     }
 
-    public String getServletPath() {
-	return super.getServletPath();
-	
-    }
 }
 		   
 	      
