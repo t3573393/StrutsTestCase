@@ -21,6 +21,8 @@ import org.apache.cactus.ServletTestCase;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
+import org.apache.struts.Globals;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -49,6 +51,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     ActionServlet actionServlet;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+    String moduleName;
 
     /**
      * Default constructor.
@@ -170,13 +173,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         init();
         ((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
-	if (moduleName != null) {
-	    if (!moduleName.equals("")) {
-		if (!moduleName.startsWith("/"))
-		    moduleName = "/" + moduleName;
-		if (!moduleName.endsWith("/"))
-		    moduleName = moduleName + "/";
-	    }
+        if (moduleName != null) {
+            if (!moduleName.equals("")) {
+                if (!moduleName.startsWith("/"))
+                    moduleName = "/" + moduleName;
+                if (!moduleName.endsWith("/"))
+                    moduleName = moduleName + "/";
+            }
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
     }
@@ -195,17 +198,9 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
     /**
      * Sets the location of the Struts configuration file for the default module.
-     * This method should only be called if the configuration file is different than
-     * the default value of /WEB-INF/struts-config.xml.<br><br>
-     * The rules for searching for the configuration files are the same
-     * as the rules associated with calling Class.getResourceAsStream().
-     * Briefly, this method delegates the call to its class loader, after
-     * making these changes to the resource name: if the resource name starts
-     * with "/", it is unchanged; otherwise, the package name is prepended
-     * to the resource name after converting "." to "/". <br><br>
-     * To be on the safe side, always make sure the pathname refers to a
-     * file in the same directory as your test, or make sure it begins
-     * with a "/" character.
+     * This method can take either an absolute path, or a relative path.  If an
+     * absolute path is supplied, the configuration file will be loaded from the
+     * underlying filesystem; otherwise, the ServletContext loader will be used.
      */
     public void setConfigFile(String pathname) {
         init();
@@ -214,17 +209,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
     /**
      * Sets the struts configuration file for a given sub-application.
+     * This method can take either an absolute path, or a relative path.  If an
+     * absolute path is supplied, the configuration file will be loaded from the
+     * underlying filesystem; otherwise, the ServletContext loader will be used.
      *
      * @param moduleName the name of the sub-application, or null if this is the default application
      * @param pathname the location of the configuration file for this sub-application
      */
     public void setConfigFile(String moduleName, String pathname) {
         init();
-        // ugly hack to get this to play ball with Class.getResourceAsStream()
-        if (!pathname.startsWith("/")) {
-            String prefix = this.getClass().getPackage().getName().replace('.','/');
-            pathname = "/" + prefix + "/" + pathname;
-        }
         if (moduleName == null)
             this.config.setInitParameter("config",pathname);
         else
@@ -246,10 +239,23 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 ServletContext context = config.getServletContext();
                 String name = "org.apache.struts.action.REQUEST_PROCESSOR";
 
+                // remove request processor for default module
                 Object obj = context.getAttribute(name);
                 if (obj != null) {
                     config.getServletContext().setAttribute(name, null);
                 }
+
+                // remove request processor for sub-applications, if used.
+                // todo: this seems pretty redundant.. may want to make this cleaner.
+                String moduleName = (String) request.getAttribute(Common.INCLUDE_SERVLET_PATH);
+                if (moduleName.endsWith("/"))
+                    moduleName = moduleName.substring(0,moduleName.lastIndexOf("/"));
+
+                obj = context.getAttribute(name + moduleName);
+                if (obj != null) {
+                    config.getServletContext().setAttribute(name + moduleName, null);
+                }
+
                 this.actionServlet.init(config);
                 actionServletIsInitialized = true;
             }
@@ -274,16 +280,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Sets the behavior of this test when validating ActionForm instances.
-     * Set to false if you do not want your test to fail if a form
-     * does not pass validation.  By default, this is is set to true.
-     *
-     * @deprecated This method no longer affects the flow of control.
-     */
-    public void setFailIfInvalid(boolean flag) {
-    }
-
-    /**
      * Executes the Action instance to be tested.  This method initializes
      * the ActionServlet, sets up and optionally validates the ActionForm
      * bean associated with the Action to be tested, and then calls the
@@ -300,6 +296,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             HttpServletResponse response = this.response;
             // make sure errors are cleared from last test.
             request.removeAttribute(Action.ERROR_KEY);
+            request.removeAttribute(Globals.MESSAGE_KEY);
 
             ActionServlet actionServlet = this.getActionServlet();
             actionServlet.doPost(request,response);
@@ -395,7 +392,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
     public void verifyActionErrors(String[] errorNames) {
         init();
-        Common.verifyActionErrors(request,errorNames);
+        Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
     }
 
     /**
@@ -407,7 +404,37 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyNoActionErrors() {
         init();
-        Common.verifyNoActionErrors(request);
+        Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
+    }
+
+    /**
+     * Verifies if the ActionServlet controller sent these action messages.
+     * There must be an exact match between the provided action messages, and
+     * those sent by the controller, in both name and number.
+     *
+     * @param messageNames a String array containing the action message keys
+     * to be verified, as defined in the application resource properties
+     * file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * sent different action messages than those in <code>messageNames</code>
+     * after executing an Action object.
+     */
+    public void verifyActionMessages(String[] messageNames) {
+        init();
+        Common.verifyActionMessages(request,messageNames,Globals.MESSAGE_KEY,"action");
+    }
+
+    /**
+     * Verifies that the ActionServlet controller sent no action messages upon
+     * executing an Action object.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * sent any action messages after excecuting and Action object.
+     */
+    public void verifyNoActionMessages() {
+        init();
+        Common.verifyNoActionMessages(request,Globals.MESSAGE_KEY,"action");
     }
 
     /**

@@ -21,6 +21,8 @@ import junit.framework.TestCase;
 import org.apache.commons.digester.Digester;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.Action;
+import org.apache.struts.Globals;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
@@ -29,7 +31,7 @@ import servletunit.ServletContextSimulator;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.InputStream;
-import java.net.URL;
+import java.io.File;
 
 /**
  * MockStrutsTestCase is an extension of the base JUnit testcase that
@@ -192,7 +194,7 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Adds an HttpServletRequest parameter that is an array of String values
      * to be used in setting up the ActionForm instance to be used in this test.
-     * Each parameter added should correspond to an attribute in the ActionForm 
+     * Each parameter added should correspond to an attribute in the ActionForm
      * instance used by the Action instance being tested.
      */
     public void addRequestParameter(String parameterName, String[] parameterValues)
@@ -252,23 +254,27 @@ public class MockStrutsTestCase extends TestCase {
      * @param value the value of the intialization parameter
      */
     public void setInitParameter(String key, String value){
+        init();
         config.setInitParameter(key, value);
         actionServletIsInitialized = false;
     }
 
     /**
+     * Sets the context directory to be used with the getRealPath() methods in
+     * the ServletContext and HttpServletRequest API.
+     * @param contextDirectory a File object representing the root context directory
+     * for this application.
+     */
+    public void setContextDirectory(File contextDirectory) {
+        init();
+        context.setContextDirectory(contextDirectory);
+    }
+
+    /**
      * Sets the location of the Struts configuration file for the default module.
-     * This method should only be called if the configuration file is different than
-     * the default value of /WEB-INF/struts-config.xml.<br><br>
-     * The rules for searching for the configuration files are the same
-     * as the rules associated with calling Class.getResourceAsStream().
-     * Briefly, this method delegates the call to its class loader, after
-     * making these changes to the resource name: if the resource name starts
-     * with "/", it is unchanged; otherwise, the package name is prepended
-     * to the resource name after converting "." to "/". <br><br>
-     * To be on the safe side, always make sure the pathname refers to a
-     * file in the same directory as your test, or make sure it begins
-     * with a "/" character.
+     * This method can take either an absolute path, or a relative path.  If an
+     * absolute path is supplied, the configuration file will be loaded from the
+     * underlying filesystem; otherwise, the ServletContext loader will be used.
      */
     public void setConfigFile(String pathname) {
         init();
@@ -276,18 +282,16 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
-     * Sets the struts configuration file for a given sub-application.
+     * Sets the struts configuration file for a given sub-application. This method
+     * can take either an absolute path, or a relative path.  If an absolute path
+     * is supplied, the configuration file will be loaded from the underlying
+     * filesystem; otherwise, the ServletContext loader will be used.
      *
      * @param moduleName the name of the sub-application, or null if this is the default application
      * @param pathname the location of the configuration file for this sub-application
      */
     public void setConfigFile(String moduleName, String pathname) {
         init();
-        // ugly hack to get this to play ball with Class.getResourceAsStream()
-        if (!pathname.startsWith("/")) {
-            String prefix = this.getClass().getPackage().getName().replace('.','/');
-            pathname = "/" + prefix + "/" + pathname;
-        }
         if (moduleName == null)
             this.config.setInitParameter("config",pathname);
         else
@@ -299,37 +303,24 @@ public class MockStrutsTestCase extends TestCase {
      * Sets the location of the web.xml configuration file to be used
      * to set up the servlet context and configuration for this test.
      * This method supports both init-param and context-param tags,
-     * setting the ServletConfig and ServletContext appropriately.<br><br>
-     * The rules for searching for the configuration files are the same
-     * as the rules associated with calling Class.getResourceAsStream().
-     * Briefly, this method delegates the call to its class loader, after
-     * making these changes to the resource name: if the resource name starts
-     * with "/", it is unchanged; otherwise, the package name is prepended
-     * to the resource name after converting "." to "/". <br><br>
-     * To be on the safe side, always make sure the pathname refers to a
-     * file in the same directory as your test, or make sure it begins
-     * with a "/" character.
+     * setting the ServletConfig and ServletContext appropriately.
+     * This method can take either an absolute path, or a relative path.  If an
+     * absolute path is supplied, the configuration file will be loaded from the
+     * underlying filesystem; otherwise, the ServletContext loader will be used.
      */
     public void setServletConfigFile(String pathname) {
         init();
-        // ugly hack to get this to play ball with Class.getResourceAsStream()
-        if (!pathname.startsWith("/")) {
-            String prefix = this.getClass().getPackage().getName().replace('.','/');
-            pathname = "/" + prefix + "/" + pathname;
-        }
+
         // pull in the appropriate parts of the
         // web.xml file -- first the init-parameters
         Digester digester = new Digester();
-        URL url = this.getClass().getResource("/org/apache/struts/resources/web-app_2_2.dtd");
-        if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
         digester.push(this.config);
-        digester.setDebug(0);
         digester.setValidating(false);
         digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
         digester.addCallParam("web-app/servlet/init-param/param-name", 0);
         digester.addCallParam("web-app/servlet/init-param/param-value", 1);
         try {
-            InputStream input = getClass().getResourceAsStream(pathname);
+            InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
             digester.parse(input);
@@ -340,15 +331,13 @@ public class MockStrutsTestCase extends TestCase {
 
         // now the context parameters..
         digester = new Digester();
-        if (url != null) digester.register("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", url.toString());
-        digester.setDebug(0);
         digester.setValidating(false);
         digester.push(this.context);
         digester.addCallMethod("web-app/context-param", "setInitParameter", 2);
         digester.addCallParam("web-app/context-param/param-name", 0);
         digester.addCallParam("web-app/context-param/param-value", 1);
         try {
-            InputStream input = getClass().getResourceAsStream(pathname);
+            InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
             digester.parse(input);
@@ -440,8 +429,9 @@ public class MockStrutsTestCase extends TestCase {
 
     public void verifyActionErrors(String[] errorNames) {
         init();
-        Common.verifyActionErrors(request,errorNames);
+        Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
     }
+
 
     /**
      * Verifies that the ActionServlet controller sent no error messages upon
@@ -452,7 +442,37 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyNoActionErrors() {
         init();
-        Common.verifyNoActionErrors(request);
+        Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
+    }
+
+    /**
+     * Verifies if the ActionServlet controller sent these action messages.
+     * There must be an exact match between the provided action messages, and
+     * those sent by the controller, in both name and number.
+     *
+     * @param messageNames a String array containing the action message keys
+     * to be verified, as defined in the application resource properties
+     * file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * sent different action messages than those in <code>messageNames</code>
+     * after executing an Action object.
+     */
+    public void verifyActionMessages(String[] messageNames) {
+        init();
+        Common.verifyActionMessages(request,messageNames,Globals.MESSAGE_KEY,"action");
+    }
+
+    /**
+     * Verifies that the ActionServlet controller sent no action messages upon
+     * executing an Action object.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * sent any action messages after excecuting and Action object.
+     */
+    public void verifyNoActionMessages() {
+        init();
+        Common.verifyNoActionMessages(request,Globals.MESSAGE_KEY,"action");
     }
 
     /**
