@@ -316,6 +316,9 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 if (!moduleName.endsWith("/"))
                     moduleName = moduleName + "/";
             }
+            if (logger.isDebugEnabled()) {
+                logger.debug("setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
+            }
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         if (logger.isDebugEnabled())
@@ -546,8 +549,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
         init();
         forwardPath = request.getContextPath() + forwardPath;
         String actualForward = getActualForward();
-        if (actualForward == null)
+        if (actualForward == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");
+            }
             throw new AssertionFailedError("Was expecting '" + forwardPath + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("verifyForwardPath() : expected forward = '" + forwardPath + "' - actual forward = '" + actualForward + "'");
+        }
         if (!(actualForward.equals(forwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + actualForward + "'");
         if (logger.isDebugEnabled())
