@@ -147,7 +147,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * appear in an HTML or JSP source file.
      */
     public void setRequestPathInfo(String pathInfo) {
-        this.actionPath = pathInfo;
+        this.actionPath = Common.stripActionPath(pathInfo);
     }
 
     /**
@@ -296,16 +296,20 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
+        Common.verifyForwardPath(actionServlet,actionPath,forwardName,forward.getPath(),false);
+    }
 
-        if (forward == null)
-            throw new AssertionFailedError("did not receive any ActionForward");
-        ActionForward expectedForward = actionServlet.findMapping(actionPath).findForward(forwardName);
-        if (expectedForward == null)
-            expectedForward = actionServlet.findForward(forwardName);
-        if (expectedForward == null)
-            throw new AssertionFailedError("cannot find forward '" + forwardName + "'");
-        if (!expectedForward.getName().equals(forward.getName()))
-            throw new AssertionFailedError("was expecting '" + expectedForward.getName() + "' but received '" + forward.getName() + "'");
+    /**
+     * Verifies if the ActionServlet controller forwarded to the defined
+     * input path.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward than the defined input path after
+     * executing an Action object.
+     */
+    public void verifyInputForward() {
+        String inputPath = actionServlet.findMapping(actionPath).getInput();
+        Common.verifyForwardPath(actionServlet,actionPath,inputPath,forward.getPath(),true);
     }
 
     /**
@@ -323,30 +327,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
 
     public void verifyActionErrors(String[] errorNames) {
-
-        int actualLength = 0;
-
-        ActionErrors errors = (ActionErrors) request.getAttribute(Action.ERROR_KEY);
-        if (errors == null) {
-            throw new AssertionFailedError("was expecting some error messages, but received none.");
-        } else {
-            Iterator iterator = errors.get();
-            while (iterator.hasNext()) {
-                actualLength++;
-                boolean throwError = true;
-                ActionError error = (ActionError) iterator.next();
-                for (int x = 0; x < errorNames.length; x++) {
-                    if (error.getKey().equals(errorNames[x]))
-                        throwError = false;
-                }
-                if (throwError) {
-                    throw new AssertionFailedError("received unexpected error '" + error.getKey() + "'");
-                }
-            }
-            if (actualLength != errorNames.length) {
-                throw new AssertionFailedError("was expecting " + errorNames.length + " error(s), but received " + actualLength + " error(s)");
-            }
-        }
+        Common.verifyActionErrors(request,errorNames);
     }
 
     /**
@@ -357,19 +338,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * sent any error messages after excecuting and Action object.
      */
     public void verifyNoActionErrors() {
-        ActionErrors errors = (ActionErrors) request.getAttribute(Action.ERROR_KEY);
-        if (errors != null) {
-            Iterator iterator = errors.get();
-            if (iterator.hasNext()) {
-                StringBuffer errorText = new StringBuffer();
-                while (iterator.hasNext()) {
-                    errorText.append(" \"");
-                    errorText.append(((ActionError) iterator.next()).getKey());
-                    errorText.append("\"");
-                }
-                throw new AssertionFailedError("was expecting no error messages, but received: " + errorText.toString());
-            }
-        }
+        Common.verifyNoActionErrors(request);
     }
 
 }

@@ -63,6 +63,7 @@ public class MockStrutsTestCase extends TestCase {
     HttpServletResponseSimulator response;
     ServletContextSimulator context;
     ServletConfigSimulator config;
+    String actionPath;
 
     /**
      * Default constructor.
@@ -183,7 +184,8 @@ public class MockStrutsTestCase extends TestCase {
      * appear in an HTML or JSP source file.
      */
     public void setRequestPathInfo(String pathInfo) {
-        this.request.setPathInfo(pathInfo);
+        this.actionPath = Common.stripActionPath(pathInfo);
+        this.request.setPathInfo(actionPath);
     }
 
     /**
@@ -222,19 +224,21 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
         RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
-        String path = request.getPathInfo();
-        int slash = path.lastIndexOf("/");
-        int period = path.lastIndexOf(".");
-        if ((period >= 0) && (period > slash))
-            path = path.substring(0, period);
-        ActionForward forward = actionServlet.findMapping(path).findForward(forwardName);
-        if (forward == null)
-            forward = actionServlet.findForward(forwardName);
-        if (forward == null)
-            throw new AssertionFailedError("cannot find forward '" + forwardName + "'");
-        String expectedName = forward.getPath();
-        if (!dispatcher.getForward().equals(expectedName))
-            throw new AssertionFailedError("was expecting '" + expectedName + "' but received '" + dispatcher.getForward() + "'");
+        Common.verifyForwardPath(actionServlet,actionPath,forwardName,dispatcher.getForward(),false);
+    }
+
+    /**
+     * Verifies if the ActionServlet controller forwarded to the defined
+     * input path.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward than the defined input path after
+     * executing an Action object.
+     */
+    public void verifyInputForward() {
+        String inputPath = actionServlet.findMapping(actionPath).getInput();
+        RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
+        Common.verifyForwardPath(actionServlet,actionPath,inputPath,dispatcher.getForward(),true);
     }
 
     /**
@@ -252,30 +256,7 @@ public class MockStrutsTestCase extends TestCase {
      */
 
     public void verifyActionErrors(String[] errorNames) {
-
-        int actualLength = 0;
-
-        ActionErrors errors = (ActionErrors) request.getAttribute(Action.ERROR_KEY);
-        if (errors == null) {
-            throw new AssertionFailedError("was expecting some error messages, but received none.");
-        } else {
-            Iterator iterator = errors.get();
-            while (iterator.hasNext()) {
-                actualLength++;
-                boolean throwError = true;
-                ActionError error = (ActionError) iterator.next();
-                for (int x = 0; x < errorNames.length; x++) {
-                    if (error.getKey().equals(errorNames[x]))
-                        throwError = false;
-                }
-                if (throwError) {
-                    throw new AssertionFailedError("received unexpected error \"" + error.getKey() + "\"");
-                }
-            }
-            if (actualLength != errorNames.length) {
-                throw new AssertionFailedError("was expecting " + errorNames.length + " error(s), but received " + actualLength + " error(s)");
-            }
-        }
+        Common.verifyActionErrors(request,errorNames);
     }
 
     /**
@@ -286,19 +267,7 @@ public class MockStrutsTestCase extends TestCase {
      * sent any error messages after excecuting and Action object.
      */
     public void verifyNoActionErrors() {
-        ActionErrors errors = (ActionErrors) request.getAttribute(Action.ERROR_KEY);
-        if (errors != null) {
-            Iterator iterator = errors.get();
-            if (iterator.hasNext()) {
-                StringBuffer errorText = new StringBuffer();
-                while (iterator.hasNext()) {
-                    errorText.append(" \"");
-                    errorText.append(((ActionError) iterator.next()).getKey());
-                    errorText.append("\"");
-                }
-                throw new AssertionFailedError("was expecting no error messages, but received: " + errorText.toString());
-            }
-        }
+        Common.verifyNoActionErrors(request);
     }
 
 }
