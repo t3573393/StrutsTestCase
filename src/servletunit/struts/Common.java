@@ -113,7 +113,7 @@ public class Common {
         try {
             ComponentDefinition definition;
             // Get definition of tiles/component corresponding to uri.
-            definition = DefinitionsUtil.createDefinitionsFactory(context,config).getDefinition(forwardPath, request, context);
+            definition = TilesUtil.getDefinition(forwardPath,request,context);
             if( definition != null ) {
                 // We have a definition.
                 // We use it to complete missing attribute in context.
