@@ -49,7 +49,11 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private Locale locale;
     private Principal principal;
     String remoteAddr;
+    String localAddr;
     String remoteHost;
+    String localName;
+    int remotePort;
+    int localPort;
     private String remoteUser;
     private String userRole;
     private String reqSessionId;
@@ -1320,6 +1324,38 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public void setUserPrincipal(Principal principal) {
         this.principal = principal;
+    }
+
+    public int getRemotePort() {
+        return remotePort;
+    }
+
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
+    }
+
+    public String getLocalAddr() {
+        return localAddr;
+    }
+
+    public void setLocalAddr(String localAddr) {
+        this.localAddr = localAddr;
+    }
+
+    public String getLocalName() {
+        return localName;
+    }
+
+    public void setLocalName(String localName) {
+        this.localName = localName;
+    }
+
+    public int getLocalPort() {
+        return localPort;
+    }
+
+    public void setLocalPort(int localPort) {
+        this.localPort = localPort;
     }
 
 

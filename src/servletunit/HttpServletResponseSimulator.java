@@ -79,6 +79,8 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     private HashMap headers = new HashMap();
     private HashMap cookies = new HashMap();
 
+    String charEncoding;
+
     private boolean isCommitted = false;
 
     public static final int SC_CONTINUE = 100;
@@ -275,7 +277,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public String getCharacterEncoding()
     {
-    throw new UnsupportedOperationException("getBufferSize operation is not supported!");
+        return charEncoding;
     }
 
     /**
@@ -630,6 +632,14 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public int getStatusCode() {
         return this.status;
+    }
+
+    public void setCharacterEncoding(String charEncoding) {
+        this.charEncoding = charEncoding;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
 
