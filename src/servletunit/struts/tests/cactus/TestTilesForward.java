@@ -33,7 +33,8 @@ public class TestTilesForward extends CactusStrutsTestCase {
         // properties don't seem to work.
         setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");
         setInitParameter("definitions-debug","0");
-        //setConfigFile("tiles","/WEB-INF/struts-config-tiles.xml");
+        setConfigFile("tiles","/WEB-INF/struts-config-tiles.xml");
+        setConfigFile("/WEB-INF/struts-config.xml");
     }
 
     public void testTilesForward() {

@@ -20,6 +20,7 @@
 package servletunit.struts.tests;
 
 import servletunit.struts.MockStrutsTestCase;
+import org.apache.struts.action.RequestProcessor;
 
 public class TestTilesForward extends MockStrutsTestCase {
 
@@ -34,6 +35,7 @@ public class TestTilesForward extends MockStrutsTestCase {
         setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");
         setInitParameter("definitions-debug","0");
         setConfigFile("tiles","/WEB-INF/struts-config-tiles.xml");
+        setConfigFile("/WEB-INF/struts-config.xml");
     }
 
 
@@ -44,6 +46,7 @@ public class TestTilesForward extends MockStrutsTestCase {
         actionPerform();
         verifyForward("success");
         verifyForwardPath("/layouts/pageLayout.jsp");
+        System.out.println(getRequest().getServletPath());
     }
 
 
