@@ -282,8 +282,7 @@ public class MockStrutsTestCase extends TestCase {
 
     /**
      * Sets the request path instructing the ActionServlet to used a
-     * particual ActionMapping.  Also sets the ServletPath property
-     * on the request.
+     * particual ActionMapping.
      *
      * @param pathInfo the request path to be processed.  This should
      * correspond to a particular action mapping, as would normally
