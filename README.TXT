@@ -1,14 +1,18 @@
-StrutsTestCase for JUnit - release 1.7
+StrutsTestCase for JUnit - release 1.8
 --------------------------------------
 
-This release introduces support for Struts 1.1, provides
-several requested enhancements, and fixes many reported
-defects.
+This release introduces improved support for Struts 1.1,
+provides several requested enhancements, and fixes many
+reported defects.
 
 The StrutsTestCase library is now available as four distinct
 releases supporting both the 2.2 and 2.3 versions of the 
 Servlet specification, and both the 1.0.x and 1.1 versions
 of the Struts Framework.
+
+The StrutsTestCase library supports Struts 1.1b1 and the
+latest nightly builds, as well as Cactus v1.3 and JUnit
+v3.7.
 
 Change Log
 ==========
@@ -16,68 +20,47 @@ Change Log
 New Features:
 ------------
 
-- StrutsTestCase now supports both Struts 1.1 and Struts
-1.0.x in two distinct distributions, and has been fully tested
-against the 1.1b1 milestone release.  This requires all
-Struts dependency libraries to be in your CLASSPATH,
-including commons-beanutils.jar, commons-collections.jar,
-commons-digester.jar, and commons-logging.jar.
+- Improved support for Struts 1.1.  This release provides a
+major refactoring of MockStrutsTestCase and CactusStrutsTestCase
+to improve support for 1.1 features, including fixes for
+reported problems with DynaActionForm and Tiles features,
+and calling the appropriate Action perform or execute method.
+(MockStrutsTestCase and CactusStrutsTestCase)
 
-- StrutsTestCase now supports both Servlet 2.2 and 2.3 specs
-in two distinct distributions.
+NOTE: This refactoring removes or deprecates the following
+methods in CactusStrutsTestCase:
 
-- Added setServletConfigFile() method for loading web.xml files, 
-and setting ServletConfig and ServletContext parameters accordingly.  
-Supports both init-param and context-param tags. (MockStrutsTestCase
-only)
+  get/setActionForm have been removed.
+  setFailIfInvalid has been deprecated - it no longer
+  affects the flow of control, and will be removed in
+  a future release.
 
-- Added setFailIfInvalid() method to allow overriding default behavior
-of failing a test case if ActionForm validation fails.  
-(CactusStrutsTestCase only)
+- Added addRequestParameter() method in that takes in a String
+array. (MockStrutsTestCase only)
 
-- Added explicit checks to ensure that the base class setUp() method
-has been called, and failing test cases when it has not.  Previously,
-sub-classes that overrode setUp() without calling super.setUp() were
-subject to confusing errors, and so proper initialization is now
-enforced.
-
-- Un-deprecated getActionServlet() in MockStrutsTestCase, and
-added the same in CactusStrutsTestCase.  This can be useful for
-complex tests.
-
-- Added setInitParameter() method to set ActionServlet
-initialization parameters.  (MockStrutsTestCase only)
+- Changed logging mechanism to use the Commons logging package,
+as Struts does.  (MockStrutsTestCase only)
 
 - Implemented the following Mock Servlet methods:
 
   ServletContextSimulator: setInitParameter()
   HttpSessionSimulator: getServletContext()
-  HttpResponseSimulator: setStatus(), reset(), sendRedirect(), 
-   encodeURL(), encodeRedirectURL(), addHeader(), setHeader(), 
-   containsHeader(), addIntHeader(), setIntHeader()
+  HttpResponseSimulator: setDateHeader(), addDateHeader(),
+    addCookie(), findCookie()
 
 Bug Fixes:
 ---------
 
-- Fixed bug where an action forward declared as a redirect
-(ie: redirect="true" in struts-config.xml) was causing
-a NullPointerException.  (MockStrutsTestCase only)
+- Fixed bug where where calling setWrapper methods was not
+checking to see if the wrapper passed in already had a valid
+request or response. (MockStrutsTestCase and CactusStrutsTestCase)
 
-- Fixed bug where request URL's with jessionid appended were
-failing the validateForward() method.  This portion of the
-URL is now stripped before validation.
+- Fixed bug where verifyInputForward() would fail with a
+NullPointerException if the input mapping was not defined.
+(MockStrutsTestCase and CactusStrutsTestCase)
 
-- Fixed bug where validating an Action without an associated
-ActionForm caused a NullPointerException.  (CactusStrutsTestCase
-only)
-
-- Fixed bug where validating an action that is a simple
-forward (and so does not have an associated Action class)
-throws a NullPointerException.  (CactusStrutsTestCase only)
-
-- Removed tearDown() methods.  They were not useful and 
-sometimes caused spurious errors.
-
+- Fixed a bug where context path was not being added to verify
+forward paths. (MockStrutsTestCase and CactusStrutsTestCase)
 
 
 Questions and comments are always welcome!
