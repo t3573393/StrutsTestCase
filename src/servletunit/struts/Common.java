@@ -17,13 +17,11 @@
 package servletunit.struts;
 
 import junit.framework.AssertionFailedError;
+import org.apache.struts.Globals;
 import org.apache.struts.action.*;
 import org.apache.struts.config.ActionConfig;
-import org.apache.struts.config.ApplicationConfig;
-import org.apache.struts.tiles.ComponentDefinition;
-import org.apache.struts.tiles.DefinitionsFactoryException;
-import org.apache.struts.tiles.DefinitionsUtil;
-import org.apache.struts.tiles.NoSuchDefinitionException;
+import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.tiles.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -114,7 +112,7 @@ public class Common {
         try {
             ComponentDefinition definition;
             // Get definition of tiles/component corresponding to uri.
-            definition = DefinitionsUtil.createDefinitionsFactory(context, config).getDefinition(forwardPath, request, context);
+            definition = TilesUtil.getDefinition(forwardPath, request, context);
             if( definition != null ) {
                 // We have a definition.
                 // We use it to complete missing attribute in context.
@@ -221,14 +219,12 @@ public class Common {
         return form;
     }
 
-    protected static ApplicationConfig getApplicationConfig(HttpServletRequest request, ServletContext context) {
-        ApplicationConfig config = (ApplicationConfig) request.getAttribute(Action.APPLICATION_KEY);
+    protected static ModuleConfig getApplicationConfig(HttpServletRequest request, ServletContext context) {
+        ModuleConfig config = (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
         if (config == null) {
-            config = (ApplicationConfig)
-                    context.getAttribute(Action.APPLICATION_KEY);
+            config = (ModuleConfig) context.getAttribute(Globals.MODULE_KEY);
         }
         return (config);
-
     }
 
     protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context) {
@@ -236,7 +232,7 @@ public class Common {
     }
 
     protected static ActionConfig getActionConfig(String mappingName, HttpServletRequest request, ServletContext context) {
-        ApplicationConfig config = getApplicationConfig(request, context);
+        ModuleConfig config = getApplicationConfig(request, context);
         return config.findActionConfig(mappingName);
     }
 
