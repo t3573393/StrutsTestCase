@@ -6,6 +6,7 @@
 </head>
 <body>
 <center><h1>StrutsTestCase for JUnit</h1></center>
+<font color=red><center><h3>Now with Cactus Support!</h3></center></font>
 <font size="-1"><center>Copyright (C) 2001 Deryl Seale</center></font>
 <hr>
 <br>
@@ -13,15 +14,21 @@
 
 <h2>What is it?</h2>
 StrutsTestCase for JUnit is an extension of the standard JUnit TestCase class that provides facilities 
-for testing code based on the Struts framework.  StrutsTestCase uses <a href="http://sourceforge.net/projects/servletunit/"/>mock servlet objects</a>
- to actually run the Struts ActionServlet, allowing you to test your Struts code without a running servlet engine.  Because
+for testing code based on the Struts framework.  StrutsTestCase provides both a <a href="http://sourceforge.net/projects/servletunit/"/>Mock Object approach</a> and a <a href="http://jakarta.apache.org/cactus">Cactus approach</a> 
+ to actually run the Struts ActionServlet, allowing you to test your Struts code with or without a running servlet engine.  Because
  StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation 
- of your Action objects, but also your mappings, form beans, and forwards declarations.  And since 
- StrutsTestCase does not require a running servlet engine, it's quick and easy to write unit test cases. 
+ of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases. 
 <br><br>
 <h2>Where does it live?</h2>
 StrutsTestCase for JUnit is hosted at <a href="http://sourceforge.net/projects/strutstestcase/">SourceForge</a>. You can find the latest and greatest release of StrutsTestCase <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">here.</a><br><br>
 Javadocs for all of the StrutsTestCase classes can be found <a href="api/index.html">here</a>.
+<br><br>
+<h2>Mock Testing vs. In-Container Testing</h2>
+There are two popular approaches to testing server-side classes: <b>mock objects</b>, which test classes by simulating the server container, and <b>in-container testing</b>, which tests classes running in the actual server container.  StrutsTestCase for JUnit allows you to use either approach, with very minimal impact on your actual unit test code.  In fact, because the StrutsTestCase setup and validation methods are exactly the same for both approaches, choosing one approach over the other simply effects which base class you use!
+<br><br>
+StrutsTestCase for JUnit provides two base classes, both of which are extensions of the standard JUnit TestCase.  <a href="api/servletunit/struts/MockStrutsTestCase.html">MockStrutsTestCase</a> uses a set of HttpServlet mock objects to simulate the container environment without requiring a running servlet engine.  <a href="api/servletunit/struts/CactusStrutsTestCase.html">CactusStrutsTestCase</a> uses the <a href="http://jakarta.apache.org/cactus">Cactus testing framework</a> to test Struts classes in the actual server container, allowing for a testing environment more in line with the actual deployment environment.
+<br><br>
+<b>Please note</b> that while the following examples use the MockStrutsTestCase approach, you could choose to use the Cactus approach by simply subclassing from CactusStrutsTestCase without changing another line of code!
 <h2>How does it work?</h2>
 Using the popular cookbook approach, let's consider the following code snippet:<br><br>
 <table border="0" cellspacing="2" cellpadding="2" align="center" bgcolor="#FEEACB">
@@ -79,7 +86,7 @@ So, how do we actually do it?  Let's start by creating an empty test case, which
 <tr>
     <td>
 <pre>
-public class TestLoginAction extends StrutsTestCase {
+public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -97,7 +104,7 @@ The first thing we need to do is to tell Struts which mapping to use in this tes
 <tr>
 	<td>
 <pre>
-public class TestLoginAction extends StrutsTestCase {
+public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -116,7 +123,7 @@ Next we need to pass form bean properties, which we send via the request object 
 <tr>
 	<td>
 <pre>
-public class TestLoginAction extends StrutsTestCase {
+public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -131,7 +138,7 @@ public class TestLoginAction extends StrutsTestCase {
 </tr>
 </table>
 <br>
-Finally, we need to get the ActionServlet to do its thing, which just involves executing the doPost method:
+Finally, we need to get the Action to do its thing, which just involves executing the actionPerform method:
 <br><br>
 <b>NOTE:</b> By default, the Struts ActionServlet will look for the file <code>WEB-INF/struts-config.xml</code>, so you must place the directory that <i>contains</i> WEB-INF in your CLASSPATH.  If you would like to use an alternate configuration file, please see the <a href="api/servletunit/struts/StrutsTestCase.html#setConfigFile(java.lang.String)">setConfigFile()</a> method for details on how this file is located.
 <br><br>
@@ -139,7 +146,7 @@ Finally, we need to get the ActionServlet to do its thing, which just involves e
 <tr>
 	<td>
 <pre>
-public class TestLoginAction extends StrutsTestCase {
+public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -147,7 +154,7 @@ public class TestLoginAction extends StrutsTestCase {
        setRequestPathInfo("/login");
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
-       <font color="red">getActionServlet().doPost(getRequest(),getResponse());</font>
+       <font color="red">actionPerform();</font>
     }
 }
 </pre>
@@ -161,7 +168,7 @@ That's all you have to do to get the ActionServlet to process your request, and 
 <tr>
 	<td>
 <pre>
-public class TestLoginAction extends StrutsTestCase {
+public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -169,7 +176,7 @@ public class TestLoginAction extends StrutsTestCase {
        setRequestPathInfo("/login");
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
-       getActionServlet().doPost(getRequest(),getResponse());
+       actionPerform();
        <font color="blue">verifyForward("success");</font>
     }
 }
@@ -186,7 +193,7 @@ Next, we want to make sure that authentication information was stored properly:
 <tr>
 	<td>
 <pre>
-public class TestLoginAction extends StrutsTestCase {
+public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -194,9 +201,9 @@ public class TestLoginAction extends StrutsTestCase {
        setRequestPathInfo("/login");
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
-       getActionServlet().doPost(getRequest(),getResponse());
+       actionPerform();
        verifyForward("success");
-       <font color="blue">assertEquals("deryl",(String) getRequest().getSession().getAttribute("authentication"));</font>
+       <font color="blue">assertEquals("deryl",(String) getSession().getAttribute("authentication"));</font>
     }
 }
 </pre>
@@ -206,7 +213,7 @@ public class TestLoginAction extends StrutsTestCase {
 <br>
 Here we're getting the session object from the request, and checking to see if it has the proper attribute and value.
 You could just as easily place an object on the session that your Action object expects to find.
-All of the servlet classes available in the StrutsTestCase are fully functioning mock objects.
+All of the servlet classes available in the StrutsTestCase base classes are fully functioning objects.
 <br><br>
 Finally, we want to make sure that no ActionError messages were sent along.  We can use a built in method
 to make sure of this condition:
@@ -215,7 +222,7 @@ to make sure of this condition:
 <tr>
 	<td>
 <pre>
-public class TestLoginAction extends StrutsTestCase {
+public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -223,9 +230,9 @@ public class TestLoginAction extends StrutsTestCase {
        setRequestPathInfo("/login");
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
-       getActionServlet().doPost(getRequest(),getResponse());
+       actionPerform();
        verifyForward("success");
-       assertEquals("deryl",(String) getRequest().getSession().getAttribute("authentication"));
+       assertEquals("deryl",(String) getSession().getAttribute("authentication"));
        <font color="blue">verifyNoActionErrors();</font>
     }
 }
@@ -247,10 +254,10 @@ public void testFailedLogin() {
     addRequestParameter("username","deryl");
     addRequestParameter("password","express");
     setRequestPathInfo("/login");
-    getActionServlet().doPost(getRequest(),getResponse());
+    actionPerform();
     verifyForward("login");
     <font color="blue">verifyActionErrors(new String[] {"error.password.mismatch"});</font>
-    assertNull((String) getRequest().getSession().getAttribute("authentication"));
+    assertNull((String) getSession().getAttribute("authentication"));
 }
 </pre>
 </td>
