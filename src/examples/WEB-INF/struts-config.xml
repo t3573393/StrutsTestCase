@@ -43,5 +43,4 @@
 			<forward name="success" path="page.library"/>
 		</action>
 	</action-mappings>
-	<controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" maxFileSize="5M" nocache="true" />
 </struts-config>
