@@ -303,10 +303,23 @@ public class MockStrutsTestCase extends TestCase {
                 this.actionServlet.init(config);
                 actionServletIsInitialized = true;
             }
-        } catch (ServletException e) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in getActionServlet()",e.getRootCause());
-            throw new AssertionFailedError(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error initializing action servlet",e);
+            if(e.getMessage().equals("java.lang.NullPointerException")){
+                String message = "Error initializing action servlet: Unable to find /WEB-INF/web.xml.  "
+                               + "TestCase is running from " + System.getProperty("user.dir") + " directory.  "
+                               + "Context directory ";
+                if(this.context.getContextDirectory()==null){
+                    message += "has not been set.  Try calling setContextDirectory() with a relative or absolute path";
+                }else{
+                    message = message + "is " + this.context.getContextDirectory().getAbsolutePath();
+                }
+                message = message + ".  /WEB-INF/web.xml must be found under the context directory, "
+                        + "the directory the test case is running from, or in the classpath.";
+                fail(message);
+            }else{
+                throw new AssertionFailedError(e.getMessage());
+            }
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting getActionServlet()");
@@ -351,17 +364,24 @@ public class MockStrutsTestCase extends TestCase {
             request = this.requestWrapper;
         if (this.responseWrapper != null)
             response = this.responseWrapper;
-
         try {
             this.getActionServlet().doPost(request,response);
-        } catch (ServletException se) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",se.getRootCause());
-            fail("Error running Action.execute(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
-        } catch (Exception ex) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",ex);
-            fail("Error running Action.execute(): " + ex.getClass() + " - " + ex.getMessage());
+        }catch (Exception e) {
+            if(e instanceof java.lang.NullPointerException){
+                String message = "Error initializing action servlet: Unable to find struts config file.  "
+                               + "TestCase is running from " + System.getProperty("user.dir") + " directory.  "
+                               + "Context directory ";
+                if(this.context.getContextDirectory()==null){
+                    message += "has not been set.  Try calling setContextDirectory() with a relative or absolute path";
+                }else{
+                    message = message + "is " + this.context.getContextDirectory().getAbsolutePath();
+                }
+                message = message + ".  struts config file must be found under the context directory, "
+                        + "the directory the test case is running from, or in the classpath.";
+                fail(message);
+            }else{
+                throw new ExceptionDuringTestError("An uncaught exception was thrown during actionExecute()", e);
+            }
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting actionPerform()");
@@ -386,7 +406,7 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Adds an HttpServletRequest parameter that is an array of String values
      * to be used in setting up the ActionForm instance to be used in this test.
-     * Each parameter added should correspond to an attribute in the ActionForm 
+     * Each parameter added should correspond to an attribute in the ActionForm
      * instance used by the Action instance being tested.
      */
     public void addRequestParameter(String parameterName, String[] parameterValues)
