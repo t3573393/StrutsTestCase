@@ -12,9 +12,10 @@
     <property name="release.version" value="${major.version}${minor.version}${point.version}"/>
     <property name="jar.name" value="strutstest-${major.version}.${minor.version}.${point.version}.jar"/>
 
-    <!-- targets this build for the Servlet 2.2 spec -->
-    <!-- uncomment or set on the ant command line    -->
+    <!-- targets this build for different Servlet specs -->
+    <!-- uncomment or set on the ant command line       -->
     <!-- <property name="build_2.2" value="true"  />-->
+    <!-- <property name="build_2.4" value="true"  />-->
 
     <!-- points to the top of a test application server -->
     <!-- used for automatic deployment of the test code -->
@@ -42,7 +43,12 @@
             <include name="*.jar"/>
             <include name="*.zip"/>
             <exclude name="servletapi-2.3.jar" if="build_2.2"/>
-            <exclude name="servletapi-2.2.jar" unless="build_2.2"/>
+            <exclude name="servletapi-2.4.jar" if="build_2.2"/>
+            <exclude name="servletapi-2.2.jar" if="build_2.3"/>
+            <exclude name="servletapi-2.4.jar" if="build_2.3"/>
+            <exclude name="servletapi-2.2.jar" if="build_2.4"/>
+            <exclude name="servletapi-2.3.jar" if="build_2.4"/>
+
             <exclude name="cactus-13-1.6.1.jar" if="build_2.2"/>
             <exclude name="cactus-12-1.6.1.jar" unless="build_2.2"/>
         </fileset>
@@ -56,11 +62,20 @@
         <condition property="servlet.version" value="2.2">
             <isset property="build_2.2"/>
         </condition>
-        <condition property="servlet.version" value="2.3">
-            <not>
-                <isset property="build_2.2"/>
-            </not>
+        <condition property="servlet.version" value="2.4">
+            <isset property="build_2.4"/>
         </condition>
+        <condition property="servlet.version" value="2.3">
+            <and>
+                <not>
+                    <isset property="build_2.2"/>
+                </not>
+                <not>
+                    <isset property="build_2.4"/>
+                </not>
+            </and>
+        </condition>
+        <echo message="servlet version = ${servlet.version}"/>
         <property name="struts.version" value="1.2"/>
     </target>
 
@@ -98,8 +113,7 @@
             <lib dir="${lib.dir}">
                 <exclude name="cactus-13-1.6.1.jar" if="build_2.2"/>
                 <exclude name="cactus-12-1.6.1.jar" unless="build_2.2"/>
-                <exclude name="servletapi-2.3.jar" />
-                <exclude name="servletapi-2.2.jar" />
+                <exclude name="servletapi*.jar" />
                 <exclude name="ant*.jar"/>
             </lib>
             <lib dir="${distribute.dir}" includes="${jar.name}"/>
@@ -200,10 +214,10 @@
         </junit>
 
         <junitreport todir="${test.dir}">
-          <fileset dir="${test.dir}">
-            <include name="TEST-*.xml"/>
-          </fileset>
-          <report format="frames" todir="${test.dir}"/>
+            <fileset dir="${test.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${test.dir}"/>
         </junitreport>
 
     </target>
@@ -226,10 +240,10 @@
             </batchtest>
         </junit>
         <junitreport todir="${test.dir}">
-          <fileset dir="${test.dir}">
-            <include name="TEST-*.xml"/>
-          </fileset>
-          <report format="frames" todir="${test.dir}"/>
+            <fileset dir="${test.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${test.dir}"/>
         </junitreport>
     </target>
 
