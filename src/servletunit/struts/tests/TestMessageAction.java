@@ -11,7 +11,6 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  Apache Software Foundation Licens for more details.
-//                                                                             test
 //  You may view the full text here: http://www.apache.org/LICENSE.txt
 
 package servletunit.struts.tests;
@@ -42,14 +41,14 @@ public class TestMessageAction extends MockStrutsTestCase {
     }
 
     public void testMessageExists() {
-        setRequestPathInfo("/testActionMessages");
+        setRequestPathInfo("test","/testActionMessages");
         actionPerform();
         verifyForward("success");
         verifyActionMessages(new String[] {"test.message"});
     }
 
      public void testMessageExistsExpectedNone() {
-        setRequestPathInfo("/testActionMessages");
+        setRequestPathInfo("test","/testActionMessages");
         actionPerform();
         verifyForward("success");
         try {
@@ -61,7 +60,7 @@ public class TestMessageAction extends MockStrutsTestCase {
     }
 
     public void testMessageMismatch() {
-        setRequestPathInfo("/testActionMessages");
+        setRequestPathInfo("test","/testActionMessages");
         actionPerform();
         verifyForward("success");
         try {
