@@ -3,7 +3,7 @@
     <!-- ================ Initialize Property Values ================ -->
 
     <!-- set jikes as the java compiler -->
-    <property name="build.compiler" value="jikes"/>
+    <property name="build.compiler" value="modern"/>
 
     <!-- set the release version -->
     <property name="major.version" value="2"/>
