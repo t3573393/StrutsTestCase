@@ -72,6 +72,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private Vector cookies;
 
     private HttpSession session;
+    private ServletContext context;
 
     /**
      * Constant used by {@link #setMethod} to indicate that the GET method
@@ -92,7 +93,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public final static int PUT = 2;
 
-    public HttpServletRequestSimulator()
+    public HttpServletRequestSimulator(ServletContext context)
     {
         scheme = "http";
         attributes = new Hashtable();
@@ -100,9 +101,9 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         headers = new Hashtable();
         requestDispatchers = new Hashtable();
 	cookies = new Vector();
+	this.context = context;
         //if (getHeader("Accept")==null)
         //setHeader("Accept","dummy accept");
-        
     }
 
     /**
@@ -900,7 +901,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     public HttpSession getSession(boolean b)
     {
         if ((session == null) && (b))
-            this.session = new HttpSessionSimulator();
+            this.session = new HttpSessionSimulator(context);
         return this.session;
     }
 

@@ -50,9 +50,11 @@ public class HttpSessionSimulator implements HttpSession
 {
     private Hashtable values;
     private boolean valid = true;
+    private ServletContext context;
 
-    public HttpSessionSimulator()
+    public HttpSessionSimulator(ServletContext context)
     {
+	this.context = context;
         values = new Hashtable();
     }
 
@@ -148,7 +150,7 @@ public class HttpSessionSimulator implements HttpSession
     }
 
     public ServletContext getServletContext() {
-        throw new UnsupportedOperationException("getServletContext not supported");
+	return this.context;
     }
 
     private void checkValid() throws IllegalStateException {
