@@ -250,6 +250,24 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
+     * Returns the mock HttpServletRequest object used in this test.  This allows
+     * access to methods for setting up test preconditions that are otherwise
+     * unavailable through the normal Servlet API.
+     */
+    public HttpServletRequestSimulator getMockRequest() {
+        return this.request;
+    }
+
+    /**
+     * Returns the mock HttpServletResponse object used in this test.  This allows
+     * access to methods for setting up test preconditions that are otherwise
+     * unavailable through the normal Servlet API.
+     */
+    public HttpServletResponseSimulator getMockResponse() {
+        return this.response;
+    }
+
+    /**
      * Returns an HttpSession object that can be used in this
      * test.
      */

@@ -26,11 +26,16 @@ when running multiple actions in a test.  Currently, this method
 cannot reset parameters set using Cactus beginXXX methods. (MockStrutsTestCase
 and CactusStrutsTestCase)
 
+- added getMockRequest() and getMockResponse() methods to allow access
+to the Mock Servlet objects directly, instead of having to use class
+casting.  (MockServletTestCase only)
+
 - changed HttpServletResponseSimulator.sendError() to set the status code
 appropriately and added a getStatusCode() method to grab this value for
 testing.  NOTE: the sendError() method still throws an AssertionFailedError
 (we need it to, in cases of missing action mappings, and other bad Struts errors)
 but that can be caught to test for status codes.  (MockStrutsTestCase only)
+
 
 Bug Fixes:
 ---------
