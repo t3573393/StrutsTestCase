@@ -260,18 +260,15 @@ public class ServletContextSimulator implements ServletContext
     public URL getResource(String path) throws MalformedURLException
     {
         try {
-            File file = new File(path);
-
-            // If the path is relative then apply the contextDirectory path if it exists.
-            if (!file.exists() && (getContextDirectory() != null))
-            {
-                file = new File(getContextDirectory().getAbsolutePath() + path);
-            }
+            File file = getResourceAsFile(path);
 
             if (file.exists()) {
                 return file.toURL();
             }
             else {
+                if(!path.startsWith("/")){
+                    path = "/" + path;
+                }
                 return this.getClass().getResource(path);
             }
         } catch (Exception e) {
@@ -314,18 +311,15 @@ public class ServletContextSimulator implements ServletContext
     public InputStream getResourceAsStream(String path)
     {
         try {
-            File file = new File(path);
-
-            // If the path is relative then apply the contextDirectory path if it exists.
-            if (!file.exists() && (getContextDirectory() != null))
-            {
-                file = new File(getContextDirectory().getAbsolutePath() + path);
-            }
+            File file = getResourceAsFile(path);
 
             if (file.exists()) {
                 return new FileInputStream(file);
             }
             else {
+                if(!path.startsWith("/")){
+                    path = "/" + path;
+                }
                 return this.getClass().getResourceAsStream(path);
             }
         } catch (Exception e) {
@@ -333,6 +327,39 @@ public class ServletContextSimulator implements ServletContext
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Attempts to load a resource from the underlying file system
+     * and return a file handle to it.
+     * It first treats the path as an absolute path.  If no file is found,
+     * it attempts to treat the path as relative to the context directory.
+     * If no file is found, it attempts to treat the path as relative to
+     * the current directory.
+     * If all these options fail, the returned file will return false()
+     * to calls to File.exists().
+     * @param path the relative or context-relative path to the file
+     * @return the refernce to the file (which may or may not exist)
+     */
+    public File getResourceAsFile(String path){
+        File file = new File(path);
+
+        // If the path is relative then apply the contextDirectory path if it exists.
+        if (!file.exists())
+        {
+            if(!path.startsWith("/")){
+                path = "/" + path;
+            }
+            if((getContextDirectory() != null))
+            {
+                file = new File(getContextDirectory().getAbsolutePath() + path);
+            }else{
+                //try using current directory
+                file = new File(new File(".").getAbsolutePath() + path);
+            }
+        }
+        return file;
+
     }
 
     /**

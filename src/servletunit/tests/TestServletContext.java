@@ -24,6 +24,7 @@ import java.io.File;
 
 public class TestServletContext extends TestCase {
 
+    String contextDirectory = "src/examples";
     ServletContextSimulator context;
 
     public TestServletContext(String testName) {
@@ -70,5 +71,99 @@ public class TestServletContext extends TestCase {
         context.setContextDirectory(null);
         assertNull(context.getRealPath("/test.html"));
     }
+
+    /**
+     * verifies that web.xml can be loaded
+     * using the classpath
+     */
+    public void testGetResourceAsStreamFromClasspath(){
+        assertNotNull("resource was not found", context.getResourceAsStream("/WEB-INF/web.xml"));
+    }
+
+    /**
+     * verified that web.xml can be loaded as a URL using the classpath
+     * @throws Exception
+     */
+    public void testGetResourceFromClasspath() throws Exception{
+        assertNotNull("resource was not found", context.getResource("/WEB-INF/web.xml"));
+    }
+
+    /**
+     * verifies that web.xml can be loaded
+     * using the filesystem.  Assumes test is being run from
+     * the strutstestcase project root directory
+     * and that WEB-INF is in src/examples
+     */
+    public void testGetResourceAsStreamFromFileSystem(){
+        context.setContextDirectory(new File(contextDirectory));
+        assertNotNull("resource was not found", context.getResourceAsStream("/WEB-INF/web.xml"));
+    }
+
+    /**
+     * verified that web.xml can be loaded as a URL using the classpath
+     * @throws Exception
+     */
+    public void testGetResourceFromFileSystem() throws Exception{
+        context.setContextDirectory(new File(contextDirectory));
+        assertNotNull("resource was not found", context.getResource("/WEB-INF/web.xml"));
+    }
+
+    /**
+     * confirms that calls to getResource will
+     * adjust to a path missing the leading "/"
+     * @throws Exception
+     */
+    public void testGetResourceFromFileSystemWithPathCorrection() throws Exception{
+        context.setContextDirectory(new File(contextDirectory));
+        assertNotNull("resource was not found", context.getResource("WEB-INF/web.xml"));
+    }
+
+    /**
+     * confirms that calls to getResource will
+     * adjust to a path missing the leading "/"
+     * @throws Exception
+     */
+    public void testGetResourceFromClasspathWithPathCorrection() throws Exception{
+        assertNotNull("resource was not found", context.getResource("WEB-INF/web.xml"));
+    }
+
+    /**
+     * confirms that calls to getResource will
+     * adjust to a path missing the leading "/"
+     * @throws Exception
+     */
+    public void testGetResourceAsStreamFromFileSystemWithPathCorrection() throws Exception{
+        context.setContextDirectory(new File(contextDirectory));
+        assertNotNull("resource was not found", context.getResourceAsStream("WEB-INF/web.xml"));
+    }
+
+    /**
+     * confirms that calls to getResource will
+     * adjust to a path missing the leading "/"
+     * @throws Exception
+     */
+    public void testGetResourceAsStreamFromClasspathWithPathCorrection() throws Exception{
+        assertNotNull("resource was not found", context.getResourceAsStream("WEB-INF/web.xml"));
+    }
+
+    /**
+     * verifies that web.xml can be loaded
+     * using the filesystem.  Assumes test is being run from
+     * the strutstestcase project root directory
+     * and that WEB-INF is in src/examples
+     * this is necessary because the other tests could be "fooled"
+     * by a file that was actually loaded by the classloader.
+     */
+    public void testGetResourceAsFileFromFileSystem(){
+        context.setContextDirectory(new File(contextDirectory));
+        File file = context.getResourceAsFile("/WEB-INF/web.xml");
+        assertNotNull("resource was not found", file);
+        assertTrue("resource was not found", file.exists());
+    }
+
+
+
+
+
 
 }
