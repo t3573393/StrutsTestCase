@@ -67,6 +67,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     HttpServletRequestWrapper requestWrapper;
     HttpServletResponseWrapper responseWrapper;
     boolean isInitialized = false;
+    boolean failIfFormInvalid = true;
 
     /**
      * Default constructor.
@@ -88,9 +89,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		actionForm = null;
 		if (actionServlet == null)
 		    actionServlet = new ActionServlet();
-		config.setInitParameter("debug","0");
-		config.setInitParameter("detail","0");
-		config.setInitParameter("validate","true");
 		requestWrapper = null;
 		responseWrapper = null;
 		isInitialized = true;
@@ -336,6 +334,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Sets the behavior of this test when validating ActionForm instances.
+     * Set to false if you do not want your test to fail if a form
+     * does not pass validation.  By default, this is is set to true.
+     */
+    public void setFailIfFormInvalid(boolean flag) {
+	this.failIfFormInvalid = flag;
+    }
+
+    /**
      * Executes the Action instance to be tested.  This method initializes
      * the ActionServlet, sets up and optionally validates the ActionForm
      * bean associated with the Action to be tested, and then calls the
@@ -395,7 +402,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
             if (mapping.getValidate()) {
                 ActionErrors errors = form.validate(mapping,request);
-                if ((errors != null) && (!errors.empty())) {
+                if (((errors != null) && (!errors.empty())) && (failIfFormInvalid)) {
                     StringBuffer errorText = new StringBuffer();
                     Iterator iterator = errors.get();
                     while (iterator.hasNext()) {
