@@ -50,7 +50,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private String scheme;
     private String protocol = "HTTP/1.1";
     private String requestURI;
-    private String contextPath;
+    private String contextPath = "";
     private String lookupPath;
     private String servletPath;
     private String pathInfo;
