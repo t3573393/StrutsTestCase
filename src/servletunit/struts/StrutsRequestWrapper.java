@@ -91,6 +91,20 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
 	    parameters.put(name,values);
     }
 
+    public String getServletPath() {
+        String path = super.getServletPath();
+        if (path == null) {
+            path = this.getPathInfo();
+            int index = path.indexOf('/',1);
+            if (index < 0)
+            // there is no servlet path to return
+                path = "";
+            else
+                path = path.substring(0,path.indexOf('/',1));
+        }
+        return path;
+    }
+
 }
 		   
 	      
