@@ -93,13 +93,8 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
     }
 
     public String getServletPath() {
-        if (this.servletPath == null)
-            return super.getServletPath();
-        else return this.servletPath;
-    }
-
-    public void setServletPath(String servletPath) {
-        this.servletPath = servletPath;
+	return super.getServletPath();
+	
     }
 }
 		   

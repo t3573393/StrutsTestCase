@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 import org.apache.commons.digester.Digester;
 import org.apache.struts.action.ActionServlet;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.RequestProcessor;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
@@ -310,12 +311,10 @@ public class MockStrutsTestCase extends TestCase {
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         init();
         this.actionPath = Common.stripActionPath(pathInfo);
-        if ((moduleName == null) || (moduleName.length() == 0))
-            this.request.setServletPath("");
-        else {
+        if (!((moduleName == null) && (moduleName.length() == 0))) {
             if (!moduleName.startsWith("/"))
-                moduleName = "/" + moduleName;
-            this.request.setServletPath(moduleName);
+                moduleName = "/" + moduleName + "/";
+            this.request.setAttribute(RequestProcessor.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);
     }

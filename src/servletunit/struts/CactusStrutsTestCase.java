@@ -24,7 +24,7 @@ import org.apache.cactus.ServletTestCase;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionServlet;
 import org.apache.struts.action.ActionForm;
-
+import org.apache.struts.action.RequestProcessor;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -246,12 +246,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         init();
         ((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
-        if ((moduleName == null) || (moduleName.length() == 0))
-            ((StrutsRequestWrapper) this.request).setServletPath("");
-        else {
+        if (!((moduleName == null) && (moduleName.length() == 0))) {
             if (!moduleName.startsWith("/"))
-                moduleName = "/" + moduleName;
-            ((StrutsRequestWrapper) this.request).setServletPath(moduleName);
+                moduleName = "/" + moduleName + "/";
+	    this.request.setAttribute(RequestProcessor.INCLUDE_SERVLET_PATH, moduleName);
         }
     }
 
