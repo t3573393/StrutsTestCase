@@ -225,7 +225,34 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setRequestPathInfo(String pathInfo) {
         init();
+        this.setRequestPathInfo(null,pathInfo);
+    }
+
+
+    /**
+     * Sets the request path instructing the ActionServlet to used a
+     * particual ActionMapping.  Also sets the ServletPath property
+     * on the request.
+     *
+     * @param moduleName the name of the Struts sub-application with
+     * which this request is associated, or null if it is the default
+     * application.
+     * @param pathInfo the request path to be processed.  This should
+     * correspond to a particular action mapping, as would normally
+     * appear in an HTML or JSP source file.  If this request is part
+     * of a sub-application, the module name should not appear in the
+     * request path.
+     */
+    public void setRequestPathInfo(String moduleName, String pathInfo) {
+        init();
         ((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
+        if ((moduleName == null) || (moduleName.length() == 0))
+            ((StrutsRequestWrapper) this.request).setServletPath("");
+        else {
+            if (!moduleName.startsWith("/"))
+                moduleName = "/" + moduleName;
+            ((StrutsRequestWrapper) this.request).setServletPath(moduleName);
+        }
     }
 
     /**
