@@ -115,17 +115,11 @@ public class Common {
 	    }
 	    return result;
 	} catch (NoSuchDefinitionException nsde) {
-	    System.out.println("NoSuchDefinitionException: " + nsde.getMessage());
-	    nsde.printStackTrace();
 	    return null;
 	} catch (DefinitionsFactoryException dfe) {
-	    System.out.println("DefintionsFactoryException: " + dfe.getMessage());
-	    dfe.printStackTrace();
 	    return null;
 	} catch (NullPointerException npe) {
 	    // can happen if tiles is not at all used.
-	    System.out.println("NullPointerException: " + npe.getMessage());
-	    npe.printStackTrace();
 	    return null;
 	}
     }
