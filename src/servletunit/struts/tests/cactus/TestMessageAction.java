@@ -17,7 +17,7 @@
 //  If you have any questions or suggestions, you may contact me at
 //  this address: Deryl Seale - deryl@acm.org
 
-package servletunit.struts.test.cactus;
+package servletunit.struts.tests.cactus;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
