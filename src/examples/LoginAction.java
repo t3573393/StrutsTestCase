@@ -39,7 +39,7 @@ public class LoginAction extends Action {
 
         if (!errors.empty()) {
             saveErrors(request,errors);
-            return mapping.findForward("login");
+            return mapping.getInputForward();
         }
 
         HttpSession session = request.getSession();
