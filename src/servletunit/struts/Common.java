@@ -280,7 +280,12 @@ public class Common {
             // in the path or not.
             useModules = !expectedForward.getContextRelative ();
         }
-        String moduleName = (String) request.getAttribute(INCLUDE_SERVLET_PATH);
+
+        String moduleName = request.getServletPath() != null ? request.getServletPath() : "";
+        if ((moduleName == null || moduleName.equalsIgnoreCase("")) && request.getAttribute(INCLUDE_SERVLET_PATH) != null)
+            // check to see if this is a MockStrutsTestCase call
+            moduleName = (String) request.getAttribute(INCLUDE_SERVLET_PATH);
+
         if ((moduleName != null) && (moduleName.length() > 0))
         //todo: think i can use first index 0 here, since it will start with a /
             moduleName = moduleName.substring(moduleName.indexOf('/'),moduleName.lastIndexOf('/'));

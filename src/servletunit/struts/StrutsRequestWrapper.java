@@ -31,6 +31,7 @@ import java.util.*;
 public class StrutsRequestWrapper extends HttpServletRequestWrapper {
 
     private String pathInfo;
+    private String servletPath;
     private Map parameters;
 
     public StrutsRequestWrapper(HttpServletRequestWrapper request) {
@@ -48,6 +49,18 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
         else
             return this.pathInfo;
     }
+
+    public void setServletPath(String servletPath) {
+        this.servletPath = servletPath;
+    }
+
+    public String getServletPath() {
+        if (this.servletPath == null)
+            return super.getServletPath();
+        else
+            return this.servletPath;
+    }
+
 
     public String getParameter(String name) {
         String[] result = getParameterValues(name);

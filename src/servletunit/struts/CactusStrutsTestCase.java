@@ -332,9 +332,9 @@ public class CactusStrutsTestCase extends ServletTestCase {
                     moduleName = moduleName + "/";
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
+                logger.debug("setRequestPathInfo() : setting request.ServletPath value = " + moduleName);
             }
-            this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
+            ((StrutsRequestWrapper) this.request).setServletPath(moduleName);
             this.requestPathIsSet = true;
         }
         if (logger.isDebugEnabled())
@@ -418,7 +418,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
                 // remove request processor for sub-applications, if used.
                 // todo: this seems pretty redundant.. may want to make this cleaner.
-                String moduleName = (String) request.getAttribute(Common.INCLUDE_SERVLET_PATH);
+                String moduleName = request.getServletPath() != null ? request.getServletPath() : "";
+
                 if (moduleName.endsWith("/"))
                     moduleName = moduleName.substring(0,moduleName.lastIndexOf("/"));
 
