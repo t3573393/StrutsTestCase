@@ -112,6 +112,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         this.parameters.put( key, value );
     }
 
+    public Map getParameterMap() {
+        return this.parameters;
+    }
+
     public Object getAttribute(String s)
     {
         return attributes.get(s);
@@ -321,7 +325,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public HttpSession getSession(boolean b)
     {
-	if ((session == null) && (b))
+        if ((session == null) && (b))
             this.session = new HttpSessionSimulator();
         return this.session;
     }
