@@ -196,7 +196,8 @@ public class Common {
         if (path == null)
             return null;
 
-        int jsess_idx = path.indexOf(";jsessionid=");
+        String pathCopy = path.toLowerCase();
+        int jsess_idx = pathCopy.indexOf(";jsessionid=");
         if (jsess_idx > 0) {
             // Strip jsessionid from obtained path
             StringBuffer buf = new StringBuffer(path);
