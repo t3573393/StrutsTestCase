@@ -27,7 +27,7 @@
 		</action>
 		<action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
 		<action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
-			<forward name="redirect" path="http://www.yahoo.com" redirect="true"/>
+			<forward name="redirect" path="/main/success.jsp" redirect="true"/>
 		</action>
 		<action path="/testRelativeRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
 			<forward name="redirect" path="/main/success.jsp" redirect="true"/>

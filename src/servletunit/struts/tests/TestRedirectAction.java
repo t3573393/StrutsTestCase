@@ -37,7 +37,7 @@ public class TestRedirectAction extends MockStrutsTestCase {
         setRequestPathInfo("/testRedirect");
         actionPerform();
 	verifyForward("redirect");
-	verifyForwardPath("http://www.yahoo.com");
+	verifyForwardPath("/main/success.jsp");
         verifyNoActionErrors();
     }
     

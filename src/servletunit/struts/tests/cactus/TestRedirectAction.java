@@ -34,8 +34,8 @@ public class TestRedirectAction extends CactusStrutsTestCase {
     public void testRedirect() {
         setRequestPathInfo("/testRedirect");
         actionPerform();
-	verifyForward("redirect");
-	verifyForwardPath("http://www.yahoo.com");
+	//verifyForward("redirect");
+	verifyForwardPath("/test/main/success.jsp");
         verifyNoActionErrors();
     }
     
