@@ -107,7 +107,7 @@ public class Common {
      * using the tiles framework, since the actual forward URI must
      * be fetched from the tile definition.
      */
-    protected static String getTilesForward(String forwardPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
+    protected static ComponentDefinition getTilesForward(String forwardPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
 
         if (logger.isTraceEnabled())
             logger.trace("Entering getTilesForward() : forwardPath = " + forwardPath + ", request = " + request + ", context = " + context + ", config = " + config);
@@ -115,29 +115,32 @@ public class Common {
         String result = null;
         try {
             ComponentDefinition definition;
+            ComponentDefinition actionDefinition;
+
             // Get definition of tiles/component corresponding to uri.
             definition = TilesUtil.getDefinition(forwardPath, request, context);
             if (definition != null) {
-                // We have a definition.
-                // We use it to complete missing attribute in context.
-                // We also get uri, controller.
-                result = definition.getPath();
                 if (logger.isDebugEnabled()) {
                     logger.debug("getTilesForward() : found tiles definition - '" + forwardPath + "' = '" + result + "'");
                 }
             }
-            definition = DefinitionsUtil.getActionDefinition(request);
-            if (definition != null) {
-                // We have a definition.
-                // We use it to complete missing attribute in context.
-                // We also overload uri and controller if set in definition.
-                if (definition.getPath() != null)
-                    result = definition.getPath();
+
+            actionDefinition = DefinitionsUtil.getActionDefinition(request);
+            if (actionDefinition != null) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("getTilesForward() : found tiles definition for action - '" + forwardPath + "' = '" + result + "'");
                 }
             }
-            return result;
+
+            if (actionDefinition != null) {
+                if (logger.isDebugEnabled())
+                    logger.debug("definition attributes: " + actionDefinition.getAttributes());
+                return actionDefinition;
+            } else {
+                if (logger.isDebugEnabled() && (definition != null))
+                    logger.debug("definition attributes: " + definition.getAttributes());
+                return definition;
+            }
         } catch (NoSuchDefinitionException nsde) {
             if (logger.isTraceEnabled())
                 logger.trace("Exiting getTilesForward(): caught NoSuchDefinitionException");
@@ -153,6 +156,60 @@ public class Common {
             }
             return null;
         }
+    }
+
+    /**
+     * Verifies that ActionServlet used this logical forward or input mapping with this tile definition.
+     *
+     * @throws AssertionFailedError if the expected and actual tiles definitions do not match.
+     */
+    protected static void verifyTilesForward(ActionServlet actionServlet, String actionPath, String forwardName, String expectedDefinition, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering verifyTilesForward() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", forwardName = " + forwardName + ", expectedDefinition = " + expectedDefinition);
+
+        String definitionName = null;
+
+        if ((forwardName == null) && (isInputPath)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("verifyTilesForward() : processing an input forward");
+            }
+            forwardName = getActionConfig(actionServlet, actionPath, request, context).getInput();
+            if (logger.isDebugEnabled()) {
+                logger.debug("verifyTilesForward() : retrieved input forward name = " + forwardName);
+            }
+            if (forwardName == null)
+                throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
+            ComponentDefinition definition = getTilesForward(forwardName, request, context, config);
+            if (definition != null)
+                definitionName = definition.getName();
+        }
+
+        if (!isInputPath) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("verifyTilesForward() : processing normal forward");
+            }
+            ActionForward expectedForward = findForward(actionPath, forwardName, request, context, actionServlet);
+            if (expectedForward == null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("verifyTilesForward() : looking for global forward declaration");
+                }
+                expectedForward = actionServlet.findForward(forwardName);
+            }
+            if (expectedForward == null)
+                throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
+            forwardName = expectedForward.getPath();
+            if (logger.isDebugEnabled()) {
+                logger.debug("verifyTilesForward() : retrieved forward name = " + forwardName);
+            }
+
+            ComponentDefinition definition = getTilesForward(forwardName, request, context, config);
+            if (definition != null)
+                definitionName = definition.getName();
+        }
+        if (definitionName == null)
+            throw new AssertionFailedError("Could not find tiles definition mapped to forward '" + forwardName + "'");
+        if (!definitionName.equals(expectedDefinition))
+            throw new AssertionFailedError("Was expecting tiles definition '" + expectedDefinition + "' but received '" + definitionName + "'");
     }
 
     /**
@@ -177,7 +234,10 @@ public class Common {
             }
             if (forwardName == null)
                 throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
-            String tilesForward = getTilesForward(forwardName, request, context, config);
+            String tilesForward = null;
+            ComponentDefinition definition = getTilesForward(forwardName, request, context, config);
+            if (definition != null)
+                tilesForward = definition.getPath();
             if (tilesForward != null) {
                 forwardName = tilesForward;
                 usesTiles = true;
@@ -204,7 +264,10 @@ public class Common {
                 logger.debug("verifyForwardPath() : retrieved forward name = " + forwardName);
             }
 
-            String tilesForward = getTilesForward(forwardName, request, context, config);
+            String tilesForward = null;
+            ComponentDefinition definition = getTilesForward(forwardName, request, context, config);
+            if (definition != null)
+                tilesForward = definition.getPath();
             if (tilesForward != null) {
                 forwardName = tilesForward;
 
