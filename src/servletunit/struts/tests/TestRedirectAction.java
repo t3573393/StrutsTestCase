@@ -36,21 +36,32 @@ public class TestRedirectAction extends MockStrutsTestCase {
     public void testVerifyRedirect() {
         setRequestPathInfo("/testRedirect");
         actionPerform();
-	verifyForward("redirect");
+    verifyForward("redirect");
+        verifyNoActionErrors();
+    }
+
+    /**
+     * Confirms verifyForward works correctly when the redirect path
+     * is a relative (not absolute) URL
+     */
+    public void testRelativeRedirect() {
+        setRequestPathInfo("/testRelativeRedirect");
+        actionPerform();
+    verifyForward("redirect");
         verifyNoActionErrors();
     }
 
     public void testVerifyRedirectFail() {
-	try {
-	    setRequestPathInfo("/testRedirect");
-	    actionPerform();
-	    verifyForward("login");
-	    verifyNoActionErrors();
-	} catch (AssertionFailedError e) {
-	    return;
-	}
-	fail("We are apparently getting the same redirects, when they should be different.");
+    try {
+        setRequestPathInfo("/testRedirect");
+        actionPerform();
+        verifyForward("login");
+        verifyNoActionErrors();
+    } catch (AssertionFailedError e) {
+        return;
     }
-	
+    fail("We are apparently getting the same redirects, when they should be different.");
+    }
+
 
 }
