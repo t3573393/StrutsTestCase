@@ -25,12 +25,12 @@
         <fileset dir="${lib.dir}">
             <include name="*.jar" />
             <include name="*.zip" />
-	    <exclude name="struts-1.1b2.jar" if="build_1.0"/>
-	    <exclude name="struts-1.0.jar" unless="build_1.0"/>
-        <exclude name="servletapi-2.3.jar" if="build_2.2"/>
-        <exclude name="servletapi-2.2.jar" unless="build_2.2"/>
-        <exclude name="cactus-13-1.4.1.jar" if="build_2.2"/>
-        <exclude name="cactus-12-1.4.1.jar" unless="build_2.2"/>
+            <exclude name="struts-1.1b2.jar" if="build_1.0"/>
+            <exclude name="struts-1.0.jar" unless="build_1.0"/>
+            <exclude name="servletapi-2.3.jar" if="build_2.2"/>
+            <exclude name="servletapi-2.2.jar" unless="build_2.2"/>
+            <exclude name="cactus-13-1.4.1.jar" if="build_2.2"/>
+            <exclude name="cactus-12-1.4.1.jar" unless="build_2.2"/>
         </fileset>
         <pathelement location="${build.dir}" />
     </path>
@@ -40,89 +40,66 @@
 
     <!-- Compile the application classes -->
     <target name="build">
-       <mkdir dir="${build.dir}" />
-       <antcall target="patch.22" inheritAll="true"/>
-       <antcall target="patch.10" inheritAll="true"/>
-       <javac srcdir="${src.dir}"
-               destdir="${build.dir}"
-               deprecation="${comp.deprecate}"
-               debug="${comp.debug}"
-               optimize="${comp.opt}"
-               verbose="${comp.verbose}"
-               depend="${comp.depend}">
+        <mkdir dir="${build.dir}" />
+        <!--<antcall target="patch.22" inheritAll="true"/>
+        <antcall target="patch.10" inheritAll="true"/>-->
+        <javac srcdir="${src.dir}"
+            destdir="${build.dir}"
+            deprecation="${comp.deprecate}"
+            debug="${comp.debug}"
+            optimize="${comp.optimize}"
+            verbose="${comp.verbose}"
+            depend="${comp.depend}">
             <classpath refid="class.path" />
             <include name="**/*.java" />
-	    <!-- Build the Servlet 2.2 Spec version if specified -->
-	    <exclude name="**/2.2/**"/>
-	    <exclude name="**/*Token*.java" if="build_1.0"/>
-	    <exclude name="**/*Dyna*.java" if="build_1.0"/>
-	    <exclude name="**/*Tiles*.java" if="build_1.0"/>
-        <exclude name="**/Filter*.java" if="build_2.2"/>
+            <!-- Build the Servlet 2.2 or Struts 1.0.2 version if specified -->
+            <exclude name="**/1_0/**" unless="build_1.0"/>
+            <exclude name="**/struts/Common.java" if="build_1.0"/>
+            <exclude name="**/*Token*.java" if="build_1.0"/>
+            <exclude name="**/*Dyna*.java" if="build_1.0"/>
+            <exclude name="**/*Tiles*.java" if="build_1.0"/>
+            <exclude name="**/Filter*.java" if="build_2.2"/>
         </javac>
-	<antcall target="patch.restore" inheritAll="true"/>
     </target>
-
-    <target name="patch" if="patch.files">
-       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/CactusStrutsTestCase-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/CactusStrutsTestCase.java"/>
-       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/MockStrutsTestCase-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/MockStrutsTestCase.java"/>
-    </target>
-
-    <target name="patch.22" if="build_2.2">
-       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/CactusStrutsTestCase-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/CactusStrutsTestCase.java"/>
-       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/MockStrutsTestCase-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/MockStrutsTestCase.java"/>
-       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/StrutsResponseWrapper-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/StrutsResponseWrapper.java"/>
-    </target>
-
-    <target name="patch.10" if="build_1.0">
-       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/Common-1.0-patch.txt" originalfile="${src.dir}/servletunit/struts/Common.java"/>
-    </target>
-
-    <target name="patch.restore">
-       <move todir="${src.dir}/servletunit/struts">
-          <fileset dir="${src.dir}/servletunit/struts" includes="*.orig"/>
-	  <mapper type="glob" from="*.orig" to="*"/>
-       </move>
-    </target>
-
 
     <!-- package the application for deployment.  -->
     <target name="package">
         <mkdir dir="${distribute.dir}"/>
-	<jar jarfile="${distribute.dir}/strutstest.jar">
-	    <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
-	</jar>
+        <jar jarfile="${distribute.dir}/strutstest.jar">
+            <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
+        </jar>
 
-	<war warfile="test.war" webxml="${src.dir}/examples/WEB-INF/web.xml">
-	    <webinf dir="${src.dir}/examples/WEB-INF">
-	         <exclude name="web.xml"/>
-	    </webinf>
-	    <webinf dir="${src.dir}/examples/cactus">
-	         <include name="cactus.properties"/>
-		 <include name="log_server.properties"/>
-	    </webinf>
-	    <classes dir="${src.dir}">
-	         <include name="log4j.properties"/>
-	    </classes>
-	    <lib dir="${lib.dir}">
-	         <exclude name="ant*.jar"/>
-		 <exclude name="servlet.jar"/>
-		 <exclude name="struts-1.1b2.jar" if="build_1.0"/>
-		 <exclude name="struts-1.0.jar" unless="build_1.0"/>
+        <war warfile="test.war" webxml="${src.dir}/examples/WEB-INF/web.xml">
+            <webinf dir="${src.dir}/examples/WEB-INF">
+                <exclude name="web.xml"/>
+            </webinf>
+            <webinf dir="${src.dir}/examples/cactus">
+                <include name="cactus.properties"/>
+                <include name="log_server.properties"/>
+            </webinf>
+            <classes dir="${src.dir}">
+                <include name="log4j.properties"/>
+            </classes>
+            <lib dir="${lib.dir}">
+                <exclude name="ant*.jar"/>
+                <exclude name="servlet.jar"/>
+                <exclude name="struts-1.1b2.jar" if="build_1.0"/>
+                <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
-	    <!-- do we want to remove test classes? -->
-	    <classes dir="${build.dir}"/>
-	    <classes dir="${src.dir}/" includes="examples/ApplicationResources.properties"/>
-	    <classes dir="${src.dir}/examples/cactus">
-	         <include name="cactus.properties"/>
-		 <include name="log_server.properties"/>
-	    </classes>
-	</war>
+            <!-- do we want to remove test classes? -->
+            <classes dir="${build.dir}"/>
+            <classes dir="${src.dir}/" includes="examples/ApplicationResources.properties"/>
+            <classes dir="${src.dir}/examples/cactus">
+                <include name="cactus.properties"/>
+                <include name="log_server.properties"/>
+            </classes>
+        </war>
     </target>
 
     <!-- prepare code for public release -->
     <target name="release" depends="package,docs">
         <!-- property name="servlet.version" value="2.3"/>
-	    <property name="struts.version" value="1.1"/ -->
+        <property name="struts.version" value="1.1"/ -->
         <condition property="servlet.version" value="2.2">
             <isset property="build_2.2"/>
         </condition>
@@ -144,11 +121,11 @@
     </target>
 
     <target name="release.src" depends="clean">
-       <zip zipFile="${basedir}/strutstest-src.zip" basedir="${basedir}">
-	   <exclude name="*.tar.gz"/>
-	   <exclude name="*.zip"/>
-	   <exclude name="lib/*.jar"/>
-	</zip>
+        <zip zipFile="${basedir}/strutstest-src.zip" basedir="${basedir}">
+            <exclude name="*.tar.gz"/>
+            <exclude name="*.zip"/>
+            <exclude name="lib/*.jar"/>
+        </zip>
     </target>
 
     <!-- Clean up the build -->
@@ -156,44 +133,44 @@
         <delete dir="${build.dir}" />
         <delete dir="${basedir}/dist" />
         <delete dir="${test.dir}" />
-	<delete file="${basedir}/test.war"/>
-	<delete>
-	   <fileset dir="${basedir}" includes="strutstest*.zip"/>
-	</delete>
-	<delete>
-	   <fileset dir="${basedir}" includes="strutstest*.tar.gz"/>
-	</delete>
+        <delete file="${basedir}/test.war"/>
+        <delete>
+            <fileset dir="${basedir}" includes="strutstest*.zip"/>
+        </delete>
+        <delete>
+            <fileset dir="${basedir}" includes="strutstest*.tar.gz"/>
+        </delete>
     </target>
 
     <!-- Generate Javadocs for the application -->
     <target name="docs">
         <mkdir dir="${doc.dir}/api" />
-	<copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
-	<copy file="${basedir}/faq.htm" toDir="${doc.dir}"/>
-	<copy file="${basedir}/LICENSE.TXT" toDir="${distribute.dir}"/>
-	<copy file="${basedir}/README.TXT" toDir="${distribute.dir}"/>
-	<mkdir dir="${distribute.dir}/examples" />
-	<copy todir="${distribute.dir}/examples" >
-	     <fileset dir="${src.dir}/examples" excludes="**/tiles*.xml"/>
-	</copy>
+        <copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
+        <copy file="${basedir}/faq.htm" toDir="${doc.dir}"/>
+        <copy file="${basedir}/LICENSE.TXT" toDir="${distribute.dir}"/>
+        <copy file="${basedir}/README.TXT" toDir="${distribute.dir}"/>
+        <mkdir dir="${distribute.dir}/examples" />
+        <copy todir="${distribute.dir}/examples" >
+            <fileset dir="${src.dir}/examples" excludes="**/tiles*.xml"/>
+        </copy>
         <javadoc packagenames="servletunit,servletunit.struts"
-	   sourcepath="${src.dir}"
-           destdir="${doc.dir}/api"
-           author="true"
-           version="true"
-           use="true"
-           windowtitle="StrutsTestCase Documentation"
-           doctitle="&lt;H1&gt;StrutsTestCase for JUnit&lt;/H1&gt;"
-           bottom="&lt;i&gt;Copyright &#169; Deryl Seale All Rights Reserved.&lt;/i&gt;">
+            sourcepath="${src.dir}"
+            destdir="${doc.dir}/api"
+            author="true"
+            version="true"
+            use="true"
+            windowtitle="StrutsTestCase Documentation"
+            doctitle="&lt;H1&gt;StrutsTestCase for JUnit&lt;/H1&gt;"
+            bottom="&lt;i&gt;Copyright &#169; Deryl Seale All Rights Reserved.&lt;/i&gt;">
             <group title="StrutsTestCase for JUnit" packages="servletunit.struts"/>
-	    <group title="ServletUnit Mock Object Framework" packages="servletunit"/>
+            <group title="ServletUnit Mock Object Framework" packages="servletunit"/>
             <!-- Put in links to JDK classes -->
             <link offline="true"
-                  href="http://java.sun.com/products/j2se/1.3/docs/api/"
-                  packagelistLoc="http://java.sun.com/products/jdk/1.3/docs/api" />
+                href="http://java.sun.com/products/j2se/1.3/docs/api/"
+                packagelistLoc="http://java.sun.com/products/jdk/1.3/docs/api" />
             <link offline="true"
-                  href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"
-                  packagelistLoc="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/" />
+                href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"
+                packagelistLoc="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/" />
         </javadoc>
     </target>
 
@@ -203,17 +180,17 @@
         <junit printsummary="yes" haltonfailure="yes">
             <sysproperty key="test.dir" value="${test.dir}" />
             <classpath refid="class.path" />
-	    <classpath>
-	       <pathelement location="${src.dir}/examples/"/>
-	       <pathelement location="${src.dir}/"/>
-	    </classpath>
+            <classpath>
+                <pathelement location="${src.dir}/examples/"/>
+                <pathelement location="${src.dir}/"/>
+            </classpath>
             <formatter type="xml" />
 
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
                     <include name="**/examples/**/Test*.class" />
-		    <include name="**/tests/**/Test*.class" />
-		    <exclude name="**/cactus/**" />
+                    <include name="**/tests/**/Test*.class" />
+                    <exclude name="**/cactus/**" />
                 </fileset>
             </batchtest>
         </junit>
@@ -231,7 +208,7 @@
             <!-- ugh. have to make sure the tiles test runs first, because other tests upset it. -->
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
-                    <include name="servletunit/struts/tests/cactus/*Tiles*.class"/>
+                    <include name="servletunit/struts/tests/cactus/*Tiles*.class" unless="build_1.0"/>
                 </fileset>
                 <fileset dir="${build.dir}">
                     <include name="**/cactus/**/Test*.class" />
