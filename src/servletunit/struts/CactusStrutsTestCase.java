@@ -45,13 +45,13 @@ import java.util.HashMap;
 /**
  * CactusStrutsTestCase is an extension of the base JUnit testcase that
  * provides additional methods to aid in testing Struts Action
- * objects.  It uses an in-container approach based on the Cactus
- * testing framework to run the servlet container, and tests the execution
- * of Action objects as thet are actually run through the Struts
- * ActionServlet.  CactusStrutsTestCase provides methods that set up
- * the request path, request parameters for ActionForm subclasses, as
- * well as methods that can verify that the correct ActionForward was
- * used and that the proper ActionError messages were supplied.
+ * objects.  It uses an in-container approach to run the servlet
+ * container, and tests the execution of Action objects as they
+ * are actually run through the Struts ActionServlet.  CactusStrutsTestCase
+ * provides methods that set up the request path, request parameters
+ * for ActionForm subclasses, as well as methods that can verify
+ * that the correct ActionForward was used and that the proper
+ * ActionError messages were supplied.
  *
  */
 public class CactusStrutsTestCase extends ServletTestCase {
@@ -167,10 +167,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
-     * Executes the Action instance to be tested.  This method
-     * sets up the ActionForm associated with this Action, optionally
-     * performing validation on the form, and then calls the Action.perform
-     * method directly.  It stores any results for further verification.
+     * Executes the Action instance to be tested.
      *
      * @exception AssertionFailedError if there are any execution
      * errors while calling Action.perform()
@@ -201,29 +198,32 @@ public class CactusStrutsTestCase extends ServletTestCase {
             } catch (Exception e) {
                 throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getMessage());
             }
+
+            if (mapping.getValidate()) {
+                ActionErrors errors = form.validate(mapping,request);
+                if (!errors.empty())
+                    throw new AssertionFailedError("Error while validating ActionForm: ");
+            }
         }
 
         // set up Action
         Action action = null;
         try {
             action = (Action) Class.forName(mapping.getType()).newInstance();
-            action.setServlet(actionServlet);
         } catch (Exception e) {
             throw new AssertionFailedError("Error trying to set up Action: " + e.getMessage());
         }
 
-        if (mapping.getValidate()) {
-            ActionErrors errors = form.validate(mapping,request);
-            if (!errors.empty())
-                throw new AssertionFailedError("Error while validating ActionForm.");
-        }
+
 
         try {
             this.forward = action.perform(mapping,form,request,response);
         } catch (ServletException e) {
-            throw new AssertionFailedError("ServletException while running action.perform(): " + e.getMessage());
+            e.printStackTrace();
+            throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
         } catch (IOException e) {
-            throw new AssertionFailedError("IOException while running action.perform(): " + e.getMessage());
+            e.printStackTrace();
+            throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
         }
     }
 
