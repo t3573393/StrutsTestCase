@@ -31,6 +31,15 @@ public class TestTilesForward extends MockStrutsTestCase {
         super(testName);
     }
 
+    public void setUp() throws Exception {
+	super.setUp();
+	setActionServlet(new org.apache.struts.tiles.ActionComponentServlet());
+	setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");
+	setInitParameter("definitions-debug","0");
+	setConfigFile("/WEB-INF/tiles-struts-config.xml");
+    }
+
+    
     public void testTilesForward() {
 	addRequestParameter("username","deryl");
 	addRequestParameter("password","radar");
