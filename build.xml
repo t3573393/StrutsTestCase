@@ -41,6 +41,12 @@
     <!-- Compile the application classes -->
     <target name="build" description="compile all Java classes">
         <mkdir dir="${build.dir}" />
+        <condition property="build_1.0_2.2">
+            <and>
+                <isset property="build_1.0"/>
+                <isset property="build_2.2"/>
+            </and>
+        </condition>
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
             deprecation="${comp.deprecate}"
@@ -55,15 +61,16 @@
             <exclude name="**/struts/Common.java" if="build_1.0"/>
             <exclude name="**/struts/CactusStrutsTestCase.java" if="build_1.0" />
             <exclude name="**/struts/MockStrutsTestCase.java" if="build_1.0" />
-            <exclude name="**/2_2/**" unless="build_2.2"/>
-            <exclude name="**/struts/CactusStrutsTestCase.java" if="build_2.2"/>
-            <exclude name="**/struts/MockStrutsTestCase.java" if="build_2.2"/>
-            <exclude name="**/struts/StrutsResponseWrapper.java" if="build_2.2"/>
             <exclude name="**/*Token*.java" if="build_1.0"/>
             <exclude name="**/*Dyna*.java" if="build_1.0"/>
             <exclude name="**/*Tiles*.java" if="build_1.0"/>
             <exclude name="**/tests/**/MessageAction.java" if="build_1.0" />
             <exclude name="**/tests/**/TestMessageAction.java" if="build_1.0" />
+
+            <exclude name="**/2_2/**" unless="build_2.2"/>
+            <exclude name="**/struts/CactusStrutsTestCase.java" if="build_2.2"/>
+            <exclude name="**/struts/MockStrutsTestCase.java" if="build_2.2"/>
+            <exclude name="**/struts/StrutsResponseWrapper.java" if="build_2.2"/>
             <exclude name="**/Filter*.java" if="build_2.2"/>
         </javac>
     </target>
