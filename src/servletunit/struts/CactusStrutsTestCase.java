@@ -77,11 +77,21 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * A check that every method should run to ensure that the
+     * base class setUp method has been called.
+     */
+    protected void init() {
+	if (!isInitialized) {
+	    throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
+	}
+    }
+    
+    /**
      * Sets up the test fixture for this test.  This method creates
      * an instance of the ActionServlet, initializes it to validate
      * forms and turn off debugging, and clears all other parameters.
      */
-    protected void init() {
+    public void setUp() throws Exception {
 	if (!isInitialized) {
 	    try {
 		parameters.clear();
@@ -96,15 +106,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
 	    }
 	}
-    }
-    
-    /**
-     * Sets up the test fixture for this test.  This method creates
-     * an instance of the ActionServlet, initializes it to validate
-     * forms and turn off debugging, and clears all other parameters.
-     */
-    public void setUp() throws Exception {
-	init();
     }
 
     /**
