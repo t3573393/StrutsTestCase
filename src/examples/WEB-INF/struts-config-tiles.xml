@@ -18,6 +18,7 @@
 		<action path="/tilesForward" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request">
 			<forward name="success" path="page.library"/>
 		</action>
+        <action path="/tilesInputForward" type="examples.LoginAction" name="loginForm" input="page.library" scope="request"/>
 	</action-mappings>
     <plug-in className="org.apache.struts.tiles.TilesPlugin" >
         <set-property property="definitions-config"

@@ -39,5 +39,10 @@ public class TestTilesForward extends CactusStrutsTestCase {
         verifyForwardPath("/layouts/pageLayout.jsp");
     }
 
+    public void testTilesInputForward() {
+        setRequestPathInfo("tiles","/tilesInputForward.do");
+        actionPerform();
+        verifyInputForward();
+    }
 
 }
