@@ -19,6 +19,8 @@ package servletunit.tests;
 import junit.framework.TestCase;
 import servletunit.HttpServletRequestSimulator;
 
+import javax.servlet.http.HttpSession;
+
 public class TestSession extends TestCase {
 
     HttpServletRequestSimulator request;
@@ -56,6 +58,14 @@ public class TestSession extends TestCase {
     public void testGetSessionInvalidFalse() {
         request.getSession().invalidate();
         assertNull(request.getSession(false));
+    }
+
+    public void testSetAttributeNull() {
+        HttpSession session = request.getSession();
+        session.setAttribute("test","test");
+        assertEquals("test",session.getAttribute("test"));
+        session.setAttribute("test",null);
+        assertNull(session.getAttribute("test"));
     }
 
 
