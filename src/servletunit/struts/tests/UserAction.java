@@ -16,10 +16,7 @@
 
 package servletunit.struts.tests;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +33,8 @@ public class UserAction extends Action {
                                  ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
-	return null;
+
+        return null;
     }
 
 }

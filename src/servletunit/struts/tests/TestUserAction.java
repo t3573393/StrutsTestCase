@@ -26,10 +26,17 @@ import servletunit.struts.MockStrutsTestCase;
  */
 public class TestUserAction extends MockStrutsTestCase {
 
-    public TestUserAction(String testName) {
-        super(testName);
+    /**
+     * Sets up the test fixture for this test.  This method creates
+     * an instance of the ActionServlet, initializes it to validate
+     * forms and turn off debugging, and creates a mock HttpServletRequest
+     * and HttpServletResponse object to use in this test.
+     */
+    protected void setUp() throws Exception {
+        super.setUp();
+        setServletConfigFile("/WEB-INF/web.xml");
     }
-    
+
     public void testAction() {
     }
 
