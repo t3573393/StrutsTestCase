@@ -39,9 +39,12 @@ public class TestMultipleActions extends MockStrutsTestCase {
         verifyForwardPath("/main/success.jsp");
         assertEquals("deryl",getSession().getAttribute("authentication"));
         verifyNoActionErrors();
+        clearRequestParameters();
         setRequestPathInfo("/test", "/testContextParams");
         actionPerform();
         verifyNoActionErrors();
+        verifyForward("login");
+        verifyForwardPath("/login/login.jsp");
     }
 
     public static void main(String[] args) {
