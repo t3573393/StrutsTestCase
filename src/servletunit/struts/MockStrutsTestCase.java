@@ -415,7 +415,7 @@ public class MockStrutsTestCase extends TestCase {
 	if (response.containsHeader("Location")) {
 	    return Common.stripJSessionID(response.getHeader("Location"));
 	} else
-	    return Common.stripJSessionID(((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator().getForward());
+	    return request.getContextPath() + Common.stripJSessionID(((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator().getForward());
     }
     
     /**
@@ -447,6 +447,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
 	init();
+	forwardPath = request.getContextPath() + forwardPath;
 	if (!(getActualForward().equals(forwardPath)))
 	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
     }

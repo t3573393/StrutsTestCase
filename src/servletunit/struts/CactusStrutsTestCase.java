@@ -365,7 +365,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 	if (response.containsHeader("Location")) {
 	    return Common.stripJSessionID(((StrutsResponseWrapper) response).getRedirectLocation());
 	} else
-	    return Common.stripJSessionID(((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward());
+	    return request.getContextPath() + Common.stripJSessionID(((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward());
     }
     
     /**
@@ -397,6 +397,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
 	init();
+	forwardPath = request.getContextPath() + forwardPath;
 	if (!(getActualForward().equals(forwardPath)))
 	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
     }

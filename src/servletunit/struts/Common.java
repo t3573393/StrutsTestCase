@@ -153,6 +153,7 @@ public class Common {
 		    forwardName = tilesForward;
 	    }
 	}
+	forwardName = request.getContextPath() + forwardName;
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
     }

@@ -34,8 +34,8 @@ public class TestRedirectAction extends CactusStrutsTestCase {
     public void testRedirect() {
         setRequestPathInfo("/testRedirect");
         actionPerform();
-	//verifyForward("redirect");
-	verifyForwardPath("/test/main/success.jsp");
+	verifyForward("redirect");
+	verifyForwardPath("/main/success.jsp");
         verifyNoActionErrors();
     }
     
@@ -47,7 +47,7 @@ public class TestRedirectAction extends CactusStrutsTestCase {
         setRequestPathInfo("/testRelativeRedirect");
         actionPerform();
 	// in a servlet engine, this will have the context prepended
-	verifyForwardPath("/test/main/success.jsp");
+	verifyForwardPath("/main/success.jsp");
         verifyNoActionErrors();
     }
     
