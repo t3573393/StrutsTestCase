@@ -205,14 +205,9 @@
                 <pathelement location="${src.dir}/examples/cactus"/>
             </classpath>
             <formatter type="xml" />
-            <!-- ugh. have to make sure the tiles test runs first, because other tests upset it. -->
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
-                    <include name="servletunit/struts/tests/cactus/*Tiles*.class" unless="build_1.0"/>
-                </fileset>
-                <fileset dir="${build.dir}">
                     <include name="**/cactus/**/Test*.class" />
-                    <exclude name="servletunit/struts/tests/cactus/*Tiles*.class"/>
                 </fileset>
             </batchtest>
         </junit>
