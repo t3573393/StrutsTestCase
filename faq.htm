@@ -7,6 +7,11 @@
 <body>
 <center><h2>Frequently Asked Questions About StrutsTestCase for JUnit</h2></center>
 <hr>
+<h3>Why do I keep getting NoClassDefFoundErrors when I run my test case?</h3>
+Assuming that your CLASSPATH is indeed set up properly, there are two situations where this problem might occur:
+<ul>
+<li>If the NoClassDefFoundError you're receiving complains about a class called <code><b>ActionConfig</b></code>, then you are probably trying to use a version of strutstest.jar built against Struts 1.1 in a Struts 1.0 environment.  Get the version of StrutsTestCase appropriate to your test environment.<br><br>
+<li>If the NoClassDefFoundError you're receiving complains about either <code><b>ServletRequestWrapper</b></code> or a <code><b>ServletResponseWrapper</b></code>, then you are probably trying to run a version of strutstest.jar that supports Servlet 2.3 in a Servlet engine that only supports the 2.2 specification.  Get the version of StrutsTestCase appropriate to your test environment.</ul>
 <h3>Why do I keep getting NullPointerExceptions when I run my test case?</h3>
 This is usually the case of overriding the <code>setUp()</code> method in your StrutsTestCase subclass.  If you choose to override this method, you <b>must</b> explicitly call <code>super.setUp()</code>.  Both MockStrutsTestCase and CactusStrutsTestCase use this method for initialization, and will not work if the base class method is not called.  This is now enforced with an internal check, and your test case will fail if super.setUp() is not called.
 <h3>Why is a session value I set in one test method not available in another test method?</h3>
