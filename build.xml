@@ -175,7 +175,7 @@
     <!-- Run unit tests -->
     <target name="test" description="run all mock object tests">
         <mkdir dir="${test.dir}"/>
-        <junit printsummary="yes" haltonfailure="yes">
+        <junit printsummary="yes" haltonfailure="no">
             <sysproperty key="test.dir" value="${test.dir}"/>
             <sysproperty key="basedir" value="${basedir}"/>
             <classpath refid="class.path"/>
@@ -194,11 +194,19 @@
                 </fileset>
             </batchtest>
         </junit>
+
+        <junitreport todir="${test.dir}">
+          <fileset dir="${test.dir}">
+            <include name="TEST-*.xml"/>
+          </fileset>
+          <report format="frames" todir="${test.dir}"/>
+        </junitreport>
+
     </target>
 
     <target name="test.cactus" description="run all cactus tests">
         <mkdir dir="${test.dir}"/>
-        <junit printsummary="yes" haltonfailure="yes">
+        <junit printsummary="yes" haltonfailure="no">
             <sysproperty key="test.dir" value="${test.dir}"/>
             <sysproperty key="basedir" value="${basedir}"/>
             <classpath refid="class.path"/>
@@ -213,6 +221,12 @@
                 </fileset>
             </batchtest>
         </junit>
+        <junitreport todir="${test.dir}">
+          <fileset dir="${test.dir}">
+            <include name="TEST-*.xml"/>
+          </fileset>
+          <report format="frames" todir="${test.dir}"/>
+        </junitreport>
     </target>
 
     <target name="deploy" depends="package">
