@@ -317,7 +317,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             this.actionServlet.init(config);
             return this.actionServlet;
         } catch (ServletException e) {
-            throw new AssertionFailedError(e.getMessage());
+	    throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
         }
     }
 
@@ -364,12 +364,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 	if (this.responseWrapper != null)
 	    response = this.responseWrapper;
 
-        // set up the ActionServlet
-        try {
-            actionServlet.init(config);
-        } catch (ServletException e) {
-            throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
-        }
+	ActionServlet actionServlet = this.getActionServlet();
 
         // set up the ActionMapping
         ActionMapping mapping = actionServlet.findMapping(this.actionPath);
