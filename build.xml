@@ -23,7 +23,7 @@
         <fileset dir="${basedir}/lib">
             <include name="*.jar" />
             <include name="*.zip" />
-	    <exclude name="struts-1.1.jar" if="build_1.0"/>
+	    <exclude name="struts-1.1b2.jar" if="build_1.0"/>
 	    <exclude name="struts-1.0.jar" unless="build_1.0"/>
         </fileset>
         <pathelement location="${build.dir}" />
@@ -98,7 +98,7 @@
 	    <lib dir="${basedir}/lib">
 	         <exclude name="ant*.jar"/>
 		 <exclude name="servlet.jar"/>
-		 <exclude name="struts-1.1.jar" if="build_1.0"/>
+		 <exclude name="struts-1.1b2.jar" if="build_1.0"/>
 		 <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
 	    <!-- do we want to remove test classes? -->
