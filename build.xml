@@ -78,7 +78,7 @@
     <target name="package" description="package all Java classes">
         <mkdir dir="${distribute.dir}"/>
         <jar jarfile="${distribute.dir}/strutstest.jar">
-            <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
+            <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**,**/tests/**"/>
         </jar>
 
         <war warfile="test.war" webxml="${src.dir}/examples/WEB-INF/web.xml">
@@ -94,7 +94,8 @@
                 <exclude name="struts-1.1.jar" if="build_1.0"/>
                 <exclude name="struts-1.0.jar" unless="build_1.0"/>
             </lib>
-            <classes dir="${build.dir}"/>
+            <lib dir="${distribute.dir}" includes="strutstest.jar"/>
+            <classes dir="${build.dir}" includes="**/tests/**,**/examples/**"/>
             <classes dir="${src.dir}">
                 <include name="examples/ApplicationResources.properties"/>
                 <include name="log4j.properties"/>
@@ -107,22 +108,6 @@
 
     <!-- prepare code for public release -->
     <target name="release" depends="init,package,docs">
-<!--        <condition property="servlet.version" value="2.2">-->
-<!--            <isset property="build_2.2"/>-->
-<!--        </condition>-->
-<!--        <condition property="struts.version" value="1.0">-->
-<!--            <isset property="build_1.0"/>-->
-<!--        </condition>-->
-<!--        <condition property="servlet.version" value="2.3">-->
-<!--            <not>-->
-<!--                <isset property="build_2.2"/>-->
-<!--            </not>-->
-<!--        </condition>-->
-<!--        <condition property="struts.version" value="1.1">-->
-<!--            <not>-->
-<!--                <isset property="build_1.0"/>-->
-<!--            </not>-->
-<!--        </condition>-->
         <echo message="creating release for servlet v${servlet.version} and struts v${struts.version}.."/>
         <zip zipFile="${basedir}/strutstest-${struts.version}_${servlet.version}.zip" basedir="${basedir}/dist"/>
     </target>
