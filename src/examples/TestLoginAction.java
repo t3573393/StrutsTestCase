@@ -26,7 +26,7 @@ public class TestLoginAction extends MockStrutsTestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        setServletConfigFile("/WEB-INF/web.xml");
+        setInitParameter("validating","false");
     }
 
     public void testSuccessfulLogin() {
