@@ -31,7 +31,6 @@ import java.util.*;
 public class StrutsRequestWrapper extends HttpServletRequestWrapper {
 
     private String pathInfo;
-    private String servletPath;
     private Map parameters;
     
     public StrutsRequestWrapper(HttpServletRequestWrapper request) {
@@ -74,7 +73,7 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
 	Enumeration superNames = super.getParameterNames();
 	List nameList = new ArrayList(parameters.keySet());
 	while (superNames.hasMoreElements()) {
-	    nameList.add((String) superNames.nextElement());
+	    nameList.add(superNames.nextElement());
 	}
 	return Collections.enumeration(nameList);
     }
