@@ -80,6 +80,8 @@ So, how do we actually do it?  Let's start by creating an empty test case, which
 <pre>
 public class TestLoginAction extends StrutsTestCase {
 
+    public TestLoginAction(String testName) { super(testName); }
+
     public void testSuccessfulLogin() {}
 }
 </pre>
@@ -95,6 +97,8 @@ The first thing we need to do is to tell Struts which mapping to use in this tes
 	<td>
 <pre>
 public class TestLoginAction extends StrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
        <font color="red">setRequestPathInfo("/login");</font>
@@ -112,6 +116,8 @@ Next we need to pass form bean properties, which we send via the request object 
 	<td>
 <pre>
 public class TestLoginAction extends StrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
        setRequestPathInfo("/login");
@@ -136,6 +142,8 @@ so the directory structure must be present.</i>
 <pre>
 public class TestLoginAction extends StrutsTestCase {
 
+    public TestLoginAction(String testName) { super(testName); }
+
     public void testSuccessfulLogin() {
        setRequestPathInfo("/login");
        addRequestParameter("username","deryl");
@@ -155,6 +163,8 @@ That's all you have to do to get the ActionServlet to process your request, and 
 	<td>
 <pre>
 public class TestLoginAction extends StrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
        setRequestPathInfo("/login");
@@ -178,6 +188,8 @@ Next, we want to make sure that authentication information was stored properly:
 	<td>
 <pre>
 public class TestLoginAction extends StrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
        setRequestPathInfo("/login");
@@ -205,6 +217,8 @@ to make sure of this condition:
 	<td>
 <pre>
 public class TestLoginAction extends StrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
        setRequestPathInfo("/login");
