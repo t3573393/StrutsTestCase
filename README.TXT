@@ -20,6 +20,10 @@ Change Log
 New Features:
 ------------
 
+- StrutsTestCase is now distributed under the Apache Software Foundation license.
+This change comes in advance of StrutsTestCase's inclusion in the Struts 1.2
+development road map.
+
 Bug Fixes:
 ---------
 
