@@ -21,11 +21,18 @@ import servletunit.RequestDispatcherSimulator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import java.net.URL;
+import java.net.MalformedURLException;
+import java.io.File;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * A wrapper for the ServletContext class.  This is used in
  * CactusStrutsTestCase so that we can retrieve the forward
- * processed by the ActionServlet.  This allows us to to use
+ * processed by the ActionServlet and use absolute paths
+ * for Struts resources.  This allows us to to use
  * the ActionServlet as a black box, rather than mimic its
  * behavior as was previously the case.
  */
@@ -40,11 +47,42 @@ public class StrutsServletContextWrapper extends ServletContextWrapper {
     public RequestDispatcher getRequestDispatcher(String path) {
         dispatchedResource = path;
         return new RequestDispatcherSimulator(path);
-        //return super.getRequestDispatcher(path);
     }
 
     public String getForward() {
         return dispatchedResource;
+    }
+
+    /**
+     * Override the getResource method to look for resources in the file system, allowing
+     * the use of absolute paths for Struts configuration files.  If the resource path exists
+     * in the file system, this method will return a URL based on the supplied path; otherwise,
+     * it defers to the ServletContext loader.
+     */
+    public URL getResource(String pathname) throws MalformedURLException {
+        File file = new File(pathname);
+        if (file.exists())
+            return file.toURL();
+        else
+            return super.getResource(pathname);
+    }
+
+    /**
+     * Override the getResourceAsStream method to look for resources in the file system, allowing
+     * the use of absolute paths for Struts configuration files. If the resource path exists
+     * in the file system, this method will return a URL based on the supplied path; otherwise,
+     * it defers to the ServletContext loader.
+     */
+    public InputStream getResourceAsStream(String pathname) {
+        File file = new File(pathname);
+        if (file.exists())
+            try {
+                return new FileInputStream(file);
+            } catch (FileNotFoundException e) {
+                return super.getResourceAsStream(pathname);
+            }
+        else
+            return super.getResourceAsStream(pathname);
     }
 
 }
