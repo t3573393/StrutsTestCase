@@ -32,12 +32,13 @@ Bug Fixes:
 ---------
 
 - Fixed a bug where the servlet context directory was not being used
-when searching for application resources (patch #698096 - MockStrutsTestCase)
+when searching for application resources (MockStrutsTestCase)
 
 - Fixed a bug where actions returning null -- a valid scenario -- could
 not be tested properly.  (MockStrutsTestCase and CactusStrutsTestCase)
 
+- Fixed setServletConfigFile to use local web.xml DTD's located in the
+Struts library.  (MockStrutsTestCase)
 
-Questions and comments are always welcome!
-
-Deryl Seale - deryl@acm.org
+Deryl Seale
+http://strutstestcase.sourceforge.net
