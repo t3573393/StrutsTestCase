@@ -336,12 +336,23 @@ public class HttpServletRequestSimulator implements HttpServletRequest
             return -1L;
         try
         {
-            DateFormat dateFormat = new SimpleDateFormat();
+            DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");
             return dateFormat.parse(s1).getTime();
         }
         catch(ParseException exception) {
             throw new IllegalArgumentException("Cannot parse date: " + s1);
         }
+    }
+
+    /**
+     * Sets a header with the appropriate date string given the time in milliseconds.
+     * @param name the name of the header
+     * @param millis the time in milliseconds
+     */
+    public void setDateHeader(String name, long millis)
+    {
+        String dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date(millis));
+        setHeader(name, dateString);
     }
 
     /**

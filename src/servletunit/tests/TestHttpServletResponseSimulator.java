@@ -21,6 +21,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import servletunit.HttpServletResponseSimulator;
 
+import java.util.Date;
+
 /**
  * A Junit based test of the HttpServletResponseSimulator class
  * @author Sean Pritchard
@@ -142,5 +144,12 @@ public class TestHttpServletResponseSimulator extends TestCase {
         assertEquals(len3, response.getContentLength());
     }
 
+
+    public void testAddDateHeader() {
+        Date date = new Date(2004,5,23);
+        HttpServletResponseSimulator response = new HttpServletResponseSimulator();
+        response.addDateHeader("date",date.getTime());
+        assertEquals("unexpected header value","Thu, 23 Jun 3904 00:00:00 PDT",response.getHeader("date"));
+    }
 }
 

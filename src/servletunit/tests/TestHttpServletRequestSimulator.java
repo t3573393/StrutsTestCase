@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Date;
 
 /**
  * A Junit based test of the HttpServletResponseSimulator class
@@ -167,8 +168,8 @@ public class TestHttpServletRequestSimulator extends TestCase {
     public void testGetDateHeader() throws ParseException
     {
         String date = "05/23/73 8:05 PM, PST";
-        request.setHeader("DATE_HEADER",date);
         long time = new SimpleDateFormat().parse(date).getTime();
+        request.setDateHeader("DATE_HEADER",time);
         assertEquals(time,request.getDateHeader("DATE_HEADER"));
     }
 

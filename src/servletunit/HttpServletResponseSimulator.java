@@ -46,6 +46,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 
 //  StrutsTestCase - a JUnit extension for testing Struts actions
@@ -183,7 +185,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void addDateHeader(String name, long date)
     {
-    this.headers.put(name,new Long(date).toString());
+        this.headers.put(name,new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date(date)));
     }
 
     /**
