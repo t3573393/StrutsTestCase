@@ -1074,7 +1074,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public void setAttribute(String name, Object o)
     {
-        attributes.put(name, o);
+        if (o == null)
+            attributes.remove(name);
+        else
+            attributes.put(name, o);
     }
 
 
