@@ -478,7 +478,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String getMethod()
     {
-        return method;
+	if (method == null)
+	    return "POST";
+	else
+	    return method;
     }
 
     /**
@@ -1126,7 +1129,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         case GET:method="GET";break;
         case PUT:method="PUT";break;
         case POST:method="POST";break;
-        default:method="NULL";
+        default:method="POST";
         }
     }
 
