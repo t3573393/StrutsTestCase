@@ -33,10 +33,8 @@ overrides the reset() method, then you could potentially reset anything
 you've set in the ActionForm instance you pass to this method.  
 (MockStrutsTestCase and CactusStrutsTestCase)
 
-- changed setConfigFile() methods to take in absolute paths.  This only works
-for MockStrutsTestCase; because CactusStrutsTestCase uses the actual servlet
-engine to load resources, it must use a path relative to the web application. 
-(MockStrutsTestCase)
+- changed setConfigFile() methods to take in absolute paths.
+(MockStrutsTestCase and CactusStrutsTestCase)
 
 Bug Fixes:
 ---------
