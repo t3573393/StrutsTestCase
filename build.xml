@@ -35,6 +35,13 @@
     <!-- Compile the application classes --> 
     <target name="build">
        <mkdir dir="${build.dir}" />
+       <condition property="patch.files" value="true">
+          <or>
+	     <equals arg1="${build_2.2}" arg2="true"/>
+	     <equals arg1="${build_1.0}" arg2="true"/>
+	  </or>
+       </condition>
+       <antcall target="patch" inheritAll="true"/>
        <javac srcdir="${src.dir}" 
                destdir="${build.dir}"
                deprecation="${comp.deprecate}" 
@@ -45,12 +52,33 @@
             <classpath refid="class.path" />
             <include name="**/*.java" />
 	    <!-- Build the Servlet 2.2 Spec version if specified -->
-	    <exclude name="**/2.2/**" unless="build_2.2"/>
-	    <exclude name="**/struts/MockStrutsTestCase.java" if="build_2.2"/>
-	    <exclude name="**/struts/CactusStrutsTestCase.java" if="build_2.2"/>
+	    <exclude name="**/2.2/**"/>
 	    <exclude name="**/*Token*.java" if="build_1.0"/>
         </javac>
+	<antcall target="patch.restore" inheritAll="true"/>
     </target>
+
+    <target name="patch" if="patch.files">
+       <property name="servlet.version" value="2.3"/>
+       <property name="struts.version" value="1.1"/>
+       <condition property="servlet.version" value="2.2">
+           <equals arg1="${build_2.2}" arg2="true"/>
+       </condition>
+       <condition property="struts.version" value="1.0">
+	   <equals arg1="${build_1.0}" arg2="true"/>
+       </condition>
+       <echo message="patching files for servlets v${servlet.version} and struts v${struts.version}.."/>
+       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/CactusStrutsTestCase-${servlet.version}-${struts.version}-patch.txt" originalfile="${src.dir}/servletunit/struts/CactusStrutsTestCase.java"/>
+       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/MockStrutsTestCase-${servlet.version}-${struts.version}-patch.txt" originalfile="${src.dir}/servletunit/struts/MockStrutsTestCase.java"/>
+    </target>
+
+    <target name="patch.restore" if="patch.files">
+       <move todir="${src.dir}/servletunit/struts">
+          <fileset dir="${src.dir}/servletunit/struts" includes="*.orig"/>
+	  <mapper type="glob" from="*.orig" to="*"/>
+       </move>
+    </target>
+    
 
     <!-- package the application for deployment.  -->
     <target name="package">
@@ -84,6 +112,7 @@
 	<condition property="struts.version" value="1.0">
 	   <equals arg1="${build_1.0}" arg2="true"/>
         </condition>
+	<echo message="creating release for servlet v${servlet.version} and struts v${struts.version}.."/>
         <zip zipFile="${basedir}/strutstest-${struts.version}_${servlet.version}.zip" basedir="${basedir}/dist"/>
 	<zip zipFile="${basedir}/strutstest-src.zip" basedir="${basedir}/src"/>
 	<tar tarFile="${basedir}/strutstest.tar" basedir="${basedir}/dist"/>
@@ -176,10 +205,8 @@
         </junit>
     </target>
 
-    
-    
     <!-- Run all the build targets -->
-    <target name="all" depends="clean,build,package" />
+    <target name="all" depends="clean,build,package"/>
     
 </project>
 
