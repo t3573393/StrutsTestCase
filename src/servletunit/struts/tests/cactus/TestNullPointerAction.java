@@ -13,10 +13,9 @@
 //  Apache Software Foundation Licens for more details.
 //
 //  You may view the full text here: http://www.apache.org/LICENSE.txt
-package servletunit.struts.tests;
+package servletunit.struts.tests.cactus;
 
 import servletunit.struts.*;
-import java.io.File;
 
 /**
  * <p>Title: NullPointerActionTest</p>
@@ -26,20 +25,18 @@ import java.io.File;
  * @author Sean Pritchard
  * @version 1.0
  */
-public class TestNullPointerAction extends MockStrutsTestCase {
+public class TestNullPointerAction extends CactusStrutsTestCase {
 
     public TestNullPointerAction() {
     }
 
     public void setUp() throws Exception {
         super.setUp();
-        this.setContextDirectory(new File(System.getProperty("basedir") + "/src/examples"));
-        setConfigFile("/WEB-INF/struts-config-test.xml");
     }
 
     public void testNullPointer() throws Exception{
         try{
-            this.setRequestPathInfo("/testNullPointer");
+            this.setRequestPathInfo("test","/testNullPointer");
             this.actionPerform();
             fail("Exception expected");
         }catch(ExceptionDuringTestError e){
@@ -51,7 +48,7 @@ public class TestNullPointerAction extends MockStrutsTestCase {
 
     public void testNullPointerFromForm() throws Exception{
         try{
-            this.setRequestPathInfo("/testNullPointerForm");
+            this.setRequestPathInfo("test","/testNullPointerForm");
             this.actionPerform();
             fail("Exception expected");
         }catch(ExceptionDuringTestError e){

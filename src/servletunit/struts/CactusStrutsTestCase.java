@@ -27,7 +27,6 @@ import org.apache.struts.action.ActionServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import java.io.IOException;
 
 /**
  * CactusStrutsTestCase is an extension of the Cactus ServletTestCase
@@ -486,14 +485,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
             actionServlet.doPost(request,response);
             if (logger.isDebugEnabled())
                 logger.debug("Exiting actionPerform()");
-        } catch (ServletException se) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",se.getRootCause());
-            fail("Error running Action.execute(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
-        } catch (IOException e) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",e);
-            fail("Error running Action.execute(): " + e.getClass() + " - " + e.getMessage());
+        } catch (NullPointerException npe) {
+            String message = "A NullPointerException was thrown.  This may indicate an error in your ActionForm, or "
+                    + "it may indicate that the Struts ActionServlet was unable to find struts config file.  "
+                    + "TestCase is running from " + System.getProperty("user.dir") + " directory.";
+            throw new ExceptionDuringTestError(message, npe);
+        } catch(Exception e){
+            throw new ExceptionDuringTestError("An uncaught exception was thrown during actionExecute()", e);
         }
     }
 
@@ -565,7 +563,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         String actualForward = getActualForward();
 
         if ((actualForward == null) && (forwardPath == null)) {
-            // actions can return null forwards.
+// actions can return null forwards.
             return;
         }
 
@@ -745,7 +743,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering setActionForm() : form = " + form);
         init();
-        // make sure ActionServlet is initialized.
+// make sure ActionServlet is initialized.
         Common.setActionForm(form,request,request.getPathInfo(),config.getServletContext());
         if (logger.isDebugEnabled())
             logger.debug("Exiting setActionForm()");
