@@ -516,7 +516,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyForward() : forwardName = " + forwardName);
         init();
-        Common.verifyForwardPath(actionServlet,actionPath,forwardName,getActualForward(),false,request,config.getServletContext(),config);
+        Common.verifyForwardPath(actionPath,forwardName,getActualForward(),false,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyForward()");
     }
@@ -571,7 +571,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyInputForward()");
         init();
-        Common.verifyForwardPath(actionServlet,actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
+        Common.verifyForwardPath(actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyInputForward()");
     }
@@ -592,7 +592,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyTilesForward(String forwardName, String definitionName) {
         init();
-        Common.verifyTilesForward(actionServlet,actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
+        Common.verifyTilesForward(actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
     }
 
     /**
@@ -608,7 +608,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyInputTilesForward(String definitionName) {
         init();
-        Common.verifyTilesForward(actionServlet,actionPath,null,definitionName,true,request,config.getServletContext(),config);
+        Common.verifyTilesForward(actionPath,null,definitionName,true,request,config.getServletContext(),config);
     }
 
     /**
@@ -702,7 +702,7 @@ public class MockStrutsTestCase extends TestCase {
         init();
         if (logger.isDebugEnabled())
             logger.debug("Exiting getActionForm()");
-        return Common.getActionForm(actionServlet,actionPath,request,context);
+        return Common.getActionForm(actionPath,request,context);
     }
 
     /**
@@ -720,7 +720,7 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Entering setActionForm() : form = " + form);
         init();
         // make sure action servlet is intialized
-        Common.setActionForm(form,request,actionPath,context,this.getActionServlet());
+        Common.setActionForm(form,request,actionPath,context);
         if (logger.isDebugEnabled())
             logger.debug("Exiting setActionForm()");
     }
