@@ -242,7 +242,7 @@
     </target>
 
     <target name="deploy" depends="package">
-        <copy todir="${appserver.home}/webapps" file="${basedir}/test.war"/>
+        <copy todir="${appserver.home}/webapps" file="${basedir}/test.war" overwrite="true"/>
     </target>
 
     <target name="update.struts">
