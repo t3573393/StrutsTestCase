@@ -1,4 +1,4 @@
-<project name="guavatrain" default="all" basedir=".">
+<project name="strutstestcase" default="all" basedir=".">
 
     <!-- ================ Initialize Property Values ================ -->
 
@@ -39,7 +39,7 @@
 
 
     <!-- Compile the application classes -->
-    <target name="build">
+    <target name="build" description="compile all Java classes">
         <mkdir dir="${build.dir}" />
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -65,7 +65,7 @@
     </target>
 
     <!-- package the application for deployment.  -->
-    <target name="package">
+    <target name="package" description="package all Java classes">
         <mkdir dir="${distribute.dir}"/>
         <jar jarfile="${distribute.dir}/strutstest.jar">
             <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
@@ -131,7 +131,7 @@
     </target>
 
     <!-- Clean up the build -->
-    <target name="clean">
+    <target name="clean" description="remove all build products">
         <delete dir="${build.dir}" />
         <delete dir="${basedir}/dist" />
         <delete dir="${test.dir}" />
@@ -145,7 +145,7 @@
     </target>
 
     <!-- Generate Javadocs for the application -->
-    <target name="docs">
+    <target name="docs" description="compile documentation for all Java classes">
         <mkdir dir="${doc.dir}/api" />
         <copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
         <copy file="${basedir}/faq.htm" toDir="${doc.dir}"/>
@@ -177,7 +177,7 @@
     </target>
 
     <!-- Run unit tests -->
-    <target name="test">
+    <target name="test" description="run all mock object tests">
         <mkdir dir="${test.dir}" />
         <junit printsummary="yes" haltonfailure="yes">
             <sysproperty key="test.dir" value="${test.dir}" />
@@ -198,7 +198,7 @@
         </junit>
     </target>
 
-    <target name="test.cactus">
+    <target name="test.cactus" description="run all cactus tests">
         <mkdir dir="${test.dir}" />
         <junit printsummary="yes" haltonfailure="yes">
             <sysproperty key="test.dir" value="${test.dir}" />
@@ -237,7 +237,7 @@
     </target>
 
     <!-- Run all the build targets -->
-    <target name="all" depends="clean,build,package,deploy"/>
+    <target name="all" description="build the StrutsTestCase library" depends="clean,build,package,deploy"/>
 
     <target name="auto.build" depends="clean,update.struts,build,test,package,deploy,test.cactus"/>
 
