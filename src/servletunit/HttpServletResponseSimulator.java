@@ -41,6 +41,7 @@ import javax.servlet.ServletOutputStream;
 import java.io.*;
 import java.util.Locale;
 import javax.servlet.http.Cookie;
+import junit.framework.AssertionFailedError;
 
 
 /**
@@ -477,7 +478,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
 
         public void sendError(int sc) throws IOException
         {
-            System.out.println("received error: " + sc);
+            throw new AssertionFailedError("received error: " + sc);
         }
         /**
          * Sends an error response to the client using the specified status
@@ -498,7 +499,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
 
         public void sendError(int sc, String msg) throws IOException
         {
-            System.out.println("recieved error " + sc + " : " + msg);
+            throw new AssertionFailedError("recieved error " + sc + " : " + msg);
         }
         /**
          * Sends a temporary redirect response to the client using the
