@@ -65,6 +65,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private String reqSessionId;
     String authType;
     String charEncoding;
+    private String serverName;
 
     private Hashtable parameters;
     private Hashtable headers;
@@ -86,7 +87,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * made this request.
      */
     public final static int POST = 1;
-    
+
     /**
      * Constant used by {@link #setMethod} to indicate that the PUT method
      * made this request.
@@ -100,8 +101,8 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         parameters = new Hashtable();
         headers = new Hashtable();
         requestDispatchers = new Hashtable();
-	cookies = new Vector();
-	this.context = context;
+    cookies = new Vector();
+    this.context = context;
         //if (getHeader("Accept")==null)
         //setHeader("Accept","dummy accept");
     }
@@ -128,13 +129,13 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         this.parameters.put( key, value );
     }
 
-    /** 
+    /**
      * Returns a java.util.Map of the parameters of this request.
      * Request parameters
      * are extra information sent with the request.  For HTTP servlets,
      * parameters are contained in the query string or posted form data.
      *
-     * @return an immutable java.util.Map containing parameter names as 
+     * @return an immutable java.util.Map containing parameter names as
      * keys and parameter values as map values. The keys in the parameter
      * map are of type String. The values in the parameter map are of type
      * String array.
@@ -147,25 +148,25 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     /**
      *
      * Returns the value of the named attribute as an <code>Object</code>,
-     * or <code>null</code> if no attribute of the given name exists. 
+     * or <code>null</code> if no attribute of the given name exists.
      *
      * <p> Attributes can be set two ways.  The servlet container may set
      * attributes to make available custom information about a request.
      * For example, for requests made using HTTPS, the attribute
      * <code>javax.servlet.request.X509Certificate</code> can be used to
      * retrieve information on the certificate of the client.  Attributes
-     * can also be set programatically using 
+     * can also be set programatically using
      * {@link ServletRequest#setAttribute}.  This allows information to be
      * embedded into a request before a {@link RequestDispatcher} call.
      *
      * <p>Attribute names should follow the same conventions as package
      * names. This specification reserves names matching <code>java.*</code>,
-     * <code>javax.*</code>, and <code>sun.*</code>. 
+     * <code>javax.*</code>, and <code>sun.*</code>.
      *
-     * @param name	a <code>String</code> specifying the name of 
+     * @param name	a <code>String</code> specifying the name of
      *			the attribute
      *
-     * @return		an <code>Object</code> containing the value 
+     * @return		an <code>Object</code> containing the value
      *			of the attribute, or <code>null</code> if
      *			the attribute does not exist
      *
@@ -177,13 +178,13 @@ public class HttpServletRequestSimulator implements HttpServletRequest
 
     /**
      * Returns an <code>Enumeration</code> containing the
-     * names of the attributes available to this request. 
+     * names of the attributes available to this request.
      * This method returns an empty <code>Enumeration</code>
      * if the request has no attributes available to it.
-     * 
      *
-     * @return		an <code>Enumeration</code> of strings 
-     *			containing the names 
+     *
+     * @return		an <code>Enumeration</code> of strings
+     *			containing the names
      * 			of the request's attributes
      *
      */
@@ -194,20 +195,20 @@ public class HttpServletRequestSimulator implements HttpServletRequest
 
     /**
      * Returns the name of the authentication scheme used to protect
-     * the servlet. All servlet containers support basic, form and client 
-     * certificate authentication, and may additionally support digest 
+     * the servlet. All servlet containers support basic, form and client
+     * certificate authentication, and may additionally support digest
      * authentication.
-     * If the servlet is not authenticated <code>null</code> is returned. 
+     * If the servlet is not authenticated <code>null</code> is returned.
      *
      * <p>Same as the value of the CGI variable AUTH_TYPE.
      *
      *
-     * @return		one of the static members BASIC_AUTH, 
+     * @return		one of the static members BASIC_AUTH,
      *			FORM_AUTH, CLIENT_CERT_AUTH, DIGEST_AUTH
-     *			(suitable for == comparison) 
-     *			indicating the authentication scheme, or 
-     *			<code>null</code> if the request was 
-     *			not authenticated.     
+     *			(suitable for == comparison)
+     *			indicating the authentication scheme, or
+     *			<code>null</code> if the request was
+     *			not authenticated.
      *
      */
     public String getAuthType()
@@ -219,9 +220,9 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Returns the name of the character encoding used in the body of this
      * request. This method returns <code>null</code> if the request
      * does not specify a character encoding
-     * 
      *
-     * @return		a <code>String</code> containing the name of 
+     *
+     * @return		a <code>String</code> containing the name of
      *			the chararacter encoding, or <code>null</code>
      *			if the request does not specify a character encoding
      */
@@ -231,7 +232,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * Returns the length, in bytes, of the request body 
+     * Returns the length, in bytes, of the request body
      * and made available by the input stream, or -1 if the
      * length is not known. For HTTP servlets, same as the value
      * of the CGI variable CONTENT_LENGTH.
@@ -244,12 +245,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * Returns the MIME type of the body of the request, or 
-     * <code>null</code> if the type is not known. For HTTP servlets, 
+     * Returns the MIME type of the body of the request, or
+     * <code>null</code> if the type is not known. For HTTP servlets,
      * same as the value of the CGI variable CONTENT_TYPE.
      *
-     * @return		a <code>String</code> containing the name 
-     *			of the MIME type of 
+     * @return		a <code>String</code> containing the name
+     *			of the MIME type of
      * 			the request, or null if the type is not known
      *
      */
@@ -275,34 +276,34 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String getContextPath()
     {
-	return contextPath;
+    return contextPath;
     }
 
     /**
      * Adds a cookie that can be retrieved from this request via the
      * getCookies() method.
-     * 
+     *
      * @param cookie a Cookie object to be retrieved from this
      * request.
      *
      * @see #getCookies
-     */ 
+     */
     public void addCookie(Cookie cookie) {
-	cookies.addElement(cookie);
+    cookies.addElement(cookie);
     }
 
     /**
      * Adds a set of cookies that can be retrieved from this request via the
      * getCookies() method.
-     * 
+     *
      * @param cookies an array of Cookie object to be retrieved from this
      * request.
      *
      * @see #getCookies
      */
     public void setCookies(Cookie[] cookies) {
-	for (int i = 0; i < cookies.length; i++)
-	    this.cookies.addElement(cookies[i]);
+    for (int i = 0; i < cookies.length; i++)
+        this.cookies.addElement(cookies[i]);
     }
 
     /**
@@ -319,12 +320,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Cookie [] getCookies()
     {
-	if (cookies.isEmpty())
-	    return null;
-	else {
-	    Cookie[] cookieArray = new Cookie[cookies.size()];
-	    return (Cookie []) cookies.toArray(cookieArray);
-	}
+    if (cookies.isEmpty())
+        return null;
+    else {
+        Cookie[] cookieArray = new Cookie[cookies.size()];
+        return (Cookie []) cookies.toArray(cookieArray);
+    }
     }
 
     /**
@@ -332,7 +333,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public long getDateHeader(String s)
     {
-	throw new UnsupportedOperationException("getDateHeader operation is not supported!");
+    throw new UnsupportedOperationException("getDateHeader operation is not supported!");
     }
 
     /**
@@ -375,7 +376,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *				if the servlet container does not
      *				allow servlets to use this method,
      *				<code>null</code>
-     *				
+     *
      *
      */
     public Enumeration getHeaderNames()
@@ -388,14 +389,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Enumeration getHeaders(String s)
     {
-	throw new UnsupportedOperationException("getHeaders operation is not supported!");
+    throw new UnsupportedOperationException("getHeaders operation is not supported!");
     }
 
     /**
      * This operation is not supported.
      */
-    public ServletInputStream getInputStream() throws IOException { 
-	throw new UnsupportedOperationException("getInputStream operation is not supported!");
+    public ServletInputStream getInputStream() throws IOException {
+    throw new UnsupportedOperationException("getInputStream operation is not supported!");
     }
 
     /**
@@ -411,7 +412,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * @param name		a <code>String</code> specifying the name
      *				of a request header
      *
-     * @return			an integer expressing the value 
+     * @return			an integer expressing the value
      * 				of the request header or -1
      *				if the request doesn't have a
      *				header of this name
@@ -423,20 +424,20 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     public int getIntHeader(String s)
     {
         Object header = headers.get(s);
-	if (header != null) {
-	    try {
-		Integer intHeader = (Integer) header;
-		return intHeader.intValue();
-	    } catch (ClassCastException e) {
-		throw new NumberFormatException("header '" + s + "' cannot be converted to number format.");
-	    }
-	} else
-	    return -1;
+    if (header != null) {
+        try {
+        Integer intHeader = (Integer) header;
+        return intHeader.intValue();
+        } catch (ClassCastException e) {
+        throw new NumberFormatException("header '" + s + "' cannot be converted to number format.");
+        }
+    } else
+        return -1;
     }
 
     /**
      *
-     * Returns the preferred <code>Locale</code> that the client will 
+     * Returns the preferred <code>Locale</code> that the client will
      * accept content in, based on the Accept-Language header.
      * If the client request doesn't provide an Accept-Language header,
      * this method returns the default locale for the server.
@@ -449,10 +450,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public  Locale getLocale()
     {
-	if (this.locale == null)
-	    return Locale.US;
-	else
-	    return this.locale;
+    if (this.locale == null)
+        return Locale.US;
+    else
+        return this.locale;
     }
 
     /**
@@ -460,16 +461,16 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Enumeration getLocales()
     {
-	throw new UnsupportedOperationException("getLocale operation is not supported!");
+    throw new UnsupportedOperationException("getLocale operation is not supported!");
     }
-    
+
     /**
      *
-     * Returns the name of the HTTP method with which this 
+     * Returns the name of the HTTP method with which this
      * request was made, for example, GET, POST, or PUT.
      * Same as the value of the CGI variable REQUEST_METHOD.
      *
-     * @return			a <code>String</code> 
+     * @return			a <code>String</code>
      *				specifying the name
      *				of the method with which
      *				this request was made
@@ -499,10 +500,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * #getInputStream} or {@link #getReader} can interfere
      * with the execution of this method.
      *
-     * @param name 	a <code>String</code> specifying the 
+     * @param name 	a <code>String</code> specifying the
      *			name of the parameter
      *
-     * @return		a <code>String</code> representing the 
+     * @return		a <code>String</code> representing the
      *			single value of the parameter
      *
      * @see 		#getParameterValues
@@ -522,13 +523,13 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      * Returns an <code>Enumeration</code> of <code>String</code>
      * objects containing the names of the parameters contained
-     * in this request. If the request has 
-     * no parameters, the method returns an 
-     * empty <code>Enumeration</code>. 
+     * in this request. If the request has
+     * no parameters, the method returns an
+     * empty <code>Enumeration</code>.
      *
      * @return		an <code>Enumeration</code> of <code>String</code>
      *			objects, each <code>String</code> containing
-     * 			the name of a request parameter; or an 
+     * 			the name of a request parameter; or an
      *			empty <code>Enumeration</code> if the
      *			request has no parameters
      *
@@ -539,17 +540,17 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
-     * Returns an array of <code>String</code> objects containing 
-     * all of the values the given request parameter has, or 
+     * Returns an array of <code>String</code> objects containing
+     * all of the values the given request parameter has, or
      * <code>null</code> if the parameter does not exist.
      *
      * <p>If the parameter has a single value, the array has a length
      * of 1.
      *
-     * @param name	a <code>String</code> containing the name of 
+     * @param name	a <code>String</code> containing the name of
      *			the parameter whose value is requested
      *
-     * @return		an array of <code>String</code> objects 
+     * @return		an array of <code>String</code> objects
      *			containing the parameter's values
      *
      * @see		#getParameter
@@ -582,7 +583,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      *
      * @return		a <code>String</code>, decoded by the
-     *			web container, specifying 
+     *			web container, specifying
      *			extra path information that comes
      *			after the servlet path but before
      *			the query string in the request URL;
@@ -600,17 +601,17 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String getPathTranslated()
     {
-	throw new UnsupportedOperationException("getPathTranslated operation is not supported!");
+    throw new UnsupportedOperationException("getPathTranslated operation is not supported!");
     }
 
     /**
      * Returns the name and version of the protocol the request uses
-     * in the form <i>protocol/majorVersion.minorVersion</i>, for 
+     * in the form <i>protocol/majorVersion.minorVersion</i>, for
      * example, HTTP/1.1. For HTTP servlets, the value
-     * returned is the same as the value of the CGI variable 
+     * returned is the same as the value of the CGI variable
      * <code>SERVER_PROTOCOL</code>.
      *
-     * @return		a <code>String</code> containing the protocol 
+     * @return		a <code>String</code> containing the protocol
      *			name and version number
      *
      */
@@ -624,10 +625,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Returns the query string that is contained in the request
      * URL after the path. This method returns <code>null</code>
      * if the URL does not have a query string. Same as the value
-     * of the CGI variable QUERY_STRING. 
+     * of the CGI variable QUERY_STRING.
      *
      * @return		a <code>String</code> containing the query
-     *			string or <code>null</code> if the URL 
+     *			string or <code>null</code> if the URL
      *			contains no query string. The value is not
      *			decoded by the container.
      *
@@ -641,11 +642,11 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * This operation is not supported.
      */
     public BufferedReader getReader() throws IOException {
-	throw new UnsupportedOperationException("getReader operation is not supported!");
+    throw new UnsupportedOperationException("getReader operation is not supported!");
     }
-    
+
     /**
-     * 
+     *
      * @deprecated 	As of Version 2.1 of the Java Servlet API,
      * 			use {@link ServletContext#getRealPath} instead.
      *
@@ -656,43 +657,43 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     {
         throw new UnsupportedOperationException("getRealPath operation is not supported.");
     }
-    
+
     /**
-     * Returns the Internet Protocol (IP) address of the client 
-     * that sent the request.  For HTTP servlets, same as the value of the 
+     * Returns the Internet Protocol (IP) address of the client
+     * that sent the request.  For HTTP servlets, same as the value of the
      * CGI variable <code>REMOTE_ADDR</code>.
      *
-     * @return		a <code>String</code> containing the 
+     * @return		a <code>String</code> containing the
      *			IP address of the client that sent the request
      *
      */
-    public String getRemoteAddr() { 
-	return remoteAddr; 
+    public String getRemoteAddr() {
+    return remoteAddr;
     }
-    
+
     /**
      * Returns the fully qualified name of the client that sent the
-     * request. If the engine cannot or chooses not to resolve the hostname 
-     * (to improve performance), this method returns the dotted-string form of 
-     * the IP address. For HTTP servlets, same as the value of the CGI variable 
+     * request. If the engine cannot or chooses not to resolve the hostname
+     * (to improve performance), this method returns the dotted-string form of
+     * the IP address. For HTTP servlets, same as the value of the CGI variable
      * <code>REMOTE_HOST</code>.
      *
-     * @return		a <code>String</code> containing the fully 
+     * @return		a <code>String</code> containing the fully
      * qualified name of the client
      *
      */
-    public String getRemoteHost() { 
-	return remoteHost;
+    public String getRemoteHost() {
+    return remoteHost;
     }
-    
+
     /**
      * Returns the fully qualified name of the client that sent the
-     * request. If the engine cannot or chooses not to resolve the hostname 
-     * (to improve performance), this method returns the dotted-string form of 
-     * the IP address. For HTTP servlets, same as the value of the CGI variable 
+     * request. If the engine cannot or chooses not to resolve the hostname
+     * (to improve performance), this method returns the dotted-string form of
+     * the IP address. For HTTP servlets, same as the value of the CGI variable
      * <code>REMOTE_HOST</code>.
      *
-     * @return		a <code>String</code> containing the fully 
+     * @return		a <code>String</code> containing the fully
      * qualified name of the client
      *
      */
@@ -704,14 +705,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     /**
      *
      * Returns a {@link RequestDispatcher} object that acts as a wrapper for
-     * the resource located at the given path.  
+     * the resource located at the given path.
      * A <code>RequestDispatcher</code> object can be used to forward
      * a request to the resource or to include the resource in a response.
      * The resource can be dynamic or static.
      *
      * <p>The pathname specified may be relative, although it cannot extend
-     * outside the current servlet context.  If the path begins with 
-     * a "/" it is interpreted as relative to the current context root.  
+     * outside the current servlet context.  If the path begins with
+     * a "/" it is interpreted as relative to the current context root.
      * This method returns <code>null</code> if the servlet container
      * cannot return a <code>RequestDispatcher</code>.
      *
@@ -765,7 +766,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * The web container does not decode this String.
      * For example:
      *
-     * 
+     *
      * <table>
      * <tr align=left><th>First line of HTTP request      </th>
      * <th>     Returned Value</th>
@@ -774,10 +775,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * <td><td>/a.html
      * <tr><td>HEAD /xyz?a=b HTTP/1.1<td><td>/xyz
      * </table>
-     *      
+     *
      *
      * @return		a <code>String</code> containing
-     *			the part of the URL from the 
+     *			the part of the URL from the
      *			protocol name up to the query string
      *
      *
@@ -787,23 +788,23 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         return requestURI;
     }
 
-    
+
     /**
      * This operation is not supported.
      */
     public StringBuffer getRequestURL()
     {
-	throw new UnsupportedOperationException("getRequestURL is not supported!");
+    throw new UnsupportedOperationException("getRequestURL is not supported!");
     }
 
     /**
-     * Returns the name of the scheme used to make this request, 
+     * Returns the name of the scheme used to make this request,
      * for example,
      * <code>http</code>, <code>https</code>, or <code>ftp</code>.
      * Different schemes have different rules for constructing URLs,
      * as noted in RFC 1738.
      *
-     * @return		a <code>String</code> containing the name 
+     * @return		a <code>String</code> containing the name
      *			of the scheme used to make this request
      *
      */
@@ -811,27 +812,30 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     {
         return scheme;
     }
-    
+
     /**
-     * This operation is not supported.
+     *     Returns the host name of the server that received
+     *     the request. For HTTP servlets, same as the value of
+     *     the CGI variable SERVER_NAME.
+     *     @return the name of the server to which the request was sent
      */
     public String getServerName() {
-	throw new UnsupportedOperationException("getServerName operation is not supported!");
+        return serverName;
     }
-    
+
     /**
      * This operation is not supported.
      */
-    public int getServerPort() { 
-	throw new UnsupportedOperationException("getServerPort operation is not supported!");
+    public int getServerPort() {
+    throw new UnsupportedOperationException("getServerPort operation is not supported!");
     }
-    
+
     /**
      *
      * Returns the part of this request's URL that calls
      * the servlet. This includes either the servlet name or
      * a path to the servlet, but does not include any extra
-     * path information or a query string. Same as the value 
+     * path information or a query string. Same as the value
      * of the CGI variable SCRIPT_NAME.
      *
      *
@@ -851,7 +855,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      * Returns the current session associated with this request,
      * or if the request does not have a session, creates one.
-     * 
+     *
      * @return		the <code>HttpSession</code> associated
      *			with this request
      *
@@ -867,7 +871,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      * Returns the current <code>HttpSession</code>
      * associated with this request or, if if there is no
-     * current session and <code>create</code> is true, returns 
+     * current session and <code>create</code> is true, returns
      * a new session.
      *
      * <p>If <code>create</code> is <code>false</code>
@@ -875,7 +879,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * this method returns <code>null</code>.
      *
      * <p>To make sure the session is properly maintained,
-     * you must call this method before 
+     * you must call this method before
      * the response is committed. If the container is using cookies
      * to maintain session integrity and is asked to create a new session
      * when the response is committed, an IllegalStateException is thrown.
@@ -884,12 +888,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      *
      * @param		<code>true</code> to create
-     *			a new session for this request if necessary; 
+     *			a new session for this request if necessary;
      *			<code>false</code> to return <code>null</code>
      *			if there's no current session
-     *			
      *
-     * @return 		the <code>HttpSession</code> associated 
+     *
+     * @return 		the <code>HttpSession</code> associated
      *			with this request or <code>null</code> if
      * 			<code>create</code> is <code>false</code>
      *			and the request has no valid session
@@ -913,13 +917,13 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      * @return		a <code>java.security.Principal</code> containing
      *			the name of the user making this request;
-     *			<code>null</code> if the user has not been 
+     *			<code>null</code> if the user has not been
      *			authenticated
      *
      */
     public Principal getUserPrincipal()
     {
-	return this.principal;
+    return this.principal;
     }
 
     /**
@@ -930,7 +934,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      * @see			#getSession
      *
-     */ 
+     */
     public boolean isRequestedSessionIdFromCookie()
     {
         return true;
@@ -950,7 +954,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
 
     /**
      *
-     * Checks whether the requested session ID came in as part of the 
+     * Checks whether the requested session ID came in as part of the
      * request URL.
      *
      * @return			<code>false</code> in all cases.
@@ -979,15 +983,15 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public boolean isRequestedSessionIdValid()
     {
-	if (session != null) {
-	    try {
-		session.getId();
-		return true;
-	    } catch (IllegalStateException e) {
-		return false;
-	    }
-	} else
-	    return false;
+    if (session != null) {
+        try {
+        session.getId();
+        return true;
+        } catch (IllegalStateException e) {
+        return false;
+        }
+    } else
+        return false;
     }
 
     /**
@@ -996,12 +1000,16 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * secure channel, such as HTTPS.
      *
      *
-     * @return		false in all cases.
+     * @return true if scheme has been set to HTTPS (ignoring case)
      *
      */
     public boolean isSecure()
     {
-        return false;
+        if(scheme==null){
+            return false;
+        } else{
+            return scheme.equalsIgnoreCase("HTTPS");
+        }
     }
 
     /**
@@ -1034,7 +1042,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * reserved for use by Sun Microsystems.
      *
      *
-     * @param name			a <code>String</code> specifying 
+     * @param name			a <code>String</code> specifying
      *					the name of the attribute to remove
      *
      */
@@ -1058,7 +1066,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      *
      *
-     * @param name			a <code>String</code> specifying 
+     * @param name			a <code>String</code> specifying
      *					the name of the attribute
      *
      * @param o				the <code>Object</code> to be stored
@@ -1090,7 +1098,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets content type to be used in {@link #getContentType}.
      */
     public void setContentType(String s) {
-	contentType = s;
+    contentType = s;
     }
 
     /**
@@ -1114,12 +1122,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     public void setMethod(int methodType)
     {
         switch (methodType)
-	    {
-	    case GET:method="GET";break;
-	    case PUT:method="PUT";break;
-	    case POST:method="POST";break;
-	    default:method="NULL";
-	    }
+        {
+        case GET:method="GET";break;
+        case PUT:method="PUT";break;
+        case POST:method="POST";break;
+        default:method="NULL";
+        }
     }
 
     /**
@@ -1142,9 +1150,9 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets query string to be used by {@link #getQueryString}.
      */
     public void setQueryString(String s) {
-	this.queryString = s;
+    this.queryString = s;
     }
-    
+
     /**
      * Sets remote user to be used by {@link #getRemoteUser}.
      */
@@ -1157,14 +1165,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets remote address to be used by {@link #getRemoteAddr}.
      */
     public void setRemoteAddr(String remoteAddr) {
-	this.remoteAddr = remoteAddr;
+    this.remoteAddr = remoteAddr;
     }
 
     /**
      * Sets remote host to be used by {@link #getRemoteHost}.
      */
     public void setRemoteHost(String remoteHost) {
-	this.remoteHost = remoteHost;
+    this.remoteHost = remoteHost;
     }
 
     /**
@@ -1200,11 +1208,19 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     }
 
     /**
+     * Sets server name to be used by {@link #getServerName}.
+     */
+    public void setServerName(String s)
+    {
+        serverName = s;
+    }
+
+    /**
      * Sets the context path to be used by {@link #getContextPath}.
      */
-    public void setContextPath(String s) 
+    public void setContextPath(String s)
     {
-	contextPath = s;
+    contextPath = s;
     }
 
 
@@ -1212,14 +1228,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets the locale to be used by {@link #getLocale}.
      */
     public void setLocale(Locale locale) {
-	this.locale = locale;
+    this.locale = locale;
     }
-	
+
     /**
      * Sets the Principal used by {@link #getUserPrincipal}.
      */
     public void setUserPrincipal(Principal principal) {
-	this.principal = principal;
+    this.principal = principal;
     }
 
 }
