@@ -21,6 +21,8 @@ import org.apache.struts.action.*;
 import org.apache.struts.tiles.*;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.Globals;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -36,12 +38,18 @@ import java.util.Iterator;
 public class Common {
 
     protected static final String INCLUDE_SERVLET_PATH = RequestProcessor.INCLUDE_SERVLET_PATH;
+    protected static Log logger = LogFactory.getLog(Common.class);
 
     /**
      * Common method to verify action errors and action messages.
      */
     protected static void verifyNoActionMessages(HttpServletRequest request, String key, String messageLabel) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.verifyNoActionMessages() : request = " + request + ", key = " + key + ", messageLabel = " + messageLabel);
         ActionMessages messages = (ActionMessages) request.getAttribute(key);
+        if (logger.isDebugEnabled()) {
+            logger.debug("servletunit.struts.Common.verifyNoActionMessages() : retrieved ActionMessages = " + messages);
+        }
         if (messages != null) {
             Iterator iterator = messages.get();
             if (iterator.hasNext()) {
@@ -54,15 +62,22 @@ public class Common {
                 throw new AssertionFailedError("was expecting no " + messageLabel + " messages, but received: " + messageText.toString());
             }
         }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.verifyNoActionMessages()");
     }
 
     /**
      * Common method to verify action errors and action messages.
      */
     protected static void verifyActionMessages(HttpServletRequest request, String[] messageNames, String key, String messageLabel) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.verifyActionMessages() : request = " + request + ", messageNames = " + messageNames + ", key = " + key + ", messageLabel = " + messageLabel);
         int actualLength = 0;
 
         ActionMessages messages = (ActionMessages) request.getAttribute(key);
+        if (logger.isDebugEnabled()) {
+            logger.debug("servletunit.struts.Common.verifyNoActionMessages() : retrieved ActionMessages = " + messages);
+        }
         if (messages == null) {
             throw new AssertionFailedError("was expecting some " + messageLabel + " messages, but received none.");
         } else {
@@ -83,6 +98,8 @@ public class Common {
                 throw new AssertionFailedError("was expecting " + messageNames.length + " " + messageLabel + " message(s), but received " + actualLength + " " + messageLabel + " message(s)");
             }
         }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.verifyActionMessages()");
     }
 
     /**
@@ -91,6 +108,9 @@ public class Common {
      * be fetched from the tile definition.
      */
     protected static String getTilesForward(String forwardPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
+
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.getTilesForward() : forwardPath = " + forwardPath + ", request = " + request + ", context = " + context + ", config = " + config);
 
         String result = null;
         try {
@@ -102,6 +122,9 @@ public class Common {
                 // We use it to complete missing attribute in context.
                 // We also get uri, controller.
                 result = definition.getPath();
+                if (logger.isDebugEnabled()) {
+                    logger.debug("servletunit.struts.Common.getTilesForward() : found tiles definition - '" + forwardPath + "' = '" + result + "'");
+                }
             }
             definition = DefinitionsUtil.getActionDefinition(request);
             if (definition != null) {
@@ -110,14 +133,24 @@ public class Common {
                 // We also overload uri and controller if set in definition.
                 if (definition.getPath() != null)
                     result = definition.getPath();
+                if (logger.isDebugEnabled()) {
+                    logger.debug("servletunit.struts.Common.getTilesForward() : found tiles definition for action - '" + forwardPath + "' = '" + result + "'");
+                }
             }
             return result;
         } catch (NoSuchDefinitionException nsde) {
+            if (logger.isTraceEnabled())
+                logger.trace("Exiting-servletunit.struts.Common.getTilesForward(): caught NoSuchDefinitionException");
             return null;
         } catch (DefinitionsFactoryException dfe) {
+            if (logger.isTraceEnabled())
+                logger.trace("Exiting-servletunit.struts.Common.getTilesForward(): caught Defi");
             return null;
         } catch (NullPointerException npe) {
             // can happen if tiles is not at all used.
+            if (logger.isDebugEnabled()) {
+                logger.debug("Exiting-servletunit.struts.Common.getTilesForward() : caught NullPointerException - tiles must not be used.");
+            }
             return null;
         }
     }
@@ -129,38 +162,72 @@ public class Common {
      */
     protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
 
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.verifyForwardPath() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", forwardName = " + forwardName + ", actualForwardPath = " + actualForwardPath);
+
         if ((forwardName == null) && (isInputPath)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.verifyForwardPath() : processing an input forward");
+            }
             forwardName = getActionConfig(actionServlet, actionPath, request, context).getInput();
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.verifyForwardPath() : retrieved input forward name = " + forwardName);
+            }
             if (forwardName == null)
                 throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
             String tilesForward = getTilesForward(forwardName, request, context, config);
-            if (tilesForward != null)
+            if (tilesForward != null) {
                 forwardName = tilesForward;
+                if (logger.isDebugEnabled()) {
+                    logger.debug("servletunit.struts.Common.verifyForwardPath() : retrieved tiles definition for forward = " + forwardName);
+                }
+            }
         }
         if (!isInputPath) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.verifyForwardPath() : processing normal forward");
+            }
             ActionForward expectedForward = findForward(actionPath, forwardName, request, context, actionServlet);
-            if (expectedForward == null)
+            if (expectedForward == null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("servletunit.struts.Common.verifyForwardPath() : looking for global forward declaration");
+                }
                 expectedForward = actionServlet.findForward(forwardName);
+            }
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.verifyForwardPath() : retrieved forward name = " + forwardName);
+            }
 
             String tilesForward = getTilesForward(forwardName, request, context, config);
-            if (tilesForward != null)
+            if (tilesForward != null) {
                 forwardName = tilesForward;
+                if (logger.isDebugEnabled()) {
+                    logger.debug("servletunit.struts.Common.verifyForwardPath() : retrieved tiles definition for forward = " + forwardName);
+                }
+            }
         }
         forwardName = request.getContextPath() + forwardName;
+        if (logger.isDebugEnabled()) {
+            logger.debug("servletunit.struts.Common.verifyForwardPath() : added context path to forward = " + forwardName);
+        }
         if (actualForwardPath == null) {
             throw new AssertionFailedError("Was expecting '" + forwardName + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
         }
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.verifyForwardPath()");
     }
 
     /**
      * Strips off *.do from action paths specified as such.
      */
     protected static String stripActionPath(String path) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.stripActionPath() : path = " + path);
         if (path == null)
             return null;
 
@@ -168,6 +235,8 @@ public class Common {
         int period = path.lastIndexOf(".");
         if ((period >= 0) && (period > slash))
             path = path.substring(0, period);
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.stripActionPath() - returning path = " + path);
         return path;
     }
 
@@ -176,6 +245,8 @@ public class Common {
      * @return stripped path
      */
     protected static String stripJSessionID(String path) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.stripJSessionID() : path = " + path);
         if (path == null)
             return null;
 
@@ -186,6 +257,8 @@ public class Common {
             StringBuffer buf = new StringBuffer(path);
             path = buf.delete(jsess_idx, jsess_idx + 44).toString();
         }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.stripJSessionID() - returning path = " + path);
         return path;
     }
 
@@ -193,36 +266,76 @@ public class Common {
      * Returns any ActionForm instance stored in the request or session, if available.
      */
     protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request, ServletContext context) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.getActionForm() : actionServlet = " + actionServlet + ", actionPath = " + actionPath + ", request = " + request + ", context = " + context);
         ActionForm form;
         ActionMapping actionConfig = getActionConfig(actionServlet, actionPath, request, context);
         if ("request".equals(actionConfig.getScope())) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.getActionForm() : looking for form in request scope");
+            }
             form = (ActionForm) request.getAttribute(actionConfig.getAttribute());
         } else {
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.getActionForm() : looking for form in session scope");
+            }
             HttpSession session = request.getSession();
             form = (ActionForm) session.getAttribute(actionConfig.getAttribute());
         }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.getActionForm()");
         return form;
     }
 
     protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context, ActionServlet actionServlet) {
-        return getActionConfig(actionServlet, mappingName, request, context).findForward(forwardName);
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.findForward() : mappingName = " + mappingName + ", forwardName = " + forwardName + ", request = " + request + ", context = " + context + ", actionServlet = " + actionServlet);
+        ActionForward forward = getActionConfig(actionServlet, mappingName, request, context).findForward(forwardName);
+        if (logger.isDebugEnabled()) {
+            logger.debug("servletunit.struts.Common.findForward() : retrieved forward = " + forward);
+        }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.findForward()");
+        return forward;
     }
 
     protected static ActionMapping getActionConfig(ActionServlet actionServlet, String mappingName, HttpServletRequest request, ServletContext context) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.getActionConfig() : actionServlet = " + actionServlet + ", mappingName = " + mappingName + ", request = " + request + ", context = " + context);
+        if (logger.isDebugEnabled()) {
+            logger.debug("servletunit.struts.Common.getActionConfig() : looking for config in request context");
+        }
         ModuleConfig config = (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
         if (config == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.getActionConfig() : looking for config in application context");
+            }
             config = (ModuleConfig) context.getAttribute(Globals.MODULE_KEY);
         }
-        return (ActionMapping) config.findActionConfig(mappingName);
+        ActionMapping actionMapping = (ActionMapping) config.findActionConfig(mappingName);
+        if (logger.isDebugEnabled()) {
+            logger.debug("servletunit.struts.Common.getActionConfig() : retrieved mapping = " + actionMapping);
+        }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting-servletunit.struts.Common.getActionConfig()");
+        return actionMapping;
     }
 
     protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context, ActionServlet actionServlet) {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering+servletunit.struts.Common.setActionForm() : form = " + form + ", request = " + request + ", actionPath = " + actionPath + ", context = " + context + ", actionServlet = " + actionServlet);
         ActionMapping actionConfig = getActionConfig(actionServlet, actionPath, request, context);
-        if (actionConfig.getScope().equals("request"))
+        if (actionConfig.getScope().equals("request"))  {
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.setActionForm() : setting form in request context");
+            }
             request.setAttribute(actionConfig.getAttribute(), form);
-        else
+        } else {
+            if (logger.isDebugEnabled()) {
+                logger.debug("servletunit.struts.Common.setActionForm() : setting form in session context");
+            }
             request.getSession().setAttribute(actionConfig.getAttribute(), form);
+        }
     }
-
 
 }
