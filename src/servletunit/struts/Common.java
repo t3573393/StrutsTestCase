@@ -250,6 +250,15 @@ public class Common {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : processing normal forward");
             }
+
+            // check for a null forward, now allowed in Struts 1.1
+            if (forwardName == null) {
+                if (actualForwardPath == null)
+                    return;
+                else
+                    throw new AssertionFailedError("Expected a null forward from action, but received '" + actualForwardPath + "'");
+            }
+
             ActionForward expectedForward = findForward(actionPath, forwardName, request, context, actionServlet);
             if (expectedForward == null) {
                 if (logger.isDebugEnabled()) {

@@ -556,8 +556,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyForwardPath() : forwardPath = " + forwardPath);
         init();
-        forwardPath = request.getContextPath() + forwardPath;
         String actualForward = getActualForward();
+
+        if ((actualForward == null) && (forwardPath == null)) {
+            // actions can return null forwards.
+            return;
+        }
+
+        forwardPath = request.getContextPath() + forwardPath;
+
         if (actualForward == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");

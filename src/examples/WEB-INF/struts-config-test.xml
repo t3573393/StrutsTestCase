@@ -39,5 +39,6 @@
             <forward name="action2" path="/main/action2.jsp"/>
         </action>
         <action path="/testActionMessages" type="servletunit.struts.tests.MessageAction" />
+        <action path="/testNullAction" type="servletunit.struts.tests.NullAction" />
     </action-mappings>
 </struts-config>

@@ -598,9 +598,14 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyForwardPath() : forwardPath = " + forwardPath);
         init();
+        String actualForward = getActualForward();
+        if ((actualForward == null) && (forwardPath == null)) {
+            // actions can send null forwards, which is fine.
+            return;
+        }
+
         forwardPath = request.getContextPath() + forwardPath;
 
-        String actualForward = getActualForward();
         if (actualForward == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");
