@@ -3,6 +3,7 @@ package servletunit;
 import java.util.Enumeration;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
+import javax.servlet.ServletContext;
 import java.util.Hashtable;
 
 // ServletUnit Library v1.2 - A java-based testing framework for servlets
@@ -91,7 +92,7 @@ public class HttpSessionSimulator implements HttpSession
 
     public HttpSessionContext getSessionContext()
     {
-        return null;
+        throw new UnsupportedOperationException("getSessionContext not supported!");
     }
 
     public Object getValue(String s) throws IllegalStateException
@@ -144,6 +145,10 @@ public class HttpSessionSimulator implements HttpSession
 
     public void setMaxInactiveInterval(int i)
     {
+    }
+
+    public ServletContext getServletContext() {
+        throw new UnsupportedOperationException("getServletContext not supported");
     }
 
     private void checkValid() throws IllegalStateException {
