@@ -7,6 +7,13 @@
 <body>
 <center><h2>Frequently Asked Questions About StrutsTestCase for JUnit</h2></center>
 <hr>
+<h3>Why does my test fail complaining about "Missing configuration resource for path /WEB-INF/struts-config.xml"?</h3>
+This usually occurs when your CLASSPATH is not set properly to point to the directory <i>that contains</i> the WEB-INF directory.  For example, if your struts-config.xml is located in the following directory:<br><br>
+<pre>/my/directory/WEB-INF/struts-config.xml</pre>
+.. then you would set the CLASSPATH as follows:
+<pre>CLASSPATH=/my/directory</pre>
+As an alternative, you can use the <a href="api/servletunit/struts/MockStrutsTestCase.html#setConfigFile(java.lang.String)"><code>setConfigFile</code></a> method to point to your configuration file, keeping in mind that you must reference the file appropriately.
+
 <h3>Why do I keep getting NoClassDefFoundErrors when I run my test case?</h3>
 Assuming that your CLASSPATH is indeed set up properly, there are two situations where this problem might occur:
 <ul>
