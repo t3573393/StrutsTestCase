@@ -23,5 +23,6 @@
 		</action>
 		<action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
 		<action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
+		<action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
 	</action-mappings>
 </struts-config>

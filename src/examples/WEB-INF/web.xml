@@ -2,6 +2,11 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
   "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
+
+        <context-param>
+	      <param-name>username</param-name>
+	      <param-value>deryl</param-value>
+	</context-param>
 	<!-- Cactus Servlet Redirector configuration -->
 	<servlet>
 		<servlet-name>ServletRedirector</servlet-name>
