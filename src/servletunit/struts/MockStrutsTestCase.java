@@ -311,9 +311,13 @@ public class MockStrutsTestCase extends TestCase {
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         init();
         this.actionPath = Common.stripActionPath(pathInfo);
-        if (!((moduleName == null) && (moduleName.length() == 0))) {
-            if (!moduleName.startsWith("/"))
-                moduleName = "/" + moduleName + "/";
+        if (moduleName != null) {
+	    if (!moduleName.equals("")) {
+		if (!moduleName.startsWith("/"))
+		    moduleName = "/" + moduleName;
+		if (!moduleName.endsWith("/"))
+		    moduleName = moduleName + "/";
+	    }
             this.request.setAttribute(RequestProcessor.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);

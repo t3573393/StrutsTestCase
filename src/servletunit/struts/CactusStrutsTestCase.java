@@ -225,7 +225,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setRequestPathInfo(String pathInfo) {
         init();
-        this.setRequestPathInfo(null,pathInfo);
+        this.setRequestPathInfo("",pathInfo);
     }
 
 
@@ -246,10 +246,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         init();
         ((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
-        if (!((moduleName == null) && (moduleName.length() == 0))) {
-            if (!moduleName.startsWith("/"))
-                moduleName = "/" + moduleName + "/";
-	    this.request.setAttribute(RequestProcessor.INCLUDE_SERVLET_PATH, moduleName);
+	if (moduleName != null) {
+	    if (!moduleName.equals("")) {
+		if (!moduleName.startsWith("/"))
+		    moduleName = "/" + moduleName;
+		if (!moduleName.endsWith("/"))
+		    moduleName = moduleName + "/";
+	    }
+            this.request.setAttribute(RequestProcessor.INCLUDE_SERVLET_PATH, moduleName);
         }
     }
 
