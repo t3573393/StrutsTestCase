@@ -260,7 +260,6 @@ public class MockStrutsTestCase extends TestCase {
 	} catch (ServletException se) {
 	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
 	} catch (Exception ex) {
-	    ex.printStackTrace();
             fail("Error running action.perform(): " + ex.getClass() + " - " + ex.getMessage());
 	}
     }
