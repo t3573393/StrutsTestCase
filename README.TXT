@@ -1,12 +1,12 @@
-StrutsTestCase for JUnit - release 2.0.2
+StrutsTestCase for JUnit - release 2.1.0
 ----------------------------------------
 
 This release resolves outstanding issues with Struts 1.1.
 
 The StrutsTestCase library is available as four distinct
 releases supporting both the 2.2 and 2.3 versions of the 
-Servlet specification, and both the 1.0.x and 1.1 versions
-of the Struts Framework.
+Servlet specification, and the 1.1 versions of the Struts
+Framework.
 
 Change Log
 ==========
@@ -14,8 +14,16 @@ Change Log
 New Features:
 ------------
 
+- The StrutsTestCase library is now supports just the Struts
+1.1 release, and as such, has removed all deprecated references.
+
 - Added no argument constructors, which is now supported in
-the latest JUnit release. (MockStrutsTestCase and CactusStrutsTestCase)
+the latest JUnit release. (MockStrutsTestCase and
+CactusStrutsTestCase)
+
+- Made getActualForward() a protected method, so that it can
+be used in test cases. (MockStrutsTestCase and
+CactusStrutsTestCase)
 
 Bug Fixes:
 ---------
