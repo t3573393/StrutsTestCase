@@ -36,7 +36,9 @@ import servletunit.ServletConfigSimulator;
 import servletunit.RequestDispatcherSimulator;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -67,6 +69,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
     ActionForward forward;
     ActionForm actionForm;
     HashMap parameters = new HashMap();
+    HttpServletRequestWrapper requestWrapper;
+    HttpServletResponseWrapper responseWrapper;
 
     /**
      * Default constructor.
@@ -74,12 +78,18 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public CactusStrutsTestCase(String testName) {
         super(testName);
     }
-
+    
     /**
-     * Sets up the test fixture for this test.
+     * Sets up the test fixture for this test.  This method creates
+     * an instance of the ActionServlet, initializes it to validate
+     * forms and turn off debugging, and clears all other parameters.
+     * <p>
+     * Please note that this method performs some important initialization
+     * calls, and <b>must</b> be called if this method is overridden in a
+     * subclass.
      */
-    public void setUp() {
-        try {
+    public void setUp() throws Exception {
+	try {
             parameters.clear();
             forward = null;
             actionForm = null;
@@ -88,6 +98,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
             config.setInitParameter("debug","0");
             config.setInitParameter("detail","0");
             config.setInitParameter("validate","true");
+	    requestWrapper = null;
+	    responseWrapper = null;
         } catch (Exception e) {
             throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
         }
@@ -95,9 +107,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
     /**
      * Tears down the test fixture upon completion.  This method calls
-     * the destroy method on the ActionServlet method used in this test.
+     * the destroy method on the ActionServlet method used in this test,
+     * and <b>must</b> be called if this method is overridden in a subclass.
      */
-    public void tearDown() {
+    public void tearDown() throws Exception {
         try {
             actionServlet.destroy();
         } catch (Exception e) {
@@ -114,11 +127,73 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Returns a HttpServletRequestWrapper object that can be used
+     * in this test. Note that if {@link #setRequestWrapper} has not been
+     * called, this method will return an instance of 
+     * javax.servlet.http.HttpServletRequestWrapper.
+     */
+    public HttpServletRequestWrapper getRequestWrapper() {
+	if (requestWrapper == null)
+	    return new HttpServletRequestWrapper(this.request);
+	else
+	    return requestWrapper;
+    }
+
+    /**
+     * Set this TestCase to use a given HttpServletRequestWrapper
+     * class when calling Action.perform().  Note that if this
+     * method is not called, then the normal HttpServletRequest
+     * object is used.
+     *
+     * @param wrapper an HttpServletRequestWrapper object to be
+     * used when calling Action.perform().
+     */
+    public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
+	if (wrapper == null)
+	    throw new IllegalArgumentException("wrapper class cannot be null!");
+	else {
+	    wrapper.setRequest(this.request);
+	    this.requestWrapper = wrapper;
+	}
+    }
+
+    /**
      * Returns an HttpServletResponse object that can be used in
      * this test.
      */
     public HttpServletResponse getResponse() {
         return this.response;
+    }
+
+    /**
+     * Returns an HttpServletResponseWrapper object that can be used in
+     * this test.  Note that if {@link #setResponseWrapper} has not been
+     * called, this method will return an instance of 
+     * javax.servlet.http.HttpServletResponseWrapper.
+     */
+    public HttpServletResponseWrapper getResponseWrapper() {
+	if (responseWrapper == null)
+	    return new HttpServletResponseWrapper(this.response);
+	else
+	    return responseWrapper;
+    }
+
+    /**
+     * Set this TestCase to use a given HttpServletResponseWrapper
+     * class when calling Action.perform().  Note that if this
+     * method is not called, then the normal HttpServletResponse
+     * object is used.
+     *
+     * @param wrapper an HttpServletResponseWrapper object to be
+     * used when calling Action.perform().
+     */
+    public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
+	if (wrapper == null)
+	    throw new IllegalArgumentException("wrapper class cannot be null!");
+	else {
+	    wrapper.setResponse(this.response);
+	    this.responseWrapper = wrapper;
+	}
     }
 
     /**
@@ -227,6 +302,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void actionPerform() {
 
+	HttpServletRequest request = this.request;
+	HttpServletResponse response = this.response;
+	if (this.requestWrapper != null)
+	    request = this.requestWrapper;
+	if (this.responseWrapper != null)
+	    response = this.responseWrapper;
+
         // set up the ActionServlet
         try {
             actionServlet.init(config);
@@ -234,7 +316,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
         }
 
-        // set up  the ActionMapping
+        // set up the ActionMapping
         ActionMapping mapping = actionServlet.findMapping(this.actionPath);
         if (mapping == null)
             throw new AssertionFailedError("Undefined mapping '" + this.actionPath + "'");
@@ -256,7 +338,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
             if (mapping.getValidate()) {
                 ActionErrors errors = form.validate(mapping,request);
-                if (!errors.empty()) {
+                if ((errors != null) && (!errors.empty())) {
                     StringBuffer errorText = new StringBuffer();
                     Iterator iterator = errors.get();
                     while (iterator.hasNext()) {
@@ -310,6 +392,22 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
         Common.verifyForwardPath(actionServlet,actionPath,forwardName,forward.getPath(),false);
+    }
+
+    /**
+     * Verifies if the ActionServlet controller used this actual path
+     * as a forward.
+     *
+     * @param forwardPath an absolute pathname to which the request
+     * is to be forwarded.
+     * 
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward path than <code>forwardPath</code> after
+     * executing an Action object.
+     */
+    public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
+	if (!forward.getPath().equals(forwardPath))
+	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + forward.getPath() + "'");
     }
 
     /**
