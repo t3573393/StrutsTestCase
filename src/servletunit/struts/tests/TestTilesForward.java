@@ -17,6 +17,7 @@
 package servletunit.struts.tests;
 
 import servletunit.struts.MockStrutsTestCase;
+import junit.framework.AssertionFailedError;
 
 public class TestTilesForward extends MockStrutsTestCase {
 
@@ -47,6 +48,21 @@ public class TestTilesForward extends MockStrutsTestCase {
         actionPerform();
         verifyInputForward();
         verifyInputTilesForward("page.library");
+    }
+
+    public void testTileForwardFail() {
+        addRequestParameter("username","deryl");
+        addRequestParameter("password","radar");
+        setRequestPathInfo("tiles","/tilesForward.do");
+        actionPerform();
+        verifyForward("success");
+        verifyForwardPath("/layouts/pageLayout.jsp");
+        try {
+        verifyTilesForward("success","foo.fail");
+        } catch (AssertionFailedError afe) {
+            return;
+        }
+        fail("Should have failed.");
     }
 
 

@@ -17,6 +17,7 @@
 package servletunit.struts.tests.cactus;
 
 import servletunit.struts.CactusStrutsTestCase;
+import junit.framework.AssertionFailedError;
 
 public class TestTilesForward extends CactusStrutsTestCase {
 
@@ -43,5 +44,21 @@ public class TestTilesForward extends CactusStrutsTestCase {
         actionPerform();
         verifyInputForward();
     }
+
+    public void testTileForwardFail() {
+        addRequestParameter("username","deryl");
+        addRequestParameter("password","radar");
+        setRequestPathInfo("tiles","/tilesForward.do");
+        actionPerform();
+        verifyForward("success");
+        verifyForwardPath("/layouts/pageLayout.jsp");
+        try {
+        verifyTilesForward("success","foo.fail");
+        } catch (AssertionFailedError afe) {
+            return;
+        }
+        fail("Should have failed.");
+    }
+
 
 }
