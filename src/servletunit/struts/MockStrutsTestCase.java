@@ -73,6 +73,7 @@ public class MockStrutsTestCase extends TestCase {
     ServletConfigSimulator config;
     String actionPath;
     boolean isInitialized = false;
+    boolean actionServletIsInitialized = false;
 
     /**
      * Default constructor.
@@ -211,7 +212,10 @@ public class MockStrutsTestCase extends TestCase {
     public ActionServlet getActionServlet() {
     init();
     try {
-        this.actionServlet.init(config);
+	if (!actionServletIsInitialized) {
+	    this.actionServlet.init(config);
+	    actionServletIsInitialized = true;
+	}
     } catch (ServletException e) {
         throw new AssertionFailedError(e.getMessage());
     }
@@ -228,6 +232,7 @@ public class MockStrutsTestCase extends TestCase {
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
+	actionServletIsInitialized = false;
     }
 
     /**

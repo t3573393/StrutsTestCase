@@ -68,6 +68,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     HttpServletResponseWrapper responseWrapper;
     boolean isInitialized = false;
     boolean failIfFormInvalid = true;
+    boolean actionServletIsInitialized = false;
 
     /**
      * Default constructor.
@@ -301,7 +302,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public ActionServlet getActionServlet() {
 	init();
         try {
-            this.actionServlet.init(config);
+	    if (!actionServletIsInitialized) {
+		this.actionServlet.init(config);
+		actionServletIsInitialized = true;
+	    }
             return this.actionServlet;
         } catch (ServletException e) {
 	    throw new AssertionFailedError("Error while initializing ActionServlet: " + e.getMessage());
@@ -318,6 +322,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
+	actionServletIsInitialized = false;
     }
 
     /**
