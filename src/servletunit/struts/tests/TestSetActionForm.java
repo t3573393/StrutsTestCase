@@ -24,7 +24,7 @@ public class TestSetActionForm extends MockStrutsTestCase {
         super(testName);
     }
 
-    public void testSuccessfulLogin() {
+    public void testSetActionForm() {
         ComplexForm form = new ComplexForm();
         form.setUsername("deryl");
         form.setPassword("radar");
