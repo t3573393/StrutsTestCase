@@ -60,7 +60,7 @@ public class LoginAction extends Action {
 </table>
 
 
-<br>So, what are doing here?  Well, we receive an ActionForm bean which should contain login information.  First, we try to get the username and password information, and then check to see if it is valid.  If there is a mismatch in the username or password values, we then create an ActionError message with a key to a message catalogue somewhere, and then try to forward to the login screen so we can log in again.  If the username and password match, however, we store some authentication information in the session, and we try to forward to the next page.<br>
+<br>So, what are we doing here?  Well, we receive an ActionForm bean which should contain login information.  First, we try to get the username and password information, and then check to see if it is valid.  If there is a mismatch in the username or password values, we then create an ActionError message with a key to a message catalogue somewhere, and then try to forward to the login screen so we can log in again.  If the username and password match, however, we store some authentication information in the session, and we try to forward to the next page.<br>
 <br>
 There are several things we can test here:
 <ul>
