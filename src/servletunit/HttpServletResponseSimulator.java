@@ -67,6 +67,8 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     private HashMap headers = new HashMap();
     private HashMap cookies = new HashMap();
 
+    private boolean isCommitted = false;
+
     public static final int SC_CONTINUE = 100;
 
 
@@ -379,12 +381,14 @@ public class HttpServletResponseSimulator implements HttpServletResponse
 	return stringWriter.getBuffer();
     }
 
-    /**
-     * This method is not supported.
-     */
+    //TODO: better documentation
     public boolean isCommitted()
     {
-	throw new UnsupportedOperationException("isCommitted operation is not supported.");
+        return isCommitted;
+    }
+
+    public void setIsCommitted(boolean isCommitted) {
+        this.isCommitted = isCommitted;
     }
 
     /**
