@@ -17,12 +17,9 @@
 package servletunit.struts;
 
 import junit.framework.AssertionFailedError;
-import org.apache.struts.Globals;
 import org.apache.struts.action.*;
-import org.apache.struts.config.ActionConfig;
-import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.*;
-
+import org.apache.struts.config.ApplicationConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +32,8 @@ import java.util.Iterator;
  * It's always good to get rid of redundancy!
  */
 public class Common {
+
+    protected static final String INCLUDE_SERVLET_PATH = RequestProcessor.INCLUDE_SERVLET_PATH;
 
     /**
      * Verifies if the ActionServlet controller sent these error messages.
@@ -112,7 +111,7 @@ public class Common {
         try {
             ComponentDefinition definition;
             // Get definition of tiles/component corresponding to uri.
-            definition = TilesUtil.getDefinition(forwardPath, request, context);
+            definition = DefinitionsUtil.createDefinitionsFactory(context,config).getDefinition(forwardPath, request, context);
             if( definition != null ) {
                 // We have a definition.
                 // We use it to complete missing attribute in context.
@@ -146,12 +145,12 @@ public class Common {
     protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
 
         if ((forwardName == null) && (isInputPath)) {
-            forwardName = getActionConfig(actionPath,request,context).getInput();
+            forwardName = getActionConfig(actionServlet,actionPath,request,context).getInput();
             if (forwardName == null)
                 throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
         }
         if (!isInputPath) {
-            ActionForward expectedForward = findForward(actionPath,forwardName,request,context);
+            ActionForward expectedForward = findForward(actionPath,forwardName,request,context, actionServlet);
             if (expectedForward == null)
                 expectedForward = actionServlet.findForward(forwardName);
             if (expectedForward == null)
@@ -209,7 +208,7 @@ public class Common {
     protected static ActionForm getActionForm(ActionServlet actionServlet, String actionPath, HttpServletRequest request, ServletContext context)
     {
         ActionForm form;
-        ActionConfig actionConfig = getActionConfig(actionPath,request,context);
+        ActionMapping actionConfig = getActionConfig(actionServlet,actionPath,request,context);
         if ("request".equals(actionConfig.getScope())) {
             form = (ActionForm) request.getAttribute(actionConfig.getAttribute());
         } else {
@@ -219,25 +218,20 @@ public class Common {
         return form;
     }
 
-    protected static ModuleConfig getApplicationConfig(HttpServletRequest request, ServletContext context) {
-        ModuleConfig config = (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
+    protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context, ActionServlet actionServlet) {
+        return getActionConfig(actionServlet,mappingName,request,context).findForward(forwardName);
+    }
+
+    protected static ActionMapping getActionConfig(ActionServlet actionServlet, String mappingName, HttpServletRequest request, ServletContext context) {
+        ApplicationConfig config = (ApplicationConfig) request.getAttribute(Action.APPLICATION_KEY);
         if (config == null) {
-            config = (ModuleConfig) context.getAttribute(Globals.MODULE_KEY);
+            config = (ApplicationConfig) context.getAttribute(Action.APPLICATION_KEY);
         }
-        return (config);
+        return (ActionMapping) config.findActionConfig(mappingName);
     }
 
-    protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context) {
-        return (ActionForward) getActionConfig(mappingName,request,context).findForwardConfig(forwardName);
-    }
-
-    protected static ActionConfig getActionConfig(String mappingName, HttpServletRequest request, ServletContext context) {
-        ModuleConfig config = getApplicationConfig(request, context);
-        return config.findActionConfig(mappingName);
-    }
-
-    protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context) {
-        ActionConfig actionConfig = getActionConfig(actionPath,request,context);
+    protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context, ActionServlet actionServlet) {
+        ActionMapping actionConfig = getActionConfig(actionServlet,actionPath,request,context);
         if (actionConfig.getScope().equals("request"))
             request.setAttribute(actionConfig.getAttribute(),form);
         else
