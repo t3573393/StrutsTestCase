@@ -326,6 +326,7 @@ public class MockStrutsTestCase extends TestCase {
             pathname = "/" + prefix + "/" + pathname;
         }
         this.config.setInitParameter("config",pathname);
+	actionServletIsInitialized = false;
     }
 
     /**
@@ -389,7 +390,7 @@ public class MockStrutsTestCase extends TestCase {
         } catch (Exception e) {
         throw new AssertionFailedError("Received an exception while loading web.xml - " + e.getClass() + " : " + e.getMessage());
         }
-
+	actionServletIsInitialized = false;
     }
 
     /**

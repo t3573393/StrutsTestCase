@@ -261,6 +261,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             pathname = "/" + prefix + "/" + pathname;
         }
         this.config.setInitParameter("config",pathname);
+	actionServletIsInitialized = false;
     }
 
     /**
