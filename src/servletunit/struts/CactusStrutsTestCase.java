@@ -565,7 +565,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
                     logger.debug("Exiting getActualForward()");
                 return null;
             } else {
-                String strippedForward = request.getContextPath() + Common.stripJSessionID(forward);
+                String temp = Common.stripJSessionID(forward);
+                if (!temp.startsWith("/"))
+                    temp = "/" + temp;
+                String strippedForward = request.getContextPath() + temp;
                 if (logger.isDebugEnabled()) {
                     logger.debug("getActualForward() : stripped forward and added context path = " + strippedForward);
                 }

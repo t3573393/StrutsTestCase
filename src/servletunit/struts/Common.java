@@ -77,51 +77,51 @@ public class Common {
      */
     protected static void verifyActionMessages(HttpServletRequest request, String[] messageNames, String key, String messageLabel) {
         if (logger.isTraceEnabled())
-                    logger.trace("Entering verifyActionMessages() : request = " + request + ", messageNames = " + messageNames + ", key = " + key + ", messageLabel = " + messageLabel);
+            logger.trace("Entering verifyActionMessages() : request = " + request + ", messageNames = " + messageNames + ", key = " + key + ", messageLabel = " + messageLabel);
 
-                ActionMessages messages = (ActionMessages) request.getAttribute(key);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("verifyNoActionMessages() : retrieved ActionMessages = " + messages);
-                }
+        ActionMessages messages = (ActionMessages) request.getAttribute(key);
+        if (logger.isDebugEnabled()) {
+            logger.debug("verifyNoActionMessages() : retrieved ActionMessages = " + messages);
+        }
 
-                if (messages == null) {
-                    throw new AssertionFailedError("was expecting some " + messageLabel + " messages, but received none.");
-                }
-                /* check length of messages as optimization */
-                else if (messages.size() != messageNames.length) {
-                    throw new AssertionFailedError("was expecting " + messageNames.length + " " + messageLabel + " message(s), but received " + messages.size() + " " + messageLabel + " message(s)");
-                }
-                else  {
-                    /* alphabetize the two lists of message keys and compare them */
+        if (messages == null) {
+            throw new AssertionFailedError("was expecting some " + messageLabel + " messages, but received none.");
+        }
+        /* check length of messages as optimization */
+        else if (messages.size() != messageNames.length) {
+            throw new AssertionFailedError("was expecting " + messageNames.length + " " + messageLabel + " message(s), but received " + messages.size() + " " + messageLabel + " message(s)");
+        }
+        else  {
+            /* alphabetize the two lists of message keys and compare them */
 
-                    Iterator iter = new TransformIterator( messages.get(),
-                                                           new Transformer(){
-                                                               public Object transform( Object input )
-                                                               {
-                                                                   return ((ActionMessage) input).getKey();
-                                                               }
-                                                           } );
-
-                    String[] messageKeys = (String[]) IteratorUtils.toArray(iter,String.class );
-
-                    Arrays.sort( messageKeys );
-                    Arrays.sort( messageNames );
-
-                    for ( int i = 0; i < messageNames.length;i++) {
-                        if ( !messageNames[i].equals(messageKeys[i])) {
-                            StringBuffer mks = new StringBuffer();
-                            StringBuffer mns = new StringBuffer();
-
-                            for ( int j = 0; j < messageKeys.length; j++) mks.append( messageKeys[j] + " " );
-                            for ( int k = 0; k < messageNames.length; k++) mns.append( messageNames[k] + " " );
-
-                            throw new AssertionFailedError("received " + messageLabel + " messages: (" + mks + ") but expected (" + mns + ")");
+            Iterator iter = new TransformIterator( messages.get(),
+                    new Transformer(){
+                        public Object transform( Object input )
+                        {
+                            return ((ActionMessage) input).getKey();
                         }
-                    }
+                    } );
+
+            String[] messageKeys = (String[]) IteratorUtils.toArray(iter,String.class );
+
+            Arrays.sort( messageKeys );
+            Arrays.sort( messageNames );
+
+            for ( int i = 0; i < messageNames.length;i++) {
+                if ( !messageNames[i].equals(messageKeys[i])) {
+                    StringBuffer mks = new StringBuffer();
+                    StringBuffer mns = new StringBuffer();
+
+                    for ( int j = 0; j < messageKeys.length; j++) mks.append( messageKeys[j] + " " );
+                    for ( int k = 0; k < messageNames.length; k++) mns.append( messageNames[k] + " " );
+
+                    throw new AssertionFailedError("received " + messageLabel + " messages: (" + mks + ") but expected (" + mns + ")");
                 }
-                if (logger.isTraceEnabled())
-                    logger.trace("Exiting verifyActionMessages()");
             }
+        }
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting verifyActionMessages()");
+    }
 
 
     /**
@@ -307,8 +307,10 @@ public class Common {
             moduleName = (String) request.getAttribute(INCLUDE_SERVLET_PATH);
 
         if ((moduleName != null) && (moduleName.length() > 0))
-        //todo: think i can use first index 0 here, since it will start with a /
             moduleName = moduleName.substring(moduleName.indexOf('/'),moduleName.lastIndexOf('/'));
+        else
+            moduleName = "";
+
         if (!forwardName.startsWith("/"))
             forwardName = "/" + forwardName;
 
