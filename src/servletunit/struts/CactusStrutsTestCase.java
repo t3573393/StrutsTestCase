@@ -434,7 +434,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		setActionForm(retForm);
 	    }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new AssertionFailedError("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
 	}
     }
