@@ -44,8 +44,10 @@ can find the cactus.properties file.
 
 Finally, you must have your servlet engine running, with the example web application, examples/test.war, deployed.
 Usually this can be done by dropping test.war in your servlet engine's webapps directory and starting it up.  Note that
-for this example, your servlet engine *MUST BE RUNNING ON PORT 8080*.  If you need more help configuring Cactus, please
-see http://jakarta.apache.org/cactus for more details.
+for this example, your servlet engine *MUST BE RUNNING ON PORT 8080*.  Also note that CLASSPATH issues can be
+particularly tricky when running a servlet engine, most especially when it comes to XML libraries.  To be on the safe
+side, make sure your CLASSPATH is unset when starting your servlet engine, so as to avoid any class loading conflicts.
+Of course, don't forget to reset your CLASSPATH as decribed above before running the tests.
 
 You can run the TestCactusLoginAction class directly, as its main method invokes the JUnit TestRunner:
 
