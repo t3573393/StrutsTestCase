@@ -39,31 +39,34 @@ import java.io.*;
 public class ServletOutputStreamSimulator extends ServletOutputStream
 {
     private OutputStream outStream;
+    
     /**
-     * The default consturctor.<p>
-     * When the default constructor is used all the content written
-     * by <code>this</code> stream is sent to <code>java.lang.System.out</code>
+     * Default constructor that sends all output to <code>System.out</code>.
      */
     public ServletOutputStreamSimulator()
     {
         this.outStream = System.out;
     }
+    
     /**
-     * @param   out The output of <code>this</code> ServletOutputStream goes here.
+     * Constructor that sends all output to given OutputStream.
+     * @param out OutputStream to which all output will be sent.
      */
     public ServletOutputStreamSimulator( OutputStream out )
     {
         this.outStream = out;
     }
+    
     public void write( int b )
     {
         try
-        {
-            outStream.write( b );
-        }
+	    {
+		outStream.write( b );
+	    }
         catch( IOException io )
-        {
-            io.printStackTrace();
-        }
+	    {
+		System.err.println("IOException: " + io.getMessage());
+		io.printStackTrace();
+	    }
     }
 }
