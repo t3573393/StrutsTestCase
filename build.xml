@@ -87,6 +87,7 @@
             </lib>
 	    <!-- do we want to remove test classes? -->
 	    <classes dir="${build.dir}"/>
+	    <classes dir="${src.dir}/" includes="examples/ApplicationResources.properties"/>
 	</war>
     </target>
 
