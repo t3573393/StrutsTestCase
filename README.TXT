@@ -8,10 +8,8 @@ releases supporting both the 2.2 and 2.3 versions of the
 Servlet specification, and both the 1.0.x and 1.1 versions
 of the Struts Framework.
 
-The StrutsTestCase library supports Struts 1.1b3 and the
-latest nightly builds, as well as Cactus v1.4.1 and JUnit
-v3.8.  PLEASE NOTE THAT THIS LATEST RELEASE WILL NOT WORK
-WITH STRUTS 1.1B2!
+PLEASE NOTE THAT THIS LATEST RELEASE WILL ONLY WORK WITH
+STRUTS 1.1B3 OR LATER RELEASES!
 
 Change Log
 ==========

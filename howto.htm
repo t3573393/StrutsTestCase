@@ -8,7 +8,7 @@
 <body>
 <div class="header">
 <h1>StrutsTestCase for JUnit v2.0</h1>
-<h3 CLASS="announce">Now supporting Struts 1.1, including <a href="#subapp">sub-applications!</a></h3>
+<h3 CLASS="announce">Now supporting Struts 1.1, including <a href="#tiles">Tiles</a> and <a href="#subapp">Sub-Applications!</a></h3>
 
 
 <p>Questions? Comments? Check out the <a href="http://sourceforge.net/forum/?group_id=39190">user forums</a>.</p>
@@ -237,6 +237,49 @@ will also fail.  Only an exact match in name and number will pass.</p>
 <p>It's that easy! As you can see, StrutsTestCase not only tests the implementation of your Action objects, but also
 the mappings that execute them, the ActionForm beans that are passed as arguments, and the
 error messages and forward statements that result from execution.  It's the whole enchilada!</p>
+
+<h2 id="tiles">Testing Tiles in Struts 1.1</h2>
+<p>The Tiles framework, which is integrated into Struts 1.1, is a flexible templating mechanism designed
+to easily re-use common user experience elements.  StrutsTestCase now provides support for testing applications
+that use Tiles, allowing any test case to verify that an Action object uses the correct Tiles definition.  Tiles
+testing is similar to calling <tt>verifyActionForward</tt>, with a twist:
+
+<pre class="code">
+public class TestLoginAction extends MockStrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
+
+    public void testSuccessfulLogin() {
+       setConfigFile("/WEB-INF/struts-config.xml");
+       setRequestPathInfo("/login.do");
+       addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");
+       actionPerform();
+       <em>verifyTilesForward("success","success.tiles.def");</em>
+    }
+}
+</pre>
+
+<p>This is similar to our previous test cases, except that we're additionally passing in a definition name
+to verify that this Action uses a given Tiles definition when resolving the expected forward.  If it uses
+a different Tiles definition, or if the expected definition does not exist, then this test will fail.  Additionally,
+you can call <b><tt>verifyInputTilesForward</tt></b> to verify that an Action uses an input mapping, and that input mapping is the expected Tiles definition:
+
+<pre class="code">
+public class TestLoginAction extends MockStrutsTestCase {
+
+    public TestLoginAction(String testName) { super(testName); }
+
+    public void testSuccessfulLogin() {
+       setConfigFile("/WEB-INF/struts-config.xml");
+       setRequestPathInfo("/login.do");
+       addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");
+       actionPerform();
+       <em>verifyInputTilesForward("success.tiles.def");</em>
+    }
+}
+</pre>
 
 <h2 id="subapp">Testing Sub-Applications in Struts 1.1</h2>
 <p>Struts 1.1 introduces the concept of sub-applications, or modules -- a powerful mechanism for dividing an
