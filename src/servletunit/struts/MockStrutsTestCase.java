@@ -85,7 +85,7 @@ public class MockStrutsTestCase extends TestCase {
      * A check that every method should run to ensure that the
      * base class setUp method has been called.
      */
-    protected void init() {
+    private void init() {
 	if (!isInitialized)
 	    throw new AssertionFailedError("You are overriding the setUp() method without calling super.setUp().  You must call the superclass setUp() method in your TestCase subclass to ensure proper initialization.");
     }
