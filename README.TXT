@@ -1,5 +1,5 @@
-StrutsTestCase for JUnit - release 2.0
----------------------------------------
+StrutsTestCase for JUnit - release 2.0.1
+----------------------------------------
 
 This release resolves outstanding issues with Struts 1.1.
 
@@ -26,17 +26,27 @@ when running multiple actions in a test.  Currently, this method
 cannot reset parameters set using Cactus beginXXX methods. (MockStrutsTestCase
 and CactusStrutsTestCase)
 
+- changed HttpServletResponseSimulator.sendError() to set the status code
+appropriately and added a getStatusCode() method to grab this value for
+testing.  NOTE: the sendError() method still throws an AssertionFailedError
+(we need it to, in cases of missing action mappings, and other bad Struts errors)
+but that can be caught to test for status codes.  (MockStrutsTestCase only)
+
 Bug Fixes:
 ---------
 
-- Fixed a bug where the servlet context directory was not being used
+- fixed a bug where the servlet context directory was not being used
 when searching for application resources (MockStrutsTestCase)
 
-- Fixed a bug where actions returning null -- a valid scenario -- could
+- fixed a bug where actions returning null -- a valid scenario -- could
 not be tested properly.  (MockStrutsTestCase and CactusStrutsTestCase)
 
-- Fixed setServletConfigFile to use local web.xml DTD's located in the
+- fixed setServletConfigFile to use local web.xml DTD's located in the
 Struts library.  (MockStrutsTestCase)
+
+- fixed a bug where the contextRelative flag was not being checked when
+verifying ActionForward's in sub-applications (MockStrutsTestCase and
+CactusStrutsTestCase)
 
 Deryl Seale
 http://strutstestcase.sourceforge.net
