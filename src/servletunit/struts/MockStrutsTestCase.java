@@ -589,7 +589,7 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Returns the forward sent to RequestDispatcher.
      */
-    private String getActualForward() {
+    protected String getActualForward() {
         if (logger.isDebugEnabled())
             logger.debug("Entering getActualForward()");
         if (response.containsHeader("Location")) {
