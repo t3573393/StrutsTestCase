@@ -1,12 +1,15 @@
 package servletunit.struts;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletConfig;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionServlet;
 import junit.framework.AssertionFailedError;
+import org.apache.struts.tiles.*;
 import java.util.Iterator;
 
 
@@ -82,11 +85,57 @@ public class Common {
     }
 
     /**
+     * Retrieves a forward uri for tile - this is required for applications
+     * using the tiles framework, since the actual forward URI must
+     * be fetched from the tile definition.
+     */
+    protected static String getTilesForward(String forwardPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
+	
+	String result = null;
+	try {
+	    ComponentDefinitionsFactory definitionsFactory = DefinitionsUtil.createDefinitionsFactory(context, config);
+	    ComponentDefinition definition;
+	    if( definitionsFactory != null ) {
+		// Get definition of tiles/component corresponding to uri.
+		definition = definitionsFactory.getDefinition(forwardPath, request, context);
+		if( definition != null ) {
+		    // We have a definition.
+		    // We use it to complete missing attribute in context.
+		    // We also get uri, controller.
+		    result = definition.getPath();
+		}
+	    }
+	    definition = DefinitionsUtil.getActionDefinition(request);
+	    if( definition != null ) {
+		// We have a definition.
+		// We use it to complete missing attribute in context.
+		// We also overload uri and controller if set in definition.
+		if(definition.getPath()!= null)
+		    result = definition.getPath();
+	    }
+	    return result;
+	} catch (NoSuchDefinitionException nsde) {
+	    System.out.println("NoSuchDefinitionException: " + nsde.getMessage());
+	    nsde.printStackTrace();
+	    return null;
+	} catch (DefinitionsFactoryException dfe) {
+	    System.out.println("DefintionsFactoryException: " + dfe.getMessage());
+	    dfe.printStackTrace();
+	    return null;
+	} catch (NullPointerException npe) {
+	    // can happen if tiles is not at all used.
+	    System.out.println("NullPointerException: " + npe.getMessage());
+	    npe.printStackTrace();
+	    return null;
+	}
+    }
+    
+    /**
      * Verifies that ActionServlet used this logical forward or input mapping.
      *
      * @throws AssertionFailedError if expected and actual paths do not match.
      */
-    protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath) {
+    protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
         if ((forwardName == null) && (isInputPath)) {
 	    forwardName = actionServlet.findMapping(actionPath).getInput();
 	    if (forwardName == null)
@@ -99,6 +148,9 @@ public class Common {
             if (expectedForward == null)
                 throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
+	    String tilesForward = getTilesForward(forwardName,request,context,config);
+	    if (tilesForward != null)
+		forwardName = tilesForward;
         }
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");

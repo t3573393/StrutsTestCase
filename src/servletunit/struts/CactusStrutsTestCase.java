@@ -380,7 +380,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
 	init();
-        Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,getActualForward(),false);
+        Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,getActualForward(),false,request,config.getServletContext(),config);
     }
 
     /**
@@ -410,7 +410,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyInputForward() {
 	init();
-        Common.verifyForwardPath(actionServlet,request.getPathInfo(),null,getActualForward(),true);
+        Common.verifyForwardPath(actionServlet,request.getPathInfo(),null,getActualForward(),true,request,config.getServletContext(),config);
     }
 
     /**

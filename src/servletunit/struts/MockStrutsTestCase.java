@@ -260,6 +260,7 @@ public class MockStrutsTestCase extends TestCase {
 	} catch (ServletException se) {
 	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
 	} catch (Exception ex) {
+	    ex.printStackTrace();
             fail("Error running action.perform(): " + ex.getClass() + " - " + ex.getMessage());
 	}
     }
@@ -417,7 +418,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
 	init();
-	Common.verifyForwardPath(actionServlet,actionPath,forwardName,getActualForward(),false);
+	Common.verifyForwardPath(actionServlet,actionPath,forwardName,getActualForward(),false,request,config.getServletContext(),config);
     }
 
     /**
@@ -447,7 +448,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void verifyInputForward() {
 	init();
-	Common.verifyForwardPath(actionServlet,actionPath,null,getActualForward(),true);
+	Common.verifyForwardPath(actionServlet,actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
     }
 
     /**
