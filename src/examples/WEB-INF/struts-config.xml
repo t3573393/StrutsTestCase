@@ -22,6 +22,9 @@
 			<forward name="failure" path="/main/failure.jsp"/>
 		</action>
 		<action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
+		<action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
+			<forward name="redirect" path="http://www.yahoo.com" redirect="true"/>
+		</action>
 		<action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
 		<action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
 	</action-mappings>
