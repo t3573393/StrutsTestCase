@@ -51,6 +51,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     HttpServletResponseWrapper responseWrapper;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+    String moduleName;
 
     /**
      * Default constructor.
@@ -242,13 +243,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void setRequestPathInfo(String moduleName, String pathInfo) {
         init();
         ((StrutsRequestWrapper) this.request).setPathInfo(Common.stripActionPath(pathInfo));
-	if (moduleName != null) {
-	    if (!moduleName.equals("")) {
-		if (!moduleName.startsWith("/"))
-		    moduleName = "/" + moduleName;
-		if (!moduleName.endsWith("/"))
-		    moduleName = moduleName + "/";
-	    }
+        if (moduleName != null) {
+            if (!moduleName.equals("")) {
+                if (!moduleName.startsWith("/"))
+                    moduleName = "/" + moduleName;
+                if (!moduleName.endsWith("/"))
+                    moduleName = moduleName + "/";
+            }
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
     }
@@ -308,10 +309,23 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 ServletContext context = config.getServletContext();
                 String name = "org.apache.struts.action.REQUEST_PROCESSOR";
 
+                // remove request processor for default module
                 Object obj = context.getAttribute(name);
                 if (obj != null) {
                     config.getServletContext().setAttribute(name, null);
                 }
+
+                // remove request processor for sub-applications, if used.
+                // todo: this seems pretty redundant.. may want to make this cleaner.
+                String moduleName = (String) request.getAttribute(Common.INCLUDE_SERVLET_PATH);
+                if (moduleName.endsWith("/"))
+                    moduleName = moduleName.substring(0,moduleName.lastIndexOf("/"));
+
+                obj = context.getAttribute(name + moduleName);
+                if (obj != null) {
+                    config.getServletContext().setAttribute(name + moduleName, null);
+                }
+
                 this.actionServlet.init(config);
                 actionServletIsInitialized = true;
             }
