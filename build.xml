@@ -109,6 +109,7 @@
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
                     <include name="**/examples/**/Test*.class" />
+		    <exclude name="**/cactus/**" />
                 </fileset>
             </batchtest>
         </junit>
