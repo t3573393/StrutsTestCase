@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tiles-definitions>
-    <definition name=""/>
-    <!-- Page Layout Definition, used for pages displayed in window of Content Viewer -->
-    <definition name="pageLayout" path="/layouts/pageLayout.jsp">
-        <!-- Default stylesheets -->
-        <putList name="screenStyles">
-            <add value="/styles/bluegray.css"/>
-        </putList>
-    </definition>
+    <definition name="pageLayout" path="/layouts/pageLayout.jsp"/>
     <definition name="page.library" extends="pageLayout">
-        <put name="title.key" value="library.title"/>
-        <put name="heading.key" value="library.heading"/>
-        <put name="content" value="/viewer/library.jsp"/>
-        <putList name="screenStyles">
-            <add value="/styles/orangegray.css"/>
-        </putList>
+        <put name="key" value="value"/>
+    </definition>
+    <definition name="another.page" extends="pageLayout">
+        <put name="key" value="another.value"/>
     </definition>
 </tiles-definitions>
