@@ -117,14 +117,16 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public void addParameter( String key, String value )
     {
-        this.parameters.put( key, value );
+        if ((key != null) && (value != null))
+            this.parameters.put( key, value );
     }
 
     /**
      * Adds a parameter as a String array to this object's list of parameters
      */
     public void addParameter(String name, String[] values) {
-        parameters.put(name,values);
+        if ((name != null) && (values != null))
+            parameters.put(name,values);
     }
 
     /**
