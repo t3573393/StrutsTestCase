@@ -226,7 +226,7 @@
         <tstamp/>
         <delete dir="${temp.dir}"/>
         <mkdir dir="${temp.dir}"/>
-        <get src="http://jakarta.apache.org/builds/jakarta-struts/nightly/jakarta-struts-${DSTAMP}.zip"
+        <get src="http://cvs.apache.org/builds/jakarta-struts/nightly/jakarta-struts-${DSTAMP}.zip"
             dest="${temp.dir}/jakarta-struts-nightly.zip"
             verbose="false"/>
         <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
