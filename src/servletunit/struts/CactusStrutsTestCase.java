@@ -273,6 +273,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Clears all request parameters previously set.  NOTE: This will <strong>note</strong> clear
+     * parameters set using Cactus beginXXX methods!
+     */
+    public void clearRequestParameters() {
+        init();
+        ((StrutsRequestWrapper) request).clearRequestParameters();
+    }
+
+    /**
      * Sets the request path instructing the ActionServlet to used a
      * particual ActionMapping.
      *
@@ -596,6 +605,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyTilesForward(String forwardName, String definitionName) {
+        init();
         Common.verifyTilesForward(actionServlet,request.getPathInfo(),forwardName,definitionName,false,request,config.getServletContext(),config);
     }
 
@@ -611,6 +621,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyInputTilesForward(String definitionName) {
+        init();
         Common.verifyTilesForward(actionServlet,request.getPathInfo(),null,definitionName,true,request,config.getServletContext(),config);
     }
 

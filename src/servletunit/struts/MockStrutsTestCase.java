@@ -168,6 +168,13 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
+     * Clears all request parameters previously set.
+     */
+    public void clearRequestParameters() {
+        this.request.getParameterMap().clear();
+    }
+
+    /**
      * Returns an HttpServletResponse object that can be used in
      * this test.
      */
@@ -641,6 +648,7 @@ public class MockStrutsTestCase extends TestCase {
      * executing an Action object.
      */
     public void verifyTilesForward(String forwardName, String definitionName) {
+        init();
         Common.verifyTilesForward(actionServlet,actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
     }
 
@@ -656,6 +664,7 @@ public class MockStrutsTestCase extends TestCase {
      * executing an Action object.
      */
     public void verifyInputTilesForward(String definitionName) {
+        init();
         Common.verifyTilesForward(actionServlet,actionPath,null,definitionName,true,request,config.getServletContext(),config);
     }
 
