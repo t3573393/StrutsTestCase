@@ -321,7 +321,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public HttpSession getSession(boolean b)
     {
-        if( b )
+	if ((session == null) && (b))
             this.session = new HttpSessionSimulator();
         return this.session;
     }
