@@ -216,6 +216,17 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Adds an HttpServletRequest parameter that is an array of String values
+     * to be used in setting up the ActionForm instance to be used in this test.
+     * Each parameter added should correspond to an attribute in the ActionForm 
+     * instance used by the Action instance being tested.
+     */
+    public void addRequestParameter(String parameterName, String[] parameterValues)
+    {
+        parameters.put(parameterName,parameterValues);
+    }
+
+    /**
      * Sets the request path instructing the ActionServlet to used a
      * particual ActionMapping.
      *
@@ -301,9 +312,12 @@ public class CactusStrutsTestCase extends ServletTestCase {
      *
      */
     public void actionPerform() {
-
+	
 	HttpServletRequest request = this.request;
 	HttpServletResponse response = this.response;
+	// make sure errors are cleared from last test.
+	request.removeAttribute(Action.ERROR_KEY); 
+	
 	if (this.requestWrapper != null)
 	    request = this.requestWrapper;
 	if (this.responseWrapper != null)
