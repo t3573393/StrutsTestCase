@@ -17,34 +17,33 @@
 //  If you have any questions or suggestions, you may contact me at
 //  this address: Deryl Seale - deryl@acm.org
 
-package servletunit.struts.tests;
+package servletunit.struts.tests.cactus;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.servlet.http.HttpSession;
+import servletunit.struts.CactusStrutsTestCase;
+import java.io.IOException;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.taglib.html.Constants;
+import org.apache.cactus.*;
 
-public class TokenAction extends Action {
+public class TestTokenAction extends CactusStrutsTestCase {
 
-    public ActionForward perform(ActionMapping mapping,
-                                 ActionForm form,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) {
-
-	ActionErrors errors = new ActionErrors();
-
-	if (!isTokenValid(request,true)) {
-	    errors.add("password",new ActionError("error.token"));
-	    saveErrors(request,errors);
-        }
-	return mapping.findForward("login");
+    public TestTokenAction(String testName) {
+        super(testName);
     }
+
+    public void beginTransactionToken(WebRequest theRequest) {
+    	theRequest.addParameter(Constants.TOKEN_KEY, "test_token");
+    }
+	
+    
+    public void testTransactionToken() {
+	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
+        setRequestPathInfo("/testToken");
+        actionPerform();
+        verifyNoActionErrors();
+    }
+
 
 }

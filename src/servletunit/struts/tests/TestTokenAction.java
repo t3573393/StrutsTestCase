@@ -24,6 +24,8 @@ import javax.servlet.http.*;
 import servletunit.struts.MockStrutsTestCase;
 import java.io.IOException;
 import org.apache.struts.action.Action;
+import org.apache.struts.taglib.html.Constants;
+import org.apache.cactus.*;
 
 public class TestTokenAction extends MockStrutsTestCase {
 
@@ -31,7 +33,13 @@ public class TestTokenAction extends MockStrutsTestCase {
         super(testName);
     }
 
+    public void beginTransactonToken(WebRequest theRequest) {
+	theRequest.addParameter(Constants.TOKEN_KEY, "test_token");
+    }
+	
+    
     public void testTransactionToken() {
+	addRequestParameter(Constants.TOKEN_KEY, "test_token");
 	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
         setRequestPathInfo("/testToken");
 	setServletConfigFile("/WEB-INF/web.xml");
