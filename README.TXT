@@ -1,7 +1,7 @@
-StrutsTestCase for JUnit - release 2.1.1
+StrutsTestCase for JUnit - release 2.1.2
 ----------------------------------------
 
-This release resolves outstanding issues with Struts 1.1.
+This is a point release to resolve a number of outstanding bugs.
 
 The StrutsTestCase library is available as two distinct
 releases supporting both the 2.2 and 2.3 versions of the 
@@ -36,9 +36,39 @@ method in order to restore the web application to its functioning state.
 (CactusStrutsTestCase only)
 
 - Fixed bug (#849772) where NullPointerException was thrown in certain
-versions of WebLogic.
+versions of WebLogic.  (CactusStrutstestCase only)
 
+- Fixed a bug (#968270) where visibility of setup() and tearDown() methods
+was inconistent with the JUnit library.
 
+- Fixed a bug (#949591) where Location header was being preserved between
+actionPerform() calls.  (MockStrutsTestCase only)
+
+- Fixed a bug (#940262) where the HttpServletRequestSimulator.getParameter()
+method would throw a NullPointerException if the requested key was null.
+(MockStrutsTestCase only)
+
+- Fixed a bug (#923197) where calling HttpServletRequestSimulator.getRequestDispacther()
+would throw a NullPointerException.
+(MockStrutsTestCase only)
+
+- Fixed a bug (#889946) where parameters added through addRequestParameter() would
+not be available from getParameterMap().  (CactusStrutstestCase only)
+
+- Fixed a bug (#871307) where verifyActionErrors() would occassionally pass when it
+really should fail.  (Both CactusStrutsTestCase and MockStrutsTestCase)
+
+- Fixed a bug (#868716) where some build parameters were not clearly marked in the
+build.xml file.
+
+- Fixed a bug (#821477) where StrutsTestCase classes were not easily extendable; now
+all methods are protected.  (Both CactusStrutsTestCase and MockStrutsTestCase)
+
+- Fixed a bug (#821326) where verifyForward() would sometimes fail to add the correct
+context path.  (Both CactusStrutsTestCase and MockStrutsTestCase)
+
+- Fixed a bug (#758161) where Struts resources were not being properly cleaned up after test
+execution.
 
 
 Deryl Seale
