@@ -80,11 +80,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void setUp() {
         try {
-	    BeanUtils.setDebug(1);
             parameters.clear();
             forward = null;
             actionForm = null;
-            actionServlet = new ActionServlet();
+	    if (actionServlet == null)
+		actionServlet = new ActionServlet();
             config.setInitParameter("debug","0");
             config.setInitParameter("detail","0");
             config.setInitParameter("validate","true");

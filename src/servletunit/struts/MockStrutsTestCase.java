@@ -80,7 +80,8 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setUp() {
         try {
-            actionServlet = new ActionServlet();
+	    if (actionServlet == null)
+		actionServlet = new ActionServlet();
             config = new ServletConfigSimulator();
             config.setInitParameter("debug","0");
             config.setInitParameter("detail","0");
