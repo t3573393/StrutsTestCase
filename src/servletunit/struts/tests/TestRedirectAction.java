@@ -50,6 +50,14 @@ public class TestRedirectAction extends MockStrutsTestCase {
         verifyNoActionErrors();
     }
 
+    //todo: this test is for a future enhancement.
+//    public void testVerifiesRedirectedExternalURL() {
+//        setRequestPathInfo("test","/testRedirectToExternalURL");
+//        actionPerform();
+//        verifyForwardPath("http://www.yahoo.com");
+//        verifyForward("redirect");
+//    }
+
     public void testVerifyRedirectFail() {
         try {
             setRequestPathInfo("test","/testRedirect");

@@ -53,6 +53,9 @@
         <action path="/testNullAction" type="servletunit.struts.tests.NullAction" />
         <action path="/testCustomMapping" type="servletunit.struts.tests.CustomMappingAction"/>
         <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request"/>
+        <action path="/testRedirectToExternalURL" type="servletunit.struts.tests.RedirectAction">
+            <forward name="redirect" path="http://www.yahoo.com" redirect="true"/>
+        </action>
     </action-mappings>
     <message-resources parameter="examples.ApplicationResources"/>
 </struts-config>
