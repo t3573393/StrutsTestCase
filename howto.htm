@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<title>StrutsTestCase for JUnit</title>
+</head>
+<body>
+<center><h1>StrutsTestCase for JUnit</h1></center>
+<font size="-1"><center>Copyright (C) 2001 Deryl Seale</center></font>
+<hr>
+<br>
+<center>Questions? Comments? Please mail me at <a href="mailto:deryl@acm.org">deryl@acm.org</a>.</center>
+
+<h2>What is it?</h2>
+StrutsTestCase for JUnit is an extension of the standard JUnit TestCase class that provides facilities 
+for testing code based on the Struts framework.  StrutsTestCase uses <a href="http://sourceforge.net/projects/servletunit/"/>mock servlet objects</a>
+ to actually run the Struts ActionServlet, allowing you to test your Struts code without a running servlet engine.  Because
+ StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation 
+ of your Action objects, but also your mappings, form beans, and forwards declarations.  And since 
+ StrutsTestCase does not require a running servlet engine, it's quick and easy to write unit test cases. 
+<br><br>
+<h2>Where does it live?</h2>
+StrutsTestCase for JUnit is hosted at <a href="http://sourceforge.net/projects/strutstestcase/">SourceForge</a>. You can find the latest and greatest release of StrutsTestCase <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">here.</a>
+<h2>How does it work?</h2>
+Using the popular cookbook approach, let's consider the following code snippet:<br><br>
+<table border="0" cellspacing="2" cellpadding="2" align="center" bgcolor="#FEEACB">
+<tr>
+    <td><pre>
+public class LoginAction extends Action {
+
+    public ActionForward perform(ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) 
+    {
+
+        String username = ((LoginForm) form).getUsername();
+        String password = ((LoginForm) form).getPassword();
+
+        ActionErrors errors = new ActionErrors();
+
+        if ((!username.equals("deryl")) || (!password.equals("radar")))
+            errors.add("password",new ActionError("error.password.mismatch"));
+
+        if (!errors.empty()) {
+            saveErrors(request,errors);
+            return mapping.findForward("login");
+        }
+	
+	// store authentication info on the session
+        HttpSession session = request.getSession();
+        session.setAttribute("authentication", username);
+
+        // Forward control to the specified success URI
+        return mapping.findForward("success");
+
+    }
+</pre></td>
+</tr>
+</table>
+
+
+<br>So, what are doing here?  Well, we receive an ActionForm bean which should contain login information.  First, we try to get the username and password information, and then check to see if it is valid.  If there is a mismatch in the username or password values, we then create an ActionError message with a key to a message catalogue somewhere, and then try to forward to the login screen so we can log in again.  If the username and password match, however, we store some authentication information in the session, and we try to forward to the next page.<br>
+<br>
+There are several things we can test here:
+<ul>
+<li>Does the LoginForm bean work properly?  If we place the appropriate parameters in the request, does this bean get instantiated correctly?
+<li>If the username or password doesn't match, do the appropriate errors get saved for display on the next screen?  Are we sent back to the login page?
+<li>If we supply the correct login information, do we get to the correct page?  Are we sure there are no errors reported?  Does the proper authentication information get saved in the session?
+</ul>
+<br>
+StrutsTestCase gives you the ability to test all of these conditions within the familiar JUnit framework.  All of the Struts setup -- which really amounts to starting up the ActionServlet -- is taken care of for you.
+<br><br>
+So, how do actually do it?  Let's start by creating an empty test case, which we extend from the base StrutsTestCase class:
+<br>
+<br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+    <td>
+<pre>
+public class TestLoginAction extends StrutsTestCase {
+
+    public void testSuccessfulLogin() {}
+}
+</pre>
+</td>
+</tr>
+</table>
+
+<br>
+The first thing we need to do is to tell Struts which mapping to use in this test.  To do so, we specify a path that is associated with a Struts mapping; this is the same mechanism that the Struts tag library method uses.
+<br><br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+	<td>
+<pre>
+public class TestLoginAction extends StrutsTestCase {
+
+    public void testSuccessfulLogin() {
+       <font color="red">setRequestPathInfo("/login");</font>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+<br>
+Next we need to pass form bean properties, which we send via the request object (again, just as Struts does):<br>
+<br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+	<td>
+<pre>
+public class TestLoginAction extends StrutsTestCase {
+
+    public void testSuccessfulLogin() {
+       setRequestPathInfo("/login");
+       <font color="red">addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");</font>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+<br>
+Finally, we need to get the ActionServlet to do it's thing, which is just involves executing the doPost method:
+<br><br>
+<i><b>NOTE:</b>You <i>must</i> have your WEB-INF directory accessible in your classpath, and it must contain
+your <code>struts-config.xml</code> file.  The ActionServlet controller looks up this file as <code>WEB-INF/struts-config.xml</code>,
+so the directory structure must be present.</i>
+<br><br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center"  border="0">
+<tr>
+	<td>
+<pre>
+public class TestLoginAction extends StrutsTestCase {
+
+    public void testSuccessfulLogin() {
+       setRequestPathInfo("/login");
+       addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");
+       <font color="red">getActionServlet().doPost(getRequest(),getResponse());</font>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+<br>
+That's all you have to do to get the ActionServlet to process your request, and if all goes well, then nothing will happen.  But we're not done yet -- we still need to verify that everything happened as we expected it to.  First, we want to make sure we got to the right page:
+<br><br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+	<td>
+<pre>
+public class TestLoginAction extends StrutsTestCase {
+
+    public void testSuccessfulLogin() {
+       setRequestPathInfo("/login");
+       addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");
+       getActionServlet().doPost(getRequest(),getResponse());
+       <font color="blue">verifyForward("success");</font>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+<br>
+It's worth noting here that when you verify which page you ended up at, you can use the Struts forward mapping.  You don't have to hard code filenames -- the StrutsTestCase framework takes care of this for you.  Thus, if you were to change where "success" pointed to, your tests would still work correctly.  All in the spirit of Struts.
+<br><br>
+Next, we want to make sure that authentication information was stored properly:
+<br><br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+	<td>
+<pre>
+public class TestLoginAction extends StrutsTestCase {
+
+    public void testSuccessfulLogin() {
+       setRequestPathInfo("/login");
+       addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");
+       getActionServlet().doPost(getRequest(),getResponse());
+       verifyForward("success");
+       <font color="blue">assertEquals("deryl",(String) getRequest().getSession().getAttribute("authentication"));</font>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+<br>
+Here we're getting the session object from the request, and checking to see if it has the proper attribute and value.
+You could just as easily place an object on the session that your Action object expects to find.
+All of the servlet classes available in the StrutsTestCase are fully functioning mock objects.
+<br><br>
+Finally, we want to make sure that no ActionError messages were sent along.  We can use a built in method
+to make sure of this condition:
+<br><br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+	<td>
+<pre>
+public class TestLoginAction extends StrutsTestCase {
+
+    public void testSuccessfulLogin() {
+       setRequestPathInfo("/login");
+       addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");
+       getActionServlet().doPost(getRequest(),getResponse());
+       verifyForward("success");
+       assertEquals("deryl",(String) getRequest().getSession().getAttribute("authentication"));
+       <font color="blue">verifyNoActionErrors();</font>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+<br>
+So, now that we've written one test case, it's easy to write another.  For example, we'd probably
+want to test the case where a user supplies incorrect login information.  We'd write such a
+test case like the following:
+<br><br>
+<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<tr>
+	<td>
+<pre>
+public void testFailedLogin() {
+
+    addRequestParameter("username","deryl");
+    addRequestParameter("password","express");
+    setRequestPathInfo("/login");
+    getActionServlet().doPost(getRequest(),getResponse());
+    verifyForward("login");
+    <font color="blue">verifyActionErrors(new String[] {"error.password.mismatch"});</font>
+    assertNull((String) getRequest().getSession().getAttribute("authentication"));
+}
+</pre>
+</td>
+</tr>
+</table>
+<br>
+Now, this look quite similar to our first test case, except that we're passing incorrect
+information.  Also, we're checking to make sure we used a different forward, namely one
+that takes us back to the login page, and that the authentication information is <i>not</i>
+on the session.
+<br><br> We're also verifying that the correct error messages
+were sent.  Note that we used the symbolic name, not the actual text.  Because the 
+<code>verifyActionErrors()</code> method takes a String array, we can verify more than
+one error messages, and StrutsTestCase will make sure there is an exact match.  If the test
+produced more error messages than we were expecting, it will fail; if it produced fewer, it
+will also fail.  Only an exact match in name and number will pass.  
+<br><br>
+It's that easy! As you can see, StrutsTestCase not only tests the implementation of your Action objects, but also
+the mappings that execute them, the ActionForm beans that are passed as arguments, and the
+error messages and forward statements that result from execution.  It's the whole enchilada!
+</body>
+</html>
+
+
