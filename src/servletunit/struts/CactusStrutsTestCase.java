@@ -88,12 +88,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		actionServlet = new ActionServlet();
 	    requestWrapper = null;
 	    responseWrapper = null;
-	    isInitialized = true;
 	    ServletContext servletContext = new StrutsServletContextWrapper(this.config.getServletContext());
+	    
 	    this.config = new StrutsServletConfigWrapper(this.config);
 	    ((StrutsServletConfigWrapper) this.config).setServletContext(servletContext);
 	    this.request = new StrutsRequestWrapper(this.request);
 	    this.response = new StrutsResponseWrapper(this.response);
+	    isInitialized = true;
 	} catch (Exception e) {
 	    throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
 	}
@@ -277,6 +278,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
 	init();
         try {
 	    if (!actionServletIsInitialized) {
+		// the RequestProcessor holds on to the ServletContext, so
+		// we need to ensure that it is replaced for each test.
+		java.util.Enumeration names = config.getServletContext().getAttributeNames();
+		while (names.hasMoreElements()) {
+		    String name = (String) names.nextElement();
+		    if (name.indexOf(Action.REQUEST_PROCESSOR_KEY) >= 0) {
+			config.getServletContext().setAttribute(name,null);
+		    }
+		}
 		this.actionServlet.init(config);
 		actionServletIsInitialized = true;
 	    }
@@ -337,6 +347,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 	    actionServlet.doPost(request,response);
 	    
 	} catch (ServletException se) {
+	    se.getRootCause().printStackTrace();
 	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
         } catch (Exception e) {
 	    e.printStackTrace();
@@ -367,7 +378,14 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		fail("Was expecting redirect '" + expectedRedirect + "' but received redirect '" + actualRedirect + "'");
 	    return;
 	}
-        Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,((StrutsServletContextWrapper) this.config.getServletContext()).getForward(),false);
+        Common.verifyForwardPath(actionServlet,request.getPathInfo(),forwardName,getActualForward(),false);
+    }
+
+    /**
+     * Returns the forward sent to RequestDispatcher.
+     */
+    private String getActualForward() {
+	return ((StrutsServletContextWrapper) this.actionServlet.getServletContext()).getForward();
     }
 
     /**
@@ -383,8 +401,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
 	init();
-	if (!Common.stripJSessionID(((StrutsServletContextWrapper) this.config.getServletContext()).getForward()).equals(forwardPath))
-	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + ((StrutsServletContextWrapper) this.config.getServletContext()).getForward() + "'");
+	if (!Common.stripJSessionID(getActualForward()).equals(forwardPath))
+	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + getActualForward() + "'");
     }
 
     /**
@@ -398,7 +416,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public void verifyInputForward() {
 	init();
         String inputPath = actionServlet.findMapping(request.getPathInfo()).getInput();
-        Common.verifyForwardPath(actionServlet,request.getPathInfo(),inputPath,((StrutsServletContextWrapper) this.config.getServletContext()).getForward(),true);
+        Common.verifyForwardPath(actionServlet,request.getPathInfo(),inputPath,getActualForward(),true);
     }
 
     /**
