@@ -536,6 +536,16 @@ public class MockStrutsTestCase extends TestCase {
         return Common.getActionForm(actionServlet,actionPath,request,context);
     }
 
+    /**
+     * Sets an ActionForm instance to be used in this test.  The given ActionForm instance
+     * will be stored in the scope specified in the Struts configuration file (ie: request
+     * or session).  Note that while this ActionForm instance is passed to the test, Struts
+     * will still control how it is used.  In particular, it will call the ActionForm.reset()
+     * method, so if you override this method in your ActionForm subclass, you could potentially
+     * reset attributes in the form passed through this method.
+     *
+     * @param form the ActionForm instance to be used in this test.
+     */
     public void setActionForm(ActionForm form) {
         init();
         // make sure action servlet is intialized
