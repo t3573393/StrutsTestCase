@@ -314,6 +314,21 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Returns the ActionServlet controller used in this
+     * test.
+     *
+     */
+    public ActionServlet getActionServlet() {
+	init();
+        try {
+            this.actionServlet.init(config);
+            return this.actionServlet;
+        } catch (ServletException e) {
+            throw new AssertionFailedError(e.getMessage());
+        }
+    }
+
+    /**
      * Sets the ActionServlet to be used in this test execution.  This
      * method should only be used if you plan to use a customized
      * version different from that provided in the Struts distribution.
