@@ -626,10 +626,35 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Exiting verifyInputForward()");
     }
 
+    /**
+     * Verifies that the ActionServlet controller used this forward and Tiles definition.
+     *
+     * @param forwardName the logical name of a forward, as defined
+     * in the Struts configuration file.  This can either refer to a
+     * global forward, or one local to the ActionMapping.
+     *
+     * @param definitionName the name of a Tiles definition, as defined
+     * in the Tiles configuration file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward or tiles definition than those given after
+     * executing an Action object.
+     */
     public void verifyTilesForward(String forwardName, String definitionName) {
         Common.verifyTilesForward(actionServlet,actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
     }
 
+    /**
+     * Verifies that the ActionServlet controller forwarded to the defined
+     * input Tiles definition.
+     *
+     * @param definitionName the name of a Tiles definition, as defined
+     * in the Tiles configuration file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward than the defined input path after
+     * executing an Action object.
+     */
     public void verifyInputTilesForward(String definitionName) {
         Common.verifyTilesForward(actionServlet,actionPath,null,definitionName,true,request,config.getServletContext(),config);
     }
