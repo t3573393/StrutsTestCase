@@ -14,8 +14,8 @@
 
     <property name="build.dir"      value="${basedir}/build"/>
     <property name="src.dir"        value="${basedir}/src"/>
-    <property name="distribute.dir" value="${basedir}/dist"/>
-    <property name="doc.dir"        value="${basedir}/docs"/>
+    <property name="distribute.dir" value="${basedir}/dist/servletunit"/>
+    <property name="doc.dir"        value="${distribute.dir}/docs"/>
     <property name="test.dir"       value="${basedir}/test-results"/>
 
     <!-- set class.path to use with javac/jikes -->
@@ -49,23 +49,30 @@
     <target name="package">
         <mkdir dir="${distribute.dir}"/>
 	<jar jarfile="${distribute.dir}/servletunit.jar">
-	    <fileset dir="${build.dir}" includes="**/*.class"/>
-	    <fileset dir="${src.dir}/servletunit/struts/examples/" includes="WEB-INF/**" excludes="WEB-INF/CVS/**"/>
-	</jar>    
+	    <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
+	</jar>
+    </target>
+
+    <target name="release" depends="package,docs">
+        <zip zipFile="${basedir}/servletunit.zip" basedir="${basedir}/dist"/>
+	<tar tarFile="${basedir}/servletunit.tar" basedir="${basedir}/dist"/>
+	<gzip src="${basedir}/servletunit.tar" zipfile="${basedir}/servletunit.tar.gz"/>
+	<delete file="${basedir}/servletunit.tar"/>
     </target>
 
     <!-- Clean up the build -->
     <target name="clean">
         <delete dir="${build.dir}" />
-        <delete dir="${distribute.dir}" />
-        <delete dir="${doc.dir}" />
+        <delete dir="${basedir}/dist" />
         <delete dir="${test.dir}" />
+	<delete file="${basedir}/servletunit.zip"/>
+	<delete file="${basedir}/servletunit.tar.gz"/>
     </target>
     
     <!-- Generate Javadocs for the application -->
     <target name="docs">
         <mkdir dir="${doc.dir}/api" />
-        <javadoc packagenames="servletunit.*"
+        <javadoc packagenames="servletunit,servletunit.struts"
            sourcepath="${src.dir}"
            destdir="${doc.dir}/api"
            author="true"
