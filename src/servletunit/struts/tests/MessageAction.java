@@ -38,7 +38,7 @@ public class MessageAction extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
 
-	MessageResources resources = getResources(request);
+	MessageResources resources = getResources();
 	if (resources == null) {
 	    return mapping.findForward("failure");
 	} else {
