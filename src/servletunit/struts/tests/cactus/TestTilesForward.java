@@ -26,8 +26,6 @@ public class TestTilesForward extends CactusStrutsTestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        setConfigFile("tiles","/WEB-INF/struts-config-tiles.xml");
-        setConfigFile("/WEB-INF/struts-config.xml");
     }
 
     public void testTilesForward() {
@@ -39,10 +37,10 @@ public class TestTilesForward extends CactusStrutsTestCase {
         verifyForwardPath("/layouts/pageLayout.jsp");
     }
 
-//    public void testTilesInputForward() {
-//        setRequestPathInfo("tiles","/tilesInputForward.do");
-//        actionPerform();
-//        verifyInputForward();
-//    }
+    public void testTilesInputForward() {
+        setRequestPathInfo("tiles","/tilesInputForward.do");
+        actionPerform();
+        verifyInputForward();
+    }
 
 }
