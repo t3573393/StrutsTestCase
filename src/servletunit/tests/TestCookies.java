@@ -15,7 +15,7 @@ public class TestCookies extends TestCase {
     }
 
     public void setUp() {
-    this.request = new HttpServletRequestSimulator();
+    this.request = new HttpServletRequestSimulator(null);
     }
 
     public void testNoCookies() {

@@ -14,7 +14,7 @@ public class TestSession extends TestCase {
     }
 
     public void setUp() {
-	this.request = new HttpServletRequestSimulator();
+	this.request = new HttpServletRequestSimulator(null);
     }
     
     public void testGetSession() {
