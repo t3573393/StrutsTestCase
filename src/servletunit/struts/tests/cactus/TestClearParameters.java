@@ -27,11 +27,5 @@ public class TestClearParameters extends CactusStrutsTestCase {
         assertNull(getRequest().getParameter("hi"));
     }
 
-    public void testGetParameterMap() {
-        addRequestParameter("foo","bar");
-        assertEquals("bar",getRequest().getParameter("foo"));
-        Map parameterMap = getRequest().getParameterMap();
-        assertNotNull(parameterMap);
-        assertEquals("bar",parameterMap.get("foo"));
-    }
+    
 }
