@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
 
 public class LoginAction extends Action {
 
-    public ActionForward perform(ActionMapping mapping,
+    public ActionForward execute(ActionMapping mapping,
                                  ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
@@ -46,6 +46,7 @@ public class LoginAction extends Action {
         session.setAttribute("authentication", username);
 
         // Forward control to the specified success URI
+
         return mapping.findForward("success");
 
     }
