@@ -20,12 +20,16 @@ import servletunit.struts.CactusStrutsTestCase;
 
 public class TestAbsolutePath extends CactusStrutsTestCase {
 
+    String rootPath;
+
     public TestAbsolutePath(String testName) {
         super(testName);
+        rootPath = System.getProperty("basedir");
     }
 
     public void testSuccessfulLogin() {
-        setConfigFile("/Users/deryl/develop/projects/strutstestcase/src/examples/WEB-INF/struts-config.xml");
+        System.out.println(rootPath);
+        setConfigFile(rootPath + "/src/examples/WEB-INF/struts-config.xml");
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
         setRequestPathInfo("/login");

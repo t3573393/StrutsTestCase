@@ -25,24 +25,24 @@ public class TestRedirectAction extends CactusStrutsTestCase {
     }
 
     public void testRedirect() {
-        setRequestPathInfo("/testRedirect");
+        setRequestPathInfo("test","/testRedirect");
         actionPerform();
-	verifyForward("redirect");
-	verifyForwardPath("/main/success.jsp");
+        verifyForward("redirect");
+        verifyForwardPath("/test/main/success.jsp");
         verifyNoActionErrors();
     }
-    
+
     /**
      * Confirms verifyForward works correctly when the redirect path
      * is a relative (not absolute) URL
      */
     public void testRelativeRedirect() {
-        setRequestPathInfo("/testRelativeRedirect");
+        setRequestPathInfo("test","/testRelativeRedirect");
         actionPerform();
-	// in a servlet engine, this will have the context prepended
-	verifyForwardPath("/main/success.jsp");
+        // in a servlet engine, this will have the context prepended
+        verifyForwardPath("/test/main/success.jsp");
         verifyNoActionErrors();
     }
-    
-    
+
+
 }

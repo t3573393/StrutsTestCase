@@ -34,7 +34,7 @@ public class TestTokenAction extends MockStrutsTestCase {
     public void testTransactionToken() {
 	addRequestParameter(Constants.TOKEN_KEY, "test_token");
 	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
-        setRequestPathInfo("/testToken");
+        setRequestPathInfo("test","/testToken");
         actionPerform();
         verifyNoActionErrors();
     }
