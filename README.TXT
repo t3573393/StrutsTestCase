@@ -36,6 +36,9 @@ you've set in the ActionForm instance you pass to this method.
 - changed setConfigFile() and setServletConfig() methods to take in absolute
 paths. (MockStrutsTestCase and CactusStrutsTestCase)
 
+- added setContextDirectory() method to enable using ServletContext.getRealPath()
+and HttpServletRequest.getRealPath() methods for testing.  (MockStrutsTestCase only)
+
 Bug Fixes:
 ---------
 
@@ -62,6 +65,8 @@ CactusStrutsTestCase)
 
 - Fixed bug where sub-applications were not spuriously failing if the
 test class had more than one test method.  (CactusStrutsTestCase)
+
+- Fixed bug where setting a null session attribute would throw a NullPointerException.
 
 
 Questions and comments are always welcome!
