@@ -33,10 +33,14 @@ overrides the reset() method, then you could potentially reset anything
 you've set in the ActionForm instance you pass to this method.  
 (MockStrutsTestCase and CactusStrutsTestCase)
 
-- changed setConfigFile() and setServletConfig() methods to take in absolute
+- Changed setConfigFile() and setServletConfig() methods to take in absolute
 paths. (MockStrutsTestCase and CactusStrutsTestCase)
 
-- added setContextDirectory() method to enable using ServletContext.getRealPath()
+- Added verifyActionMessages() and verifyNoActionMessages() for tests that
+need to validate that ActionMessages are set properly.  (MockStrutsTestCase
+and CactusStrutsTestCase)
+
+- Added setContextDirectory() method to enable using ServletContext.getRealPath()
 and HttpServletRequest.getRealPath() methods for testing.  (MockStrutsTestCase only)
 
 Bug Fixes:
