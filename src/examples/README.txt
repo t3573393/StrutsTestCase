@@ -9,7 +9,8 @@ struts.jar
 commons-digester.jar
 commons-collections.jar
 commons-logging.jar
-commons-beanutils.jar
+jaxp.jar
+crimson.jar
 strutstest.jar
 
 Additionally, you must set the CLASSPATH to point to the 'examples'
@@ -22,9 +23,9 @@ invokes the JUnit TestRunner:
 % java examples.TestLoginAction
 
 .ActionServlet: init
-[INFO] RequestProcessor - -Processing a 'null' for path '/login'
+[INFO] RequestProcessor - -Processing a 'POST' for path '/login'
 .ActionServlet: init
-[INFO] RequestProcessor - -Processing a 'null' for path '/login'
+[INFO] RequestProcessor - -Processing a 'POST' for path '/login'
 
 Time: 1.292
 
@@ -39,6 +40,7 @@ described above:
 
 cactus.jar
 httpclient.jar
+aspectjrt.jar (only if you are using Cactus v1.3)
 
 Additionally, you must set the CLASSPATH to point to the 'examples/cactus'
 directory, so that the Cactus test harness can find the cactus.properties
@@ -52,7 +54,7 @@ http://jakarta.apache.org/cactus for more details.
 You can run the TestCactusLoginAction class directly, as its main
 method invokes the JUnit TestRunner:
 
-% java examples.TestCactusLoginAction
+% java examples.cactus.TestCactusLoginAction
 
 ..
 Time: 1.502
