@@ -8,7 +8,7 @@
     <!-- set the release version -->
     <property name="major.version" value="2"/>
     <property name="minor.version" value="1"/>
-    <property name="point.version" value="2"/>
+    <property name="point.version" value="3"/>
     <property name="release.version" value="${major.version}${minor.version}${point.version}"/>
     <property name="jar.name" value="strutstest-${major.version}.${minor.version}.${point.version}.jar"/>
 
@@ -19,7 +19,7 @@
 
     <!-- points to the top of a test application server -->
     <!-- used for automatic deployment of the test code -->
-    <property name="appserver.home" value="~/develop/resin-2.1.4"/>
+    <property name="appserver.home" value="/Users/deryl/develop/resin-3.0.8"/>
 
     <!-- compile options defaults -->
     <property name="comp.deprecate" value="off"/>
@@ -255,11 +255,11 @@
         <tstamp/>
         <delete dir="${temp.dir}"/>
         <mkdir dir="${temp.dir}"/>
-        <get src="http://cvs.apache.org/builds/jakarta-struts/nightly/jakarta-struts-${DSTAMP}.zip"
+        <get src="http://svn.apache.org/builds/jakarta-struts/nightly/struts-${DSTAMP}.zip"
             dest="${temp.dir}/jakarta-struts-nightly.zip"
             verbose="false"/>
         <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
-        <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.2.jar" overwrite="true"/>
+        <copy file="${temp.dir}/struts-${DSTAMP}/lib/struts.jar" tofile="${lib.dir}/struts-1.2.jar" overwrite="true"/>
         <delete dir="${temp.dir}"/>
     </target>
 

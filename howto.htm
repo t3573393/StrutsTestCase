@@ -7,8 +7,8 @@
 </head>
 <body>
 <div class="header">
-<h1>StrutsTestCase for JUnit v2.1.2</h1>
-<h3 CLASS="announce">Now supporting Struts 1.1, including <a href="#tiles">Tiles</a> and <a href="#subapp">Sub-Applications!</a></h3>
+<h1>StrutsTestCase for JUnit v2.1.3</h1>
+<h3 CLASS="announce">Now supporting Struts 1.2, including <a href="#tiles">Tiles</a> and <a href="#subapp">Sub-Applications!</a></h3>
 
 <p>Questions? Comments? Check out the <a href="http://sourceforge.net/forum/?group_id=39190">user forums</a>.</p>
 <a href="http://sourceforge.net/donate/index.php?group_id=39190"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>
@@ -21,7 +21,7 @@ for testing code based on the Struts framework.  StrutsTestCase provides both a 
  StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation
  of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases.</p>
 
-<p>StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.1, and Cactus 1.6.1 and JUnit 3.8.1.
+<p>StrutsTestCase is compliant with the Java Servlet 2.2, 2.3, and 2.4 specifications, and supports Struts 1.2, and Cactus 1.6.1 and JUnit 3.8.1.
 
 <p><b>Please note</b> that StrutsTestCase is no longer backwards compatible with Struts 1.0.  The last release compatible with Struts 1.0 is <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">StrutsTestCase v2.0</a>.
 
@@ -240,8 +240,8 @@ will also fail.  Only an exact match in name and number will pass.</p>
 the mappings that execute them, the ActionForm beans that are passed as arguments, and the
 error messages and forward statements that result from execution.  It's the whole enchilada!</p>
 
-<h2 id="tiles">Testing Tiles in Struts 1.1</h2>
-<p>The Tiles framework, which is integrated into Struts 1.1, is a flexible templating mechanism designed
+<h2 id="tiles">Testing Tiles in Struts 1.2</h2>
+<p>The Tiles framework, which is integrated into Struts 1.2, is a flexible templating mechanism designed
 to easily re-use common user experience elements.  StrutsTestCase now provides support for testing applications
 that use Tiles, allowing any test case to verify that an Action object uses the correct Tiles definition.  Tiles
 testing is similar to calling <tt>verifyActionForward</tt>, with a twist:
@@ -283,8 +283,8 @@ public class TestLoginAction extends MockStrutsTestCase {
 }
 </pre>
 
-<h2 id="subapp">Testing Sub-Applications in Struts 1.1</h2>
-<p>Struts 1.1 introduces the concept of sub-applications, or modules -- a powerful mechanism for dividing an
+<h2 id="subapp">Testing Sub-Applications in Struts 1.2</h2>
+<p>Struts 1.2 introduces the concept of sub-applications, or modules -- a powerful mechanism for dividing an
 application into functional components.  StrutsTestCase now provides support for testing sub-applications,
 which extends the concepts discussed in the previous examples.  The general idea is still the same: you
 can point a unit test to a configuration file, execute an action, and validate the results.  The methods
