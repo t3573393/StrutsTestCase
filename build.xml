@@ -51,8 +51,19 @@
 	<jar jarfile="${distribute.dir}/strutstest.jar">
 	    <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
 	</jar>
+
+	<war warfile="test.war" webxml="${src.dir}/servletunit/struts/examples/WEB-INF/web.xml">
+	    <webinf dir="${src.dir}/servletunit/struts/examples/WEB-INF">
+	         <exclude name="web.xml"/>
+	    </webinf>
+	    <lib dir="${basedir}/lib">
+	         <exclude name="ant*.jar"/>
+            </lib>
+	    <classes dir="${build.dir}"/>
+	</war>
     </target>
 
+    <!-- prepare code for public release -->
     <target name="release" depends="package,docs">
         <zip zipFile="${basedir}/strutstest.zip" basedir="${basedir}/dist"/>
 	<tar tarFile="${basedir}/strutstest.tar" basedir="${basedir}/dist"/>
@@ -114,6 +125,26 @@
             </batchtest>
         </junit>
     </target>
+
+    <target name="test.cactus" depends="build">
+        <mkdir dir="${test.dir}" />
+        <junit printsummary="yes" haltonfailure="yes">
+            <sysproperty key="test.dir" value="${test.dir}" />
+            <classpath refid="class.path" />
+	    <classpath>
+	       <pathelement location="${src.dir}/servletunit/struts/examples/cactus"/>
+	    </classpath>
+            <formatter type="plain" />
+
+            <batchtest fork="yes" todir="${test.dir}">
+                <fileset dir="${build.dir}">
+                    <include name="**/examples/cactus/Test*.class" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    
     
     <!-- Run all the build targets -->
     <target name="all" depends="clean,build,package" />
