@@ -26,6 +26,9 @@
 		<action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
 			<forward name="redirect" path="http://www.yahoo.com" redirect="true"/>
 		</action>
+            <action path="/testRelativeRedirect" type="servletunit.struts.tests.RedirectAction" scope="request">
+			<forward name="redirect" path="/main/success.jsp" redirect="true"/>
+		</action>
 		<action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
 		<action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
 	</action-mappings>
