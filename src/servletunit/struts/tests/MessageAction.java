@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.MessageResources;
 
 public class MessageAction extends Action {
 
@@ -37,11 +38,17 @@ public class MessageAction extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
 
-	if (getResources() == null)
+	MessageResources resources = getResources();
+	if (resources == null) {
 	    return mapping.findForward("failure");
-	else
-	    return mapping.findForward("success");
-
+	} else {
+	    String message = resources.getMessage("button.save");
+	    if ((message != null) && (message.equals("Save")))
+		return mapping.findForward("success");
+	    else {
+		return mapping.findForward("failure");
+	    }
+	}
     }
 
 }
