@@ -334,14 +334,14 @@ public class MockStrutsTestCase extends TestCase {
 
     /**
      * Sets the location of the Struts configuration file for the default module.
-     * This method should only be called if the configuration file is different than
-     * the default value of /WEB-INF/struts-config.xml.<br><br>
-     * The rules for searching for the configuration files are the same
-     * as the rules associated with calling Class.getResourceAsStream().
-     * Briefly, this method delegates the call to its class loader, after
-     * making these changes to the resource name: if the resource name starts
-     * with "/", it is unchanged; otherwise, the package name is prepended
-     * to the resource name after converting "." to "/". <br><br>
+     * This method take in either a relative path, or and absolute path.  If an
+     * absolute path is passed in, then the the file will be loaded from the
+     * filesystem.  If a relative path is specified, then the rules for
+     * searching for the configuration files are the same as the rules associated
+     * with calling Class.getResourceAsStream().  Briefly, this method delegates
+     * the call to its class loader, after making these changes to the resource name: if
+     * the resource name starts with "/", it is unchanged; otherwise, the package name
+     * is prepended to the resource name after converting "." to "/". <br><br>
      * To be on the safe side, always make sure the pathname refers to a
      * file in the same directory as your test, or make sure it begins
      * with a "/" character.
@@ -359,6 +359,7 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setConfigFile(String moduleName, String pathname) {
         init();
+        // todo: this will not work with windows paths.
         // ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');

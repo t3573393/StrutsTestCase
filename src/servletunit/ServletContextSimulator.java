@@ -24,6 +24,8 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -257,7 +259,13 @@ public class ServletContextSimulator implements ServletContext
     public URL getResource(String path) throws MalformedURLException
     {
         try {
-            return this.getClass().getResource(path);
+            File file = new File(path);
+            if (file.exists()) {
+                return file.toURL();
+            }
+            else {
+                return this.getClass().getResource(path);
+            }
         } catch (Exception e) {
             return null;
         }
@@ -298,7 +306,13 @@ public class ServletContextSimulator implements ServletContext
     public InputStream getResourceAsStream(String path)
     {
         try {
-            return this.getClass().getResourceAsStream(path);
+            File file = new File(path);
+            if (file.exists()) {
+                return new FileInputStream(file);
+            }
+            else {
+                return this.getClass().getResourceAsStream(path);
+            }
         } catch (Exception e) {
             return null;
         }
