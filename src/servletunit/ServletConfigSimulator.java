@@ -48,7 +48,7 @@ public class ServletConfigSimulator implements ServletConfig
     public ServletConfigSimulator()
     {
         parameters=new Hashtable();
-        context = new ServletContextSimulator(parameters);
+        context = new ServletContextSimulator();
     }
 
     /**
