@@ -55,5 +55,9 @@ public class TestCactusLoginAction extends CactusStrutsTestCase {
         assertNull((String) getSession().getAttribute("authentication"));
     }
 
+    public static void main(String[] args) {
+	junit.textui.TestRunner.run(TestCactusLoginAction.class);
+    }
+
 }
 
