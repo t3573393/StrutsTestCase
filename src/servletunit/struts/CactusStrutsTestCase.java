@@ -71,6 +71,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     HashMap parameters = new HashMap();
     HttpServletRequestWrapper requestWrapper;
     HttpServletResponseWrapper responseWrapper;
+    boolean isInitialized = false;
 
     /**
      * Default constructor.
@@ -78,31 +79,39 @@ public class CactusStrutsTestCase extends ServletTestCase {
     public CactusStrutsTestCase(String testName) {
         super(testName);
     }
+
+    /**
+     * Sets up the test fixture for this test.  This method creates
+     * an instance of the ActionServlet, initializes it to validate
+     * forms and turn off debugging, and clears all other parameters.
+     */
+    protected void init() {
+	if (!isInitialized) {
+	    try {
+		parameters.clear();
+		forward = null;
+		actionForm = null;
+		if (actionServlet == null)
+		    actionServlet = new ActionServlet();
+		config.setInitParameter("debug","0");
+		config.setInitParameter("detail","0");
+		config.setInitParameter("validate","true");
+		requestWrapper = null;
+		responseWrapper = null;
+		isInitialized = true;
+	    } catch (Exception e) {
+		throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
+	    }
+	}
+    }
     
     /**
      * Sets up the test fixture for this test.  This method creates
      * an instance of the ActionServlet, initializes it to validate
      * forms and turn off debugging, and clears all other parameters.
-     * <p>
-     * Please note that this method performs some important initialization
-     * calls, and <b>must</b> be called if this method is overridden in a
-     * subclass.
      */
     public void setUp() throws Exception {
-	try {
-            parameters.clear();
-            forward = null;
-            actionForm = null;
-	    if (actionServlet == null)
-		actionServlet = new ActionServlet();
-            config.setInitParameter("debug","0");
-            config.setInitParameter("detail","0");
-            config.setInitParameter("validate","true");
-	    requestWrapper = null;
-	    responseWrapper = null;
-        } catch (Exception e) {
-            throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
-        }
+	init();
     }
 
     /**
@@ -111,6 +120,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * and <b>must</b> be called if this method is overridden in a subclass.
      */
     public void tearDown() throws Exception {
+	init();
         try {
             actionServlet.destroy();
         } catch (Exception e) {
@@ -123,6 +133,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * this test.
      */
     public HttpServletRequest getRequest() {
+	init();
         return this.request;
     }
 
@@ -133,6 +144,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * javax.servlet.http.HttpServletRequestWrapper.
      */
     public HttpServletRequestWrapper getRequestWrapper() {
+	init();
 	if (requestWrapper == null)
 	    return new HttpServletRequestWrapper(this.request);
 	else
@@ -149,6 +161,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * used when calling Action.perform().
      */
     public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
+	init();
 	if (wrapper == null)
 	    throw new IllegalArgumentException("wrapper class cannot be null!");
 	else {
@@ -162,6 +175,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * this test.
      */
     public HttpServletResponse getResponse() {
+	init();
         return this.response;
     }
 
@@ -172,6 +186,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * javax.servlet.http.HttpServletResponseWrapper.
      */
     public HttpServletResponseWrapper getResponseWrapper() {
+	init();
 	if (responseWrapper == null)
 	    return new HttpServletResponseWrapper(this.response);
 	else
@@ -188,6 +203,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * used when calling Action.perform().
      */
     public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
+	init();
 	if (wrapper == null)
 	    throw new IllegalArgumentException("wrapper class cannot be null!");
 	else {
@@ -201,6 +217,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * test.
      */
     public HttpSession getSession() {
+	init();
         return this.session;
     }
 
@@ -212,6 +229,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void addRequestParameter(String parameterName, String parameterValue)
     {
+	init();
         parameters.put(parameterName,parameterValue);
     }
 
@@ -223,6 +241,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void addRequestParameter(String parameterName, String[] parameterValues)
     {
+	init();
         parameters.put(parameterName,parameterValues);
     }
 
@@ -235,6 +254,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * appear in an HTML or JSP source file.
      */
     public void setRequestPathInfo(String pathInfo) {
+	init();
         this.actionPath = Common.stripActionPath(pathInfo);
     }
 
@@ -253,6 +273,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * with a "/" character.
      */
     public void setConfigFile(String pathname) {
+	init();
         // ugly hack to get this to play ball with Class.getResourceAsStream()
         if (!pathname.startsWith("/")) {
             String prefix = this.getClass().getPackage().getName().replace('.','/');
@@ -271,6 +292,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * to set the ActionForm instance.
      */
     public void setActionForm(ActionForm form) {
+	init();
         this.actionForm = form;
     }
 
@@ -287,6 +309,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * @see setActionForm(ActionForm form)
      */
     public ActionForm getActionForm() {
+	init();
         return (this.actionForm);
     }
 
@@ -296,6 +319,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * version different from that provided in the Struts distribution.
      */
     public void setActionServlet(ActionServlet servlet) {
+	init();
         if (servlet == null)
             throw new AssertionFailedError("Cannot set ActionServlet to null");
         this.actionServlet = servlet;
@@ -312,7 +336,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      *
      */
     public void actionPerform() {
-	
+	init();
 	HttpServletRequest request = this.request;
 	HttpServletResponse response = this.response;
 	// make sure errors are cleared from last test.
@@ -408,6 +432,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyForward(String forwardName) throws AssertionFailedError {
+	init();
         Common.verifyForwardPath(actionServlet,actionPath,forwardName,forward.getPath(),false);
     }
 
@@ -423,6 +448,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
+	init();
 	if (!forward.getPath().equals(forwardPath))
 	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + forward.getPath() + "'");
     }
@@ -436,6 +462,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * executing an Action object.
      */
     public void verifyInputForward() {
+	init();
         String inputPath = actionServlet.findMapping(actionPath).getInput();
         Common.verifyForwardPath(actionServlet,actionPath,inputPath,forward.getPath(),true);
     }
@@ -455,6 +482,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
 
     public void verifyActionErrors(String[] errorNames) {
+	init();
         Common.verifyActionErrors(request,errorNames);
     }
 
@@ -466,6 +494,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * sent any error messages after excecuting and Action object.
      */
     public void verifyNoActionErrors() {
+	init();
         Common.verifyNoActionErrors(request);
     }
 
