@@ -48,7 +48,7 @@ public class TestAbsolutePath extends MockStrutsTestCase {
     }
 
     public void testContextDirectory() {
-        ((ServletContextSimulator) this.getSession().getServletContext()).setContextDirectory(new File(rootPath + "/src/examples"));
+        this.setContextDirectory(new File(rootPath + "/src/examples"));
         setConfigFile("/WEB-INF/struts-config.xml");
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");

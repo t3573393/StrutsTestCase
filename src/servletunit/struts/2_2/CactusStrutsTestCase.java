@@ -30,9 +30,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-import servletunit.struts.StrutsResponseWrapper;
-import servletunit.struts.Common;
-
 /**
  * CactusStrutsTestCase is an extension of the Cactus ServletTestCase
  * base class that provides additional methods to aid in testing
@@ -130,8 +127,6 @@ public class CactusStrutsTestCase extends ServletTestCase {
         return this.response;
     }
 
-
-
     /**
      * Returns an HttpSession object that can be used in this
      * test.
@@ -175,6 +170,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
         ((StrutsRequestWrapper) this.request).addParameter(parameterName,parameterValues);
         if (logger.isDebugEnabled())
             logger.debug("Exiting addRequestParameter()");
+    }
+
+    /**
+     * Clears all request parameters previously set.  NOTE: This will <strong>note</strong> clear
+     * parameters set using Cactus beginXXX methods!
+     */
+    public void clearRequestParameters() {
+        init();
+        ((StrutsRequestWrapper) request).clearRequestParameters();
     }
 
     /**
@@ -447,8 +451,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyForwardPath() : forwardPath = " + forwardPath);
         init();
-        forwardPath = request.getContextPath() + forwardPath;
         String actualForward = getActualForward();
+
+        if ((actualForward == null) && (forwardPath == null)) {
+            // actions can return null forwards.
+            return;
+        }
+
+        forwardPath = request.getContextPath() + forwardPath;
+
         if (actualForward == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");
@@ -479,6 +490,41 @@ public class CactusStrutsTestCase extends ServletTestCase {
         Common.verifyForwardPath(actionServlet,request.getPathInfo(),null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyInputForward()");
+    }
+
+    /**
+     * Verifies that the ActionServlet controller used this forward and Tiles definition.
+     *
+     * @param forwardName the logical name of a forward, as defined
+     * in the Struts configuration file.  This can either refer to a
+     * global forward, or one local to the ActionMapping.
+     *
+     * @param definitionName the name of a Tiles definition, as defined
+     * in the Tiles configuration file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward or tiles definition than those given after
+     * executing an Action object.
+     */
+    public void verifyTilesForward(String forwardName, String definitionName) {
+        init();
+        Common.verifyTilesForward(actionServlet,request.getPathInfo(),forwardName,definitionName,false,request,config.getServletContext(),config);
+    }
+
+    /**
+     * Verifies that the ActionServlet controller forwarded to the defined
+     * input Tiles definition.
+     *
+     * @param definitionName the name of a Tiles definition, as defined
+     * in the Tiles configuration file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward than the defined input path after
+     * executing an Action object.
+     */
+    public void verifyInputTilesForward(String definitionName) {
+        init();
+        Common.verifyTilesForward(actionServlet,request.getPathInfo(),null,definitionName,true,request,config.getServletContext(),config);
     }
 
     /**

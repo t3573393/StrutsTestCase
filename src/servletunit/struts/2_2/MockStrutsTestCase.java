@@ -21,20 +21,20 @@ import junit.framework.TestCase;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.Globals;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
-import org.apache.struts.action.Action;
-import org.apache.struts.Globals;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
 import servletunit.ServletContextSimulator;
-import servletunit.struts.Common;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import java.io.InputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 
 /**
  * MockStrutsTestCase is an extension of the base JUnit testcase that
@@ -64,6 +64,19 @@ public class MockStrutsTestCase extends TestCase {
     String actionPath;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+
+    /**
+     * The set of public identifiers, and corresponding resource names, for
+     * the versions of the configuration file DTDs that we know about.  There
+     * <strong>MUST</strong> be an even number of Strings in this list!
+     */
+    protected String registrations[] = {
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN",
+        "/org/apache/struts/resources/web-app_2_2.dtd",
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN",
+        "/org/apache/struts/resources/web-app_2_3.dtd"
+    };
+
 
     protected static Log logger = LogFactory.getLog(MockStrutsTestCase.class);
 
@@ -116,7 +129,12 @@ public class MockStrutsTestCase extends TestCase {
         return this.request;
     }
 
-
+    /**
+     * Clears all request parameters previously set.
+     */
+    public void clearRequestParameters() {
+        this.request.getParameterMap().clear();
+    }
 
     /**
      * Returns an HttpServletResponse object that can be used in
@@ -240,7 +258,7 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Adds an HttpServletRequest parameter that is an array of String values
      * to be used in setting up the ActionForm instance to be used in this test.
-     * Each parameter added should correspond to an attribute in the ActionForm
+     * Each parameter added should correspond to an attribute in the ActionForm 
      * instance used by the Action instance being tested.
      */
     public void addRequestParameter(String parameterName, String[] parameterValues)
@@ -395,11 +413,16 @@ public class MockStrutsTestCase extends TestCase {
         // web.xml file -- first the init-parameters
         Digester digester = new Digester();
         digester.push(this.config);
-        digester.setValidating(false);
+        digester.setValidating(true);
         digester.addCallMethod("web-app/servlet/init-param", "setInitParameter", 2);
         digester.addCallParam("web-app/servlet/init-param/param-name", 0);
         digester.addCallParam("web-app/servlet/init-param/param-value", 1);
         try {
+            for (int i = 0; i < registrations.length; i += 2) {
+                URL url = context.getResource(registrations[i + 1]);
+                if (url != null)
+                    digester.register(registrations[i], url.toString());
+            }
             InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
@@ -411,12 +434,17 @@ public class MockStrutsTestCase extends TestCase {
 
         // now the context parameters..
         digester = new Digester();
-        digester.setValidating(false);
+        digester.setValidating(true);
         digester.push(this.context);
         digester.addCallMethod("web-app/context-param", "setInitParameter", 2);
         digester.addCallParam("web-app/context-param/param-name", 0);
         digester.addCallParam("web-app/context-param/param-value", 1);
         try {
+            for (int i = 0; i < registrations.length; i += 2) {
+                URL url = context.getResource(registrations[i + 1]);
+                if (url != null)
+                    digester.register(registrations[i], url.toString());
+            }
             InputStream input = context.getResourceAsStream(pathname);
             if(input==null)
                 throw new AssertionFailedError("Invalid pathname: " + pathname);
@@ -490,9 +518,14 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyForwardPath() : forwardPath = " + forwardPath);
         init();
+        String actualForward = getActualForward();
+        if ((actualForward == null) && (forwardPath == null)) {
+            // actions can send null forwards, which is fine.
+            return;
+        }
+
         forwardPath = request.getContextPath() + forwardPath;
 
-        String actualForward = getActualForward();
         if (actualForward == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("verifyForwardPath() : actualForward is null - this usually means it is not mapped properly.");
@@ -523,6 +556,41 @@ public class MockStrutsTestCase extends TestCase {
         Common.verifyForwardPath(actionServlet,actionPath,null,getActualForward(),true,request,config.getServletContext(),config);
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyInputForward()");
+    }
+
+    /**
+     * Verifies that the ActionServlet controller used this forward and Tiles definition.
+     *
+     * @param forwardName the logical name of a forward, as defined
+     * in the Struts configuration file.  This can either refer to a
+     * global forward, or one local to the ActionMapping.
+     *
+     * @param definitionName the name of a Tiles definition, as defined
+     * in the Tiles configuration file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward or tiles definition than those given after
+     * executing an Action object.
+     */
+    public void verifyTilesForward(String forwardName, String definitionName) {
+        init();
+        Common.verifyTilesForward(actionServlet,actionPath,forwardName,definitionName,false,request,config.getServletContext(),config);
+    }
+
+    /**
+     * Verifies that the ActionServlet controller forwarded to the defined
+     * input Tiles definition.
+     *
+     * @param definitionName the name of a Tiles definition, as defined
+     * in the Tiles configuration file.
+     *
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward than the defined input path after
+     * executing an Action object.
+     */
+    public void verifyInputTilesForward(String definitionName) {
+        init();
+        Common.verifyTilesForward(actionServlet,actionPath,null,definitionName,true,request,config.getServletContext(),config);
     }
 
     /**
