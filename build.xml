@@ -122,6 +122,7 @@
            author="true"
            version="true"
            use="true"
+	   Public="true"
            windowtitle="StrutsTestCase Documentation"
            doctitle="&lt;H1&gt;StrutsTestCase for JUnit&lt;/H1&gt;"
            bottom="&lt;i&gt;Copyright &#169; Deryl Seale All Rights Reserved.&lt;/i&gt;">
