@@ -43,16 +43,16 @@ public class TestRedirectAction extends MockStrutsTestCase {
      * is a relative (not absolute) URL
      */
     public void testRelativeRedirect() {
-        setRequestPathInfo("/testRelativeRedirect");
+        setRequestPathInfo("test","/testRelativeRedirect");
         actionPerform();
         verifyForward("redirect");
-        verifyForwardPath("/main/success.jsp");
+        verifyForwardPath("/test/main/success.jsp");
         verifyNoActionErrors();
     }
 
     public void testVerifyRedirectFail() {
         try {
-            setRequestPathInfo("/testRedirect");
+            setRequestPathInfo("test","/testRedirect");
             actionPerform();
             verifyForward("login");
             verifyNoActionErrors();
