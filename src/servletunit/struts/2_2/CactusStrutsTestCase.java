@@ -18,17 +18,15 @@ package servletunit.struts;
 
 import junit.framework.AssertionFailedError;
 import org.apache.cactus.ServletTestCase;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionServlet;
-import org.apache.struts.Globals;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import java.io.IOException;
 
 /**
  * CactusStrutsTestCase is an extension of the Cactus ServletTestCase
@@ -53,12 +51,22 @@ public class CactusStrutsTestCase extends ServletTestCase {
     ActionServlet actionServlet;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+    boolean requestPathIsSet = false;
     String moduleName;
+    Object oldRequestProcessor;
+
 
     protected static Log logger = LogFactory.getLog(CactusStrutsTestCase.class);
 
     /**
      * Default constructor.
+     */
+    public CactusStrutsTestCase() {
+        super();
+    }
+
+    /**
+     * Constructor that takes test name parameter, for backwards compatibility with older versions on JUnit.
      */
     public CactusStrutsTestCase(String testName) {
         super(testName);
@@ -83,6 +91,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering setUp()");
         try {
+            // save original request processors to replace in teardown
+            String name = "org.apache.struts.action.REQUEST_PROCESSOR";
+            oldRequestProcessor = config.getServletContext().getAttribute(name);
+
             if (actionServlet == null)
                 actionServlet = new ActionServlet();
             ServletContext servletContext = new StrutsServletContextWrapper(this.config.getServletContext());
@@ -99,6 +111,20 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 logger.debug("Error in setUp()",e);
             throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
         }
+    }
+
+    public void tearDown () {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering");
+        new ActionServlet();
+        actionServlet = null;
+        actionServletIsInitialized = false;
+
+        // FIXME -- Do the same for all Modules
+        String name = "org.apache.struts.action.REQUEST_PROCESSOR";
+        config.getServletContext().setAttribute(name, oldRequestProcessor);
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
     }
 
     /**
@@ -226,9 +252,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
                     moduleName = moduleName + "/";
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("setRequestPathInfo() : setting request attribute - name = " + Common.INCLUDE_SERVLET_PATH + ", value = " + moduleName);
+                logger.debug("setRequestPathInfo() : setting request.ServletPath value = " + moduleName);
             }
-            this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
+            ((StrutsRequestWrapper) this.request).setServletPath(moduleName);
+            this.requestPathIsSet = true;
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting setRequestPathInfo()");
@@ -311,7 +338,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
                 // remove request processor for sub-applications, if used.
                 // todo: this seems pretty redundant.. may want to make this cleaner.
-                String moduleName = (String) request.getAttribute(Common.INCLUDE_SERVLET_PATH);
+                String moduleName = request.getServletPath() != null ? request.getServletPath() : "";
+
                 if (moduleName.endsWith("/"))
                     moduleName = moduleName.substring(0,moduleName.lastIndexOf("/"));
 
@@ -354,42 +382,44 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * Executes the Action instance to be tested.  This method initializes
      * the ActionServlet, sets up and optionally validates the ActionForm
      * bean associated with the Action to be tested, and then calls the
-     * Action.perform() method.  Results are stored for further validation.
+     * Action.execute() method.  Results are stored for further validation.
      *
      * @exception AssertionFailedError if there are any execution
-     * errors while calling Action.perform() or ActionForm.validate().
+     * errors while calling Action.execute() or ActionForm.validate().
      *
      */
     public void actionPerform() {
         if (logger.isDebugEnabled())
             logger.debug("Entering actionPerform()");
+        if(!this.requestPathIsSet){
+            throw new IllegalStateException("You must call setRequestPathInfo() prior to calling actionPerform().");
+        }
         init();
         try {
             HttpServletRequest request = this.request;
             HttpServletResponse response = this.response;
             // make sure errors are cleared from last test.
-            request.removeAttribute(Action.ERROR_KEY);
+            request.removeAttribute(Globals.ERROR_KEY);
             request.removeAttribute(Globals.MESSAGE_KEY);
 
             ActionServlet actionServlet = this.getActionServlet();
             actionServlet.doPost(request,response);
             if (logger.isDebugEnabled())
                 logger.debug("Exiting actionPerform()");
-        } catch (ServletException se) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",se.getRootCause());
-            fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
-        } catch (IOException e) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",e);
-            fail("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
+        } catch (NullPointerException npe) {
+            String message = "A NullPointerException was thrown.  This may indicate an error in your ActionForm, or "
+                    + "it may indicate that the Struts ActionServlet was unable to find struts config file.  "
+                    + "TestCase is running from " + System.getProperty("user.dir") + " directory.";
+            throw new ExceptionDuringTestError(message, npe);
+        } catch(Exception e){
+            throw new ExceptionDuringTestError("An uncaught exception was thrown during actionExecute()", e);
         }
     }
 
     /**
      * Returns the forward sent to RequestDispatcher.
      */
-    private String getActualForward() {
+    protected String getActualForward() {
         if (logger.isDebugEnabled())
             logger.debug("Entering getActualForward()");
         if (response.containsHeader("Location")) {
@@ -454,7 +484,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         String actualForward = getActualForward();
 
         if ((actualForward == null) && (forwardPath == null)) {
-            // actions can return null forwards.
+// actions can return null forwards.
             return;
         }
 
@@ -545,7 +575,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyActionErrors() : errorNames = " + errorNames);
         init();
-        Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
+        Common.verifyActionMessages(request,errorNames,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyActionErrors()");
     }
@@ -561,7 +591,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyNoActionErrors()");
         init();
-        Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
+        Common.verifyNoActionMessages(request,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyNoActionErrors()");
     }
@@ -634,7 +664,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering setActionForm() : form = " + form);
         init();
-        // make sure ActionServlet is initialized.
+// make sure ActionServlet is initialized.
         Common.setActionForm(form,request,request.getPathInfo(),config.getServletContext());
         if (logger.isDebugEnabled())
             logger.debug("Exiting setActionForm()");

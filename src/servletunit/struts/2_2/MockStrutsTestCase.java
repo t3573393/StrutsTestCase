@@ -22,7 +22,6 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
 import servletunit.HttpServletRequestSimulator;
@@ -30,7 +29,6 @@ import servletunit.HttpServletResponseSimulator;
 import servletunit.ServletConfigSimulator;
 import servletunit.ServletContextSimulator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.InputStream;
@@ -64,6 +62,7 @@ public class MockStrutsTestCase extends TestCase {
     String actionPath;
     boolean isInitialized = false;
     boolean actionServletIsInitialized = false;
+    boolean requestPathSet = false;
 
     /**
      * The set of public identifiers, and corresponding resource names, for
@@ -82,6 +81,13 @@ public class MockStrutsTestCase extends TestCase {
 
     /**
      * Default constructor.
+     */
+    public MockStrutsTestCase() {
+        super();
+    }
+
+    /**
+     * Constructor that takes test name parameter, for backwards compatibility with older versions on JUnit.
      */
     public MockStrutsTestCase(String testName) {
         super(testName);
@@ -197,10 +203,23 @@ public class MockStrutsTestCase extends TestCase {
                 this.actionServlet.init(config);
                 actionServletIsInitialized = true;
             }
-        } catch (ServletException e) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in getActionServlet()",e.getRootCause());
-            throw new AssertionFailedError(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error initializing action servlet",e);
+            if(e.getMessage().equals("java.lang.NullPointerException")){
+                String message = "Error initializing action servlet: Unable to find /WEB-INF/web.xml.  "
+                               + "TestCase is running from " + System.getProperty("user.dir") + " directory.  "
+                               + "Context directory ";
+                if(this.context.getContextDirectory()==null){
+                    message += "has not been set.  Try calling setContextDirectory() with a relative or absolute path";
+                }else{
+                    message = message + "is " + this.context.getContextDirectory().getAbsolutePath();
+                }
+                message = message + ".  /WEB-INF/web.xml must be found under the context directory, "
+                        + "the directory the test case is running from, or in the classpath.";
+                fail(message);
+            }else{
+                throw new AssertionFailedError(e.getMessage());
+            }
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting getActionServlet()");
@@ -232,26 +251,35 @@ public class MockStrutsTestCase extends TestCase {
      * for further validation.
      *
      * @exception AssertionFailedError if there are any execution
-     * errors while calling Action.perform()
+     * errors while calling Action.execute()
      *
      */
     public void actionPerform() {
         if (logger.isDebugEnabled())
             logger.debug("Entering actionPerform()");
+        if(!this.requestPathSet){
+            throw new IllegalStateException("You must call setRequestPathInfo() prior to calling actionPerform().");
+        }
         init();
         HttpServletRequest request = this.request;
         HttpServletResponse response = this.response;
-
         try {
             this.getActionServlet().doPost(request,response);
-        } catch (ServletException se) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",se.getRootCause());
-            fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
-        } catch (Exception ex) {
-            if (logger.isDebugEnabled())
-                logger.debug("Error in actionPerform()",ex);
-            fail("Error running action.perform(): " + ex.getClass() + " - " + ex.getMessage());
+        }catch (NullPointerException npe) {
+                String message = "A NullPointerException was thrown.  This may indicate an error in your ActionForm, or "
+                               + "it may indicate that the Struts ActionServlet was unable to find struts config file.  "
+                               + "TestCase is running from " + System.getProperty("user.dir") + " directory.  "
+                               + "Context directory ";
+                if(this.context.getContextDirectory()==null){
+                    message += "has not been set.  Try calling setContextDirectory() with a relative or absolute path";
+                }else{
+                    message = message + "is " + this.context.getContextDirectory().getAbsolutePath();
+                }
+                message = message + ".  struts config file must be found under the context directory, "
+                        + "the directory the test case is running from, or in the classpath.";
+                throw new ExceptionDuringTestError(message, npe);
+        }catch(Exception e){
+                throw new ExceptionDuringTestError("An uncaught exception was thrown during actionExecute()", e);
         }
         if (logger.isDebugEnabled())
             logger.debug("Exiting actionPerform()");
@@ -276,7 +304,7 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Adds an HttpServletRequest parameter that is an array of String values
      * to be used in setting up the ActionForm instance to be used in this test.
-     * Each parameter added should correspond to an attribute in the ActionForm 
+     * Each parameter added should correspond to an attribute in the ActionForm
      * instance used by the Action instance being tested.
      */
     public void addRequestParameter(String parameterName, String[] parameterValues)
@@ -338,6 +366,7 @@ public class MockStrutsTestCase extends TestCase {
             this.request.setAttribute(Common.INCLUDE_SERVLET_PATH, moduleName);
         }
         this.request.setPathInfo(actionPath);
+        this.requestPathSet = true;
         if (logger.isDebugEnabled())
             logger.debug("Exiting setRequestPathInfo()");
     }
@@ -479,7 +508,7 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Returns the forward sent to RequestDispatcher.
      */
-    private String getActualForward() {
+    protected String getActualForward() {
         if (logger.isDebugEnabled())
             logger.debug("Entering getActualForward()");
         if (response.containsHeader("Location")) {
@@ -629,7 +658,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyActionErrors() : errorNames = " + errorNames);
         init();
-        Common.verifyActionMessages(request,errorNames,Action.ERROR_KEY,"error");
+        Common.verifyActionMessages(request,errorNames,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyActionErrors()");
     }
@@ -646,7 +675,7 @@ public class MockStrutsTestCase extends TestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering verifyNoActionErrors()");
         init();
-        Common.verifyNoActionMessages(request,Action.ERROR_KEY,"error");
+        Common.verifyNoActionMessages(request,Globals.ERROR_KEY,"error");
         if (logger.isDebugEnabled())
             logger.debug("Exiting verifyNoActionErrors()");
     }
@@ -720,6 +749,7 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Entering setActionForm() : form = " + form);
         init();
         // make sure action servlet is intialized
+        getActionServlet();
         Common.setActionForm(form,request,actionPath,context);
         if (logger.isDebugEnabled())
             logger.debug("Exiting setActionForm()");
