@@ -17,7 +17,6 @@
 package examples;
 
 import servletunit.struts.MockStrutsTestCase;
-import org.apache.struts.action.Action;
 
 public class TestLoginAction extends MockStrutsTestCase {
 
@@ -47,7 +46,7 @@ public class TestLoginAction extends MockStrutsTestCase {
         verifyForwardPath("/login/login.jsp");
         verifyInputForward();
         verifyActionErrors(new String[] {"error.password.mismatch"});
-        assertNull((String) getSession().getAttribute("authentication"));
+        assertNull(getSession().getAttribute("authentication"));
     }
 
     public static void main(String[] args) {
