@@ -20,29 +20,40 @@ Change Log
 New Features:
 ------------
 
-- StrutsTestCase is now distributed under the Apache Software Foundation license.
-This change comes in advance of StrutsTestCase's inclusion in the Struts 1.2
-development road map.
+- StrutsTestCase is now distributed under the Apache Software 
+Foundation license.  This change comes in advance of StrutsTestCase's
+inclusion in the Struts 1.2 development road map.
 
-- Added setActionForm() method for setting an ActionForm instance to be used in
-a unit test, allowing for setting complex objects in an ActionForm.  It's important
-to note that this method merely makes the ActionForm instance available for the
-unit test; it does not subvert how Struts manages the ActionForm for a given Action.
-In particular, if your ActionForm class overrides the reset() method, then you could
-potentially reset anything you've set in the ActionForm instance you pass to this
-method.  (MockStrutsTestCase and CactusStrutsTestCase)
+- Added setActionForm() method for setting an ActionForm instance to be 
+used in a unit test, allowing for setting complex objects in an ActionForm.
+It's important to note that this method merely makes the ActionForm instance
+available for the unit test; it does not subvert how Struts manages the
+ActionForm for a given Action.  In particular, if your ActionForm class 
+overrides the reset() method, then you could potentially reset anything
+you've set in the ActionForm instance you pass to this method.  
+(MockStrutsTestCase and CactusStrutsTestCase)
+
+- changed setConfigFile() methods to take in absolute paths.  This only works
+for MockStrutsTestCase; because CactusStrutsTestCase uses the actual servlet
+engine to load resources, it must use a path relative to the web application. 
+(MockStrutsTestCase)
 
 Bug Fixes:
 ---------
 
 - Fixed bug where sub-application requests were not properly validated,
-resulting in a NullPointerException.  (MockStrutsTestCase and CactusStrutsTestCase)
+resulting in a NullPointerException.  (MockStrutsTestCase and 
+CactusStrutsTestCase)
 
 - Fixed bug where calls to HttpServletRequestSimulator.setAttribute() would
 throw a NullPointerException if an argument was null.  (MockStrutsTestCase)
 
-- Cleaned up error messages to be a bit more explicit.  (MockStrutsTestCase and
-CactusStrutsTestCase)
+- Fixed bug where tiles test required manually setting Tiles plug-in
+properties.  Tests now read the properties from the config.xml properly.
+(MockStrutsTestCase and CactusStrutsTestCase)
+
+- Cleaned up error messages to be a bit more explicit.  (MockStrutsTestCase
+and CactusStrutsTestCase)
 
 
 Questions and comments are always welcome!
