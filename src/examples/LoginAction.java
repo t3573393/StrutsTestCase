@@ -53,14 +53,6 @@ public class LoginAction extends Action {
         HttpSession session = request.getSession();
         session.setAttribute("authentication", username);
 
-        // Remove the obsolete form bean
-        if (mapping.getAttribute() != null) {
-            if ("request".equals(mapping.getScope()))
-                request.removeAttribute(mapping.getAttribute());
-            else
-                session.removeAttribute(mapping.getAttribute());
-        }
-
         // Forward control to the specified success URI
         return mapping.findForward("success");
 
