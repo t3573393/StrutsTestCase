@@ -33,8 +33,8 @@ package servletunit;
 // Additions by:
 // Deryl Seale (deryl@acm.org) 10/31/2001
 
-import java.io.*;
 import javax.servlet.*;
+import java.io.IOException;
 
 /**
  * Simulates a <code>javax.servlet.RequestDispatcher</code> object.

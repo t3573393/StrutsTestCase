@@ -34,7 +34,8 @@ package servletunit;
 // dfoster@equitytg.com
 
 import javax.servlet.ServletOutputStream;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class ServletOutputStreamSimulator extends ServletOutputStream
 {

@@ -19,10 +19,7 @@
 
 package servletunit.struts.tests.cactus;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import servletunit.struts.CactusStrutsTestCase;
-import java.io.IOException;
 
 /**
  * This class is reserved for quickly testing out other

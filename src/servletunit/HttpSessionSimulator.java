@@ -1,9 +1,9 @@
 package servletunit;
 
-import java.util.Enumeration;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
-import javax.servlet.ServletContext;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 // ServletUnit Library v1.2 - A java-based testing framework for servlets

@@ -34,14 +34,14 @@ package servletunit;
 // 954.360.9800
 // dfoster@equitytg.com
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import javax.servlet.ServletOutputStream;
-import java.io.*;
-import java.util.Locale;
-import java.util.HashMap;
-import javax.servlet.http.Cookie;
 import junit.framework.AssertionFailedError;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Locale;
 
 
 /**

@@ -19,10 +19,7 @@
 
 package servletunit.struts.tests;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import servletunit.struts.MockStrutsTestCase;
-import java.io.IOException;
 
 public class TestSimpleForward extends MockStrutsTestCase {
 

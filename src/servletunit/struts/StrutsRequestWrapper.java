@@ -19,14 +19,10 @@
 
 package servletunit.struts;
 
-import org.apache.cactus.server.HttpServletRequestWrapper;
 import org.apache.cactus.ServletURL;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
+import org.apache.cactus.server.HttpServletRequestWrapper;
+
+import java.util.*;
 
 /**
  * A wrapper for the HttpServletRequest class.  This is used in

@@ -19,10 +19,8 @@
 
 package examples;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import servletunit.struts.MockStrutsTestCase;
-import java.io.IOException;
+import org.apache.struts.action.Action;
 
 public class TestLoginAction extends MockStrutsTestCase {
 
@@ -37,7 +35,7 @@ public class TestLoginAction extends MockStrutsTestCase {
         setRequestPathInfo("/login");
         actionPerform();
         verifyForward("success");
-	verifyForwardPath("/main/success.jsp");
+        verifyForwardPath("/main/success.jsp");
         assertEquals("deryl",getSession().getAttribute("authentication"));
         verifyNoActionErrors();
     }
@@ -49,14 +47,14 @@ public class TestLoginAction extends MockStrutsTestCase {
         setRequestPathInfo("/login");
         actionPerform();
         verifyForward("login");
-	verifyForwardPath("/login/login.jsp");
-	verifyInputForward();
+        verifyForwardPath("/login/login.jsp");
+        verifyInputForward();
         verifyActionErrors(new String[] {"error.password.mismatch"});
         assertNull((String) getSession().getAttribute("authentication"));
     }
 
     public static void main(String[] args) {
-	junit.textui.TestRunner.run(TestLoginAction.class);
+        junit.textui.TestRunner.run(TestLoginAction.class);
     }
 
 

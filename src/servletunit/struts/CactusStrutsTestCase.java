@@ -19,17 +19,14 @@
 
 package servletunit.struts;
 
-import org.apache.struts.action.ActionServlet;
-import org.apache.struts.action.Action;
-import org.apache.cactus.ServletTestCase;
 import junit.framework.AssertionFailedError;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpSession;
-import javax.servlet.ServletException;
+import org.apache.cactus.ServletTestCase;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionServlet;
+
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
 
 /**
  * CactusStrutsTestCase is an extension of the Cactus ServletTestCase 

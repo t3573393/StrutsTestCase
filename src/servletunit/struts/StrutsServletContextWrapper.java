@@ -20,8 +20,11 @@
 package servletunit.struts;
 
 import org.apache.cactus.server.ServletContextWrapper;
-import javax.servlet.ServletContext;
+
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+
+import servletunit.RequestDispatcherSimulator;
 
 /**
  * A wrapper for the ServletContext class.  This is used in
@@ -35,17 +38,18 @@ public class StrutsServletContextWrapper extends ServletContextWrapper {
     private String dispatchedResource;
 
     public StrutsServletContextWrapper(ServletContext context) {
-	super(context);
+        super(context);
     }
 
     public RequestDispatcher getRequestDispatcher(String path) {
-	dispatchedResource = path;
-	return super.getRequestDispatcher(path);
+        dispatchedResource = path;
+        return new RequestDispatcherSimulator(path);
+        //return super.getRequestDispatcher(path);
     }
 
     public String getForward() {
-	return dispatchedResource;
+        return dispatchedResource;
     }
 
 }
-	
+

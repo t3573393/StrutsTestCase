@@ -19,11 +19,8 @@
 
 package servletunit.struts.tests.cactus;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import servletunit.struts.CactusStrutsTestCase;
-import java.io.IOException;
 import junit.framework.AssertionFailedError;
+import servletunit.struts.CactusStrutsTestCase;
 
 public class TestSimpleForward extends CactusStrutsTestCase {
 

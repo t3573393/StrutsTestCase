@@ -19,11 +19,7 @@
 
 package servletunit.struts.tests.cactus;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import servletunit.struts.CactusStrutsTestCase;
-import java.io.IOException;
-import org.apache.struts.action.Action;
 
 public class TestRedirectAction extends CactusStrutsTestCase {
 

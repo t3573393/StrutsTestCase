@@ -19,11 +19,7 @@
 
 package servletunit.struts.tests;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import servletunit.struts.MockStrutsTestCase;
-import java.io.IOException;
-import junit.framework.AssertionFailedError;
 
 public class TestTilesForward extends MockStrutsTestCase {
 

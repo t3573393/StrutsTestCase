@@ -30,9 +30,9 @@ package servletunit;
 //
 // Deryl Seale (deryl@acm.org) 10/31/2001
 
-import java.util.Enumeration;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**

@@ -1,9 +1,7 @@
 package servletunit.tests;
 
 import junit.framework.TestCase;
-import servletunit.*;
-import javax.servlet.ServletContext;
-import java.util.Enumeration;
+import servletunit.HttpServletRequestSimulator;
 
 public class TestSession extends TestCase {
 

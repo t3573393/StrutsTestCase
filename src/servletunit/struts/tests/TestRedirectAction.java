@@ -19,13 +19,8 @@
 
 package servletunit.struts.tests;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import junit.framework.AssertionFailedError;
 import servletunit.struts.MockStrutsTestCase;
-import java.io.IOException;
-import org.apache.struts.action.Action;
-import org.apache.struts.taglib.html.Constants;
-import junit.framework.*;
 
 public class TestRedirectAction extends MockStrutsTestCase {
 

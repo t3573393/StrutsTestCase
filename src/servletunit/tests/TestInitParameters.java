@@ -1,7 +1,8 @@
 package servletunit.tests;
 
 import junit.framework.TestCase;
-import servletunit.*;
+import servletunit.ServletConfigSimulator;
+
 import java.util.Enumeration;
 
 public class TestInitParameters extends TestCase {

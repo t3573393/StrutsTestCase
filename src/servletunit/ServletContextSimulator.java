@@ -30,18 +30,19 @@ package servletunit;
 //
 // Deryl Seale (deryl@acm.org) 10/31/2001
 
-import java.io.InputStream;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.util.Enumeration;
-import javax.servlet.ServletContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import java.util.Set;
-import java.util.Hashtable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Set;
 
 /**
  * This class simulates a ServletContext.

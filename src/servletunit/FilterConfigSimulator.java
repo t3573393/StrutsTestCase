@@ -20,8 +20,8 @@
 package servletunit;
 
 import javax.servlet.FilterConfig;
-import java.util.Enumeration;
 import javax.servlet.ServletContext;
+import java.util.Enumeration;
 
 /**
  *  A unit test tool simulating the the FilerConfig <p>

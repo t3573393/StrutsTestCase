@@ -19,13 +19,7 @@
 
 package servletunit.struts.tests;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import servletunit.struts.MockStrutsTestCase;
-import java.io.IOException;
-import org.apache.struts.action.Action;
-import org.apache.struts.taglib.html.Constants;
-import org.apache.cactus.*;
 
 public class TestContextParameters extends MockStrutsTestCase {
 

@@ -19,22 +19,19 @@
 
 package servletunit.struts;
 
-import org.apache.struts.action.ActionServlet;
-import org.apache.commons.digester.Digester;
-import junit.framework.TestCase;
 import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
+import org.apache.commons.digester.Digester;
+import org.apache.struts.action.ActionServlet;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.HttpServletResponseSimulator;
-import servletunit.ServletContextSimulator;
 import servletunit.ServletConfigSimulator;
+import servletunit.ServletContextSimulator;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
 import java.io.InputStream;
 import java.net.URL;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpSession;
-import javax.servlet.ServletException;
 
 /**
  * MockStrutsTestCase is an extension of the base JUnit testcase that

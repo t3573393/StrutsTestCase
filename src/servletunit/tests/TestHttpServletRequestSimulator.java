@@ -1,7 +1,6 @@
 package servletunit.tests;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.ServletContextSimulator;
 
