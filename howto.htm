@@ -3,41 +3,40 @@
 <html>
 <head>
 <title>StrutsTestCase for JUnit</title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="stylesheet.css" TITLE="Default">
 </head>
 <body>
 <center><h1>StrutsTestCase for JUnit v1.9.5</h1></center>
-<font color=red><center><h3>Now supporting Struts 1.1b3, including <a href="#subapp">sub-applications!</a></h3></center></font>
-<font size="-1"><center>Copyright (C) 2002 Deryl Seale</center></font>
+<center><h3 CLASS="announce">Now supporting Struts 1.1b3, including <a href="#subapp">sub-applications!</a></h3></center>
+<center><p class="copyright">Copyright (C) 2002 Deryl Seale</p></center>
 <hr>
-<br>
-<center>Questions? Comments? Please mail me at <a href="mailto:deryl@acm.org">deryl@acm.org</a>, or take a short <a href="http://sourceforge.net/survey/survey.php?group_id=39190&survey_id=12467">survey</a>.</center>
+
+<p><center>Questions? Comments? Please mail me at <a href="mailto:deryl@acm.org">deryl@acm.org</a>, or take a short <a href="http://sourceforge.net/survey/survey.php?group_id=39190&survey_id=12467">survey</a>.</center></p>
 
 <h2>What is it?</h2>
-StrutsTestCase for JUnit is an extension of the standard JUnit TestCase class that provides facilities
+<p>StrutsTestCase for JUnit is an extension of the standard JUnit TestCase class that provides facilities
 for testing code based on the Struts framework.  StrutsTestCase provides both a <a href="api/servletunit/package-summary.html"/>Mock Object approach</a> and a <a href="http://jakarta.apache.org/cactus">Cactus approach</a>
  to actually run the Struts ActionServlet, allowing you to test your Struts code with or without a running servlet engine.  Because
  StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation
- of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases.
- <br><br>
-StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.02 and 1.1 (beta3 and the latest nightly builds), and Cactus 1.4.1 and JUnit 3.8.  <font color=red><b>Please note that this latest release of StrutsTestCase will not work with Struts 1.1b2!</b></font>
+ of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases.</p>
 
-<br><br>
+<p>StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.02 and 1.1 (beta3 and the latest nightly builds), and Cactus 1.4.1 and JUnit 3.8.  <span CLASS="warning">Please note that this latest release of StrutsTestCase will not work with Struts 1.1b2!</span></p>
+
 <h2>Where does it live?</h2>
-StrutsTestCase for JUnit is hosted at <a href="http://sourceforge.net/projects/strutstestcase/">SourceForge</a>. You can find the latest and greatest release of StrutsTestCase <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">here.</a><br><br>
-Javadocs for all of the StrutsTestCase classes can be found <a href="api/index.html">here</a>, and there is also a list of <a href="faq.htm">frequently asked questions</a>.
+<p>StrutsTestCase for JUnit is hosted at <a href="http://sourceforge.net/projects/strutstestcase/">SourceForge</a>. You can find the latest and greatest release of StrutsTestCase <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">here.</a></p>
+<p>Javadocs for all of the StrutsTestCase classes can be found <a href="api/index.html">here</a>, and there is also a list of <a href="faq.htm">frequently asked questions</a>.</p>
 
-<br><br>
 <h2>Mock Testing vs. In-Container Testing</h2>
-There are two popular approaches to testing server-side classes: <b>mock objects</b>, which test classes by simulating the server container, and <b>in-container testing</b>, which tests classes running in the actual server container.  StrutsTestCase for JUnit allows you to use either approach, with very minimal impact on your actual unit test code.  In fact, because the StrutsTestCase setup and validation methods are exactly the same for both approaches, choosing one approach over the other simply effects which base class you use!
-<br><br>
-StrutsTestCase for JUnit provides two base classes, both of which are extensions of the standard JUnit TestCase.  <a href="api/servletunit/struts/MockStrutsTestCase.html">MockStrutsTestCase</a> uses a set of HttpServlet mock objects to simulate the container environment without requiring a running servlet engine.  <a href="api/servletunit/struts/CactusStrutsTestCase.html">CactusStrutsTestCase</a> uses the <a href="http://jakarta.apache.org/cactus">Cactus testing framework</a> to test Struts classes in the actual server container, allowing for a testing environment more in line with the actual deployment environment.
-<br><br>
-<b>Please note</b> that while the following examples use the MockStrutsTestCase approach, you could choose to use the Cactus approach by simply subclassing from CactusStrutsTestCase without changing another line of code!
+<p>There are two popular approaches to testing server-side classes: <b>mock objects</b>, which test classes by simulating the server container, and <b>in-container testing</b>, which tests classes running in the actual server container.  StrutsTestCase for JUnit allows you to use either approach, with very minimal impact on your actual unit test code.  In fact, because the StrutsTestCase setup and validation methods are exactly the same for both approaches, choosing one approach over the other simply effects which base class you use!</p>
+
+<p>StrutsTestCase for JUnit provides two base classes, both of which are extensions of the standard JUnit TestCase.  <a href="api/servletunit/struts/MockStrutsTestCase.html">MockStrutsTestCase</a> uses a set of HttpServlet mock objects to simulate the container environment without requiring a running servlet engine.  <a href="api/servletunit/struts/CactusStrutsTestCase.html">CactusStrutsTestCase</a> uses the <a href="http://jakarta.apache.org/cactus">Cactus testing framework</a> to test Struts classes in the actual server container, allowing for a testing environment more in line with the actual deployment environment.</p>
+
+<p><b>Please note</b> that while the following examples use the MockStrutsTestCase approach, you could choose to use the Cactus approach by simply subclassing from CactusStrutsTestCase without changing another line of code!</p>
 <h2>How does it work?</h2>
-<b>Please note</b> that the StrutsTestCase distribution comes with these and other examples, as well as step-by-step instructions for running them -- see
-the README file in the examples directory for more details.  As well, <a href="api/index.html">there are many more methods</a> in the StrutsTestCase library than are illustrated here -- check out the javadocs for a complete picture of what you can do with StrutsTestCase!<br><br>
-Using the popular cookbook approach, let's consider the following code snippet:<br><br>
-<table border="0" cellspacing="2" cellpadding="2" align="center" bgcolor="#FEEACB">
+<p><b>Please note</b> that the StrutsTestCase distribution comes with these and other examples, as well as step-by-step instructions for running them -- see
+the README file in the examples directory for more details.  As well, <a href="api/index.html">there are many more methods</a> in the StrutsTestCase library than are illustrated here -- check out the javadocs for a complete picture of what you can do with StrutsTestCase!</p>
+<p>Using the popular cookbook approach, let's consider the following code snippet:</p>
+<table border="0" cellspacing="2" cellpadding="2" align="center">
 <tr>
     <td><pre>
 public class LoginAction extends Action {
@@ -73,30 +72,28 @@ public class LoginAction extends Action {
 </tr>
 </table>
 
+<p>So, what are we doing here?  Well, we receive an ActionForm bean which should contain login information.  First, we try to get the username and password information, and then check to see if it is valid.  If there is a mismatch in the username or password values, we then create an ActionError message with a key to a message catalogue somewhere, and then try to forward to the login screen so we can log in again.  If the username and password match, however, we store some authentication information in the session, and we try to forward to the next page.</p>
 
-<br>So, what are we doing here?  Well, we receive an ActionForm bean which should contain login information.  First, we try to get the username and password information, and then check to see if it is valid.  If there is a mismatch in the username or password values, we then create an ActionError message with a key to a message catalogue somewhere, and then try to forward to the login screen so we can log in again.  If the username and password match, however, we store some authentication information in the session, and we try to forward to the next page.<br>
-<br>
-There are several things we can test here:
+<p>There are several things we can test here:
 <ul>
 <li>Does the LoginForm bean work properly?  If we place the appropriate parameters in the request, does this bean get instantiated correctly?
 <li>If the username or password doesn't match, do the appropriate errors get saved for display on the next screen?  Are we sent back to the login page?
 <li>If we supply the correct login information, do we get to the correct page?  Are we sure there are no errors reported?  Does the proper authentication information get saved in the session?
 </ul>
-<br>
-StrutsTestCase gives you the ability to test all of these conditions within the familiar JUnit framework.  All of the Struts setup -- which really amounts to starting up the ActionServlet -- is taken care of for you.
-<br><br>
-So, how do we actually do it?  Let's start by creating an empty test case, which we extend from the base StrutsTestCase class:
-<br>
-<br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+
+StrutsTestCase gives you the ability to test all of these conditions within the familiar JUnit framework.  All of the Struts setup -- which really amounts to starting up the ActionServlet -- is taken care of for you.</p>
+
+<p>So, how do we actually do it?  Let's start by creating an empty test case, which we extend from the base StrutsTestCase class:</p>
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
     <td>
 <pre>
 public class TestLoginAction extends MockStrutsTestCase {
 
-    <font color="red">public void setUp() { super.setUp(); }
+    <span class="setup">public void setUp() { super.setUp(); }
 
-    public void tearDown() { super.tearDown(); }</font>
+    public void tearDown() { super.tearDown(); }</span>
 
     public TestLoginAction(String testName) { super(testName); }
 
@@ -107,14 +104,12 @@ public class TestLoginAction extends MockStrutsTestCase {
 </tr>
 </table>
 
-<br>
-<b>NOTE:</b> If you choose to override the <code>setUp()</code> method, you
-<b>must</b> explicitly call <code>super.setUp()</code>.  This method performs some important initialization routines, and StrutsTestCase will not work if it is not called.
-<br>
-<br>
-The first thing we need to do is to tell Struts which mapping to use in this test.  To do so, we specify a path that is associated with a Struts mapping; this is the same mechanism that the Struts tag library method uses.
-<br><br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+<p><b>NOTE:</b> If you choose to override the <code>setUp()</code> method, you
+<b>must</b> explicitly call <code>super.setUp()</code>.  This method performs some important initialization routines, and StrutsTestCase will not work if it is not called.</p>
+
+<p>The first thing we need to do is to tell Struts which mapping to use in this test.  To do so, we specify a path that is associated with a Struts mapping; this is the same mechanism that the Struts tag library method uses.</p>
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
 	<td>
 <pre>
@@ -123,17 +118,17 @@ public class TestLoginAction extends MockStrutsTestCase {
     public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
-       <font color="red">setRequestPathInfo("/login");</font>
+       <span class="setup">setRequestPathInfo("/login");</span>
     }
 }
 </pre>
 </td>
 </tr>
 </table>
-<br>
-Next we need to pass form bean properties, which we send via the request object (again, just as Struts does):<br>
-<br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+
+<p>Next we need to pass form bean properties, which we send via the request object (again, just as Struts does):</p>
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
 	<td>
 <pre>
@@ -143,20 +138,20 @@ public class TestLoginAction extends MockStrutsTestCase {
 
     public void testSuccessfulLogin() {
        setRequestPathInfo("/login");
-       <font color="red">addRequestParameter("username","deryl");
-       addRequestParameter("password","radar");</font>
+       <span class="setup">addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");</span>
     }
 }
 </pre>
 </td>
 </tr>
 </table>
-<br>
-Finally, we need to get the Action to do its thing, which just involves executing the actionPerform method:
-<br><br>
-<b>NOTE:</b> By default, the Struts ActionServlet will look for the file <code>WEB-INF/struts-config.xml</code>, so you must place the directory that <i>contains</i> WEB-INF in your CLASSPATH.  If you would like to use an alternate configuration file, please see the <a href="api/servletunit/struts/MockStrutsTestCase.html#setConfigFile(java.lang.String)">setConfigFile()</a> method for details on how this file is located.
-<br><br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center"  border="0">
+
+<p>Finally, we need to get the Action to do its thing, which just involves executing the actionPerform method:</p>
+
+<p><b>NOTE:</b> By default, the Struts ActionServlet will look for the file <code>WEB-INF/struts-config.xml</code>, so you must place the directory that <i>contains</i> WEB-INF in your CLASSPATH.  If you would like to use an alternate configuration file, please see the <a href="api/servletunit/struts/MockStrutsTestCase.html#setConfigFile(java.lang.String)">setConfigFile()</a> method for details on how this file is located.</p>
+
+<table cellspacing="2" cellpadding="2" align="center"  border="0">
 <tr>
 	<td>
 <pre>
@@ -168,17 +163,17 @@ public class TestLoginAction extends MockStrutsTestCase {
        setRequestPathInfo("/login");
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
-       <font color="red">actionPerform();</font>
+       <span class="setup">actionPerform();</span>
     }
 }
 </pre>
 </td>
 </tr>
 </table>
-<br>
-That's all you have to do to get the ActionServlet to process your request, and if all goes well, then nothing will happen.  But we're not done yet -- we still need to verify that everything happened as we expected it to.  First, we want to make sure we got to the right page:
-<br><br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+
+<p>That's all you have to do to get the ActionServlet to process your request, and if all goes well, then nothing will happen.  But we're not done yet -- we still need to verify that everything happened as we expected it to.  First, we want to make sure we got to the right page:</p>
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
 	<td>
 <pre>
@@ -191,19 +186,19 @@ public class TestLoginAction extends MockStrutsTestCase {
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
        actionPerform();
-       <font color="blue">verifyForward("success");</font>
+       <span class="verify">verifyForward("success");</span>
     }
 }
 </pre>
 </td>
 </tr>
 </table>
-<br>
-It's worth noting here that when you verify which page you ended up at, you can use the Struts forward mapping.  You don't have to hard code filenames -- the StrutsTestCase framework takes care of this for you.  Thus, if you were to change where "success" pointed to, your tests would still work correctly.  All in the spirit of Struts.
-<br><br>
-Next, we want to make sure that authentication information was stored properly:
-<br><br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+
+<p>It's worth noting here that when you verify which page you ended up at, you can use the Struts forward mapping.  You don't have to hard code filenames -- the StrutsTestCase framework takes care of this for you.  Thus, if you were to change where "success" pointed to, your tests would still work correctly.  All in the spirit of Struts.</p>
+
+<p>Next, we want to make sure that authentication information was stored properly:</p>
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
 	<td>
 <pre>
@@ -217,22 +212,22 @@ public class TestLoginAction extends MockStrutsTestCase {
        addRequestParameter("password","radar");
        actionPerform();
        verifyForward("success");
-       <font color="blue">assertEquals("deryl",(String) getSession().getAttribute("authentication"));</font>
+       <span class="verify">assertEquals("deryl",(String) getSession().getAttribute("authentication"));</span>
     }
 }
 </pre>
 </td>
 </tr>
 </table>
-<br>
-Here we're getting the session object from the request, and checking to see if it has the proper attribute and value.
+
+<p>Here we're getting the session object from the request, and checking to see if it has the proper attribute and value.
 You could just as easily place an object on the session that your Action object expects to find.
-All of the servlet classes available in the StrutsTestCase base classes are fully functioning objects.
-<br><br>
-Finally, we want to make sure that no ActionError messages were sent along.  We can use a built in method
+All of the servlet classes available in the StrutsTestCase base classes are fully functioning objects.</p>
+
+<p>Finally, we want to make sure that no ActionError messages were sent along.  We can use a built in method
 to make sure of this condition:
-<br><br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
 	<td>
 <pre>
@@ -247,19 +242,17 @@ public class TestLoginAction extends MockStrutsTestCase {
        actionPerform();
        verifyForward("success");
        assertEquals("deryl",(String) getSession().getAttribute("authentication"));
-       <font color="blue">verifyNoActionErrors();</font>
+       <span class="verify">verifyNoActionErrors();</span>
     }
 }
 </pre>
 </td>
 </tr>
 </table>
-<br>
-So, now that we've written one test case, it's easy to write another.  For example, we'd probably
-want to test the case where a user supplies incorrect login information.  We'd write such a
-test case like the following:
-<br><br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+
+<p>So, now that we've written one test case, it's easy to write another.  For example, we'd probably want to test the case where a user supplies incorrect login information.  We'd write such a test case like the following:</p>
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
 	<td>
 <pre>
@@ -270,39 +263,39 @@ public void testFailedLogin() {
     setRequestPathInfo("/login");
     actionPerform();
     verifyForward("login");
-    <font color="blue">verifyActionErrors(new String[] {"error.password.mismatch"});</font>
+    <span class="verify">verifyActionErrors(new String[] {"error.password.mismatch"});</span>
     assertNull((String) getSession().getAttribute("authentication"));
 }
 </pre>
 </td>
 </tr>
 </table>
-<br>
-Now, this looks quite similar to our first test case, except that we're passing incorrect
+
+<p>Now, this looks quite similar to our first test case, except that we're passing incorrect
 information.  Also, we're checking to make sure we used a different forward, namely one
 that takes us back to the login page, and that the authentication information is <i>not</i>
-on the session.
-<br><br> We're also verifying that the correct error messages
+on the session.</p>
+
+<p>We're also verifying that the correct error messages
 were sent.  Note that we used the symbolic name, not the actual text.  Because the
 <code>verifyActionErrors()</code> method takes a String array, we can verify more than
 one error message, and StrutsTestCase will make sure there is an exact match.  If the test
 produced more error messages than we were expecting, it will fail; if it produced fewer, it
-will also fail.  Only an exact match in name and number will pass.
-<br><br>
-It's that easy! As you can see, StrutsTestCase not only tests the implementation of your Action objects, but also
+will also fail.  Only an exact match in name and number will pass.</p>
+
+<p>It's that easy! As you can see, StrutsTestCase not only tests the implementation of your Action objects, but also
 the mappings that execute them, the ActionForm beans that are passed as arguments, and the
-error messages and forward statements that result from execution.  It's the whole enchilada!
-<br>
-<br>
+error messages and forward statements that result from execution.  It's the whole enchilada!</p>
+
 <h2 id="subapp">Testing Sub-Applications in Struts 1.1</h2>
-Struts 1.1 introduces the concept of sub-applications, or modules -- a powerful mechanism for dividing an
+<p>Struts 1.1 introduces the concept of sub-applications, or modules -- a powerful mechanism for dividing an
 application into functional components.  StrutsTestCase now provides support for testing sub-applications,
 which extends the concepts discussed in the previous examples.  The general idea is still the same: you
 can point a unit test to a configuration file, execute an action, and validate the results.  The methods
 for setting the configuration file and executing an action are a little different, however, as the following
-example shows:
-<br><br>
-<table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
+example shows:</p>
+
+<table cellspacing="2" cellpadding="2" align="center" border="0">
 <tr>
 	<td>
 <pre>
@@ -311,8 +304,8 @@ public class TestLoginAction extends MockStrutsTestCase {
     public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
-       <font color="red">setConfigFile("mymodule","/WEB-INF/struts-config-mymodule.xml");
-       setRequestPathInfo("/mymodule","/login.do");</font>
+       <span class="setup">setConfigFile("mymodule","/WEB-INF/struts-config-mymodule.xml");
+       setRequestPathInfo("/mymodule","/login.do");</span>
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
        actionPerform();
@@ -324,20 +317,20 @@ public class TestLoginAction extends MockStrutsTestCase {
 </pre>
 </td>
 </tr>
-</table><br><br>
-As you can see, this looks very similar to our other test cases.  The first important difference is in setting the configuration
+</table>
+<p>As you can see, this looks very similar to our other test cases.  The first important difference is in setting the configuration
 file.  Here, we set the files <i>and</i> associate this configuration file with a given sub-application name.  This allows the
 StrutsTestsCase library to pass this configuration information so that the ActionServlet can correctly identify the sub-application.
-Note that the same rules apply to setting the CLASSPATH to locate the configuration file as those mentioned above.
-<br><br>
-The other important difference is in setting the request path information.  Here, we set not only the path information, but also
+Note that the same rules apply to setting the CLASSPATH to locate the configuration file as those mentioned above.</p>
+
+<p>The other important difference is in setting the request path information.  Here, we set not only the path information, but also
 the sub-application names.  The combination of these two parameters is equivalent to the entire request path; in our test case
 above, this would be equivalent to a path like this: <b><code>/mymodule/login.do</code></b>.  It is important to note that when using
 this method, the first argument <i>must contain only the sub-application name</i>, and the second argument must contain the rest
 of the path <i>not including the sub-application name</i>.  Otherwise, the request path will be incorrectly constructed, resulting
-in a spurious test failure.
-<br><br>
-<center><A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=39190" width="88" height="31" border="0" alt="SourceForge Logo"></A></center>
+in a spurious test failure.</p>
+
+<!-- <center><A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=39190" width="88" height="31" border="0" alt="SourceForge Logo"></A></center> -->
 </body>
 </html>
 

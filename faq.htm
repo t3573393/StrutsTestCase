@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>StrutsTestCase for JUnit</title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="stylesheet.css" TITLE="Default">
 </head>
 <body>
 <center><h2>Frequently Asked Questions About StrutsTestCase for JUnit</h2></center>
@@ -61,8 +62,8 @@ StrutsTestCase follows a common JUnit practice of not saving state between unit 
 You can use the Struts transaction token in your tests by using the <b><code>addRequestParameter</code></b> method, thusly:<br><br>
 <pre>
      public void testTransactionToken() {
-	<font color=red>addRequestParameter(Constants.TOKEN_KEY, "test_token");
-	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</font>
+	<span class="setup" color=red>addRequestParameter(Constants.TOKEN_KEY, "test_token");
+	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</span>
         setRequestPathInfo("/testToken");
         actionPerform();
         verifyNoActionErrors();
