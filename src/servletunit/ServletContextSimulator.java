@@ -512,4 +512,8 @@ public class ServletContextSimulator implements ServletContext
         public void setAttribute(String name, Object object)
         {
         }
+
+    public Set getResourcePaths(String path) {
+        throw new UnsupportedOperationException("getResourcePaths not supported!");
+    }
 }
