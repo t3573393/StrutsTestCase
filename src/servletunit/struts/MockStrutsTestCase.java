@@ -126,6 +126,12 @@ public class MockStrutsTestCase extends TestCase {
             logger.debug("Exiting setUp()");
     }
 
+    protected void tearDown() throws Exception {
+        ActionServlet servlet = getActionServlet();
+        servlet.destroy();
+        setActionServlet(servlet);
+    }
+
     /**
      * Returns an HttpServletRequest object that can be used in
      * this test.
