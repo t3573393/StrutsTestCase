@@ -14,7 +14,7 @@
 
     <property name="build.dir"      value="${basedir}/build"/>
     <property name="src.dir"        value="${basedir}/src"/>
-    <property name="distribute.dir" value="${basedir}/dist/servletunit"/>
+    <property name="distribute.dir" value="${basedir}/dist/strutstest"/>
     <property name="doc.dir"        value="${distribute.dir}/docs"/>
     <property name="test.dir"       value="${basedir}/test-results"/>
 
@@ -48,16 +48,16 @@
     <!-- package the application for deployment.  -->
     <target name="package">
         <mkdir dir="${distribute.dir}"/>
-	<jar jarfile="${distribute.dir}/servletunit.jar">
+	<jar jarfile="${distribute.dir}/strutstest.jar">
 	    <fileset dir="${build.dir}" includes="**/*.class" excludes="**/examples/**"/>
 	</jar>
     </target>
 
     <target name="release" depends="package,docs">
-        <zip zipFile="${basedir}/servletunit.zip" basedir="${basedir}/dist"/>
-	<tar tarFile="${basedir}/servletunit.tar" basedir="${basedir}/dist"/>
-	<gzip src="${basedir}/servletunit.tar" zipfile="${basedir}/servletunit.tar.gz"/>
-	<delete file="${basedir}/servletunit.tar"/>
+        <zip zipFile="${basedir}/strutstest.zip" basedir="${basedir}/dist"/>
+	<tar tarFile="${basedir}/strutstest.tar" basedir="${basedir}/dist"/>
+	<gzip src="${basedir}/strutstest.tar" zipfile="${basedir}/strutstest.tar.gz"/>
+	<delete file="${basedir}/strutstest.tar"/>
     </target>
 
     <!-- Clean up the build -->
@@ -65,8 +65,8 @@
         <delete dir="${build.dir}" />
         <delete dir="${basedir}/dist" />
         <delete dir="${test.dir}" />
-	<delete file="${basedir}/servletunit.zip"/>
-	<delete file="${basedir}/servletunit.tar.gz"/>
+	<delete file="${basedir}/strutstest.zip"/>
+	<delete file="${basedir}/strutstest.tar.gz"/>
     </target>
     
     <!-- Generate Javadocs for the application -->
