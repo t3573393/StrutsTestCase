@@ -30,6 +30,8 @@ public class TestAbsolutePath extends CactusStrutsTestCase {
     }
 
     public void beginSuccessfulLogin(WebRequest theRequest) {
+        if (logger.isDebugEnabled())
+            logger.debug("setting cookie to " + System.getProperty("basedir") + "/src/examples/WEB-INF/struts-config.xml");
         theRequest.addCookie(COOKIE_NAME, System.getProperty("basedir") + "/src/examples/WEB-INF/struts-config.xml");
     }
 
