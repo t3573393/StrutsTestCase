@@ -26,7 +26,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.BeanUtils;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.cactus.ServletTestCase;
 import junit.framework.AssertionFailedError;
 import servletunit.HttpServletRequestSimulator;
@@ -52,7 +52,7 @@ import java.util.HashMap;
  * for ActionForm subclasses, as well as methods that can verify
  * that the correct ActionForward was used and that the proper
  * ActionError messages were supplied.
- * 
+ *
  * Please note that this class is meant to run in the Cactus
  * framework, and you must configure your test environment
  * accordingly.  Please see http://jakarta.apache.org/cactus
@@ -64,6 +64,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
     ActionServlet actionServlet;
     String actionPath;
     ActionForward forward;
+    ActionForm actionForm;
     HashMap parameters = new HashMap();
 
     /**
@@ -80,6 +81,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         try {
             parameters.clear();
             forward = null;
+            actionForm = null;
             actionServlet = new ActionServlet();
             config.setInitParameter("debug","0");
             config.setInitParameter("detail","0");
@@ -172,6 +174,35 @@ public class CactusStrutsTestCase extends ServletTestCase {
     }
 
     /**
+     * Sets the ActionForm instance to be used with the
+     * Action to be tested.  In most cases, you do <b>not</b>
+     * need to use this method, as CactusStrutsTestCase sets
+     * up the ActionForm for you.  If, however, you need to
+     * use an ActionForm instance from a previous test (eg:
+     * to test nested properties) then you can use this method
+     * to set the ActionForm instance.
+     */
+    public void setActionForm(ActionForm form) {
+        this.actionForm = form;
+    }
+
+    /**
+     * Returns the ActionForm instance used in testing an Action
+     * instance.  This method should only be used in conjunction
+     * with the setActionForm() method to keep and use ActionForm
+     * instances between test execution.
+     *
+     * @return any ActionForm instance saved in the request or
+     * session scope, or null if no such ActionForm instance
+     * is saved (or is cleaned up by the Action.perform() method).
+     *
+     * @see setActionForm(ActionForm form)
+     */
+    public ActionForm getActionForm() {
+        return (this.actionForm);
+    }
+
+    /**
      * Executes the Action instance to be tested.  This method initializes
      * the ActionServlet, sets up and optionally validates the ActionForm
      * bean associated with the Action to be tested, and then calls the
@@ -200,8 +231,11 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (mapping.getAttribute() != null) {
             String formType = actionServlet.findFormBean(mapping.getAttribute()).getType();
             try {
-                form = (ActionForm) Class.forName(formType).newInstance();
-                form.reset(mapping,request);
+                form = getActionForm();
+                if (form == null) {
+                    form = (ActionForm) Class.forName(formType).newInstance();
+                    form.reset(mapping,request);
+                }
                 BeanUtils.populate(form,parameters);
             } catch (Exception e) {
                 throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getMessage());
@@ -209,8 +243,16 @@ public class CactusStrutsTestCase extends ServletTestCase {
 
             if (mapping.getValidate()) {
                 ActionErrors errors = form.validate(mapping,request);
-                if (!errors.empty())
-                    throw new AssertionFailedError("Error while validating ActionForm: ");
+                if (!errors.empty()) {
+                    StringBuffer errorText = new StringBuffer();
+                    Iterator iterator = errors.get();
+                    while (iterator.hasNext()) {
+                        errorText.append(" \"");
+                        errorText.append(((ActionError) iterator.next()).getKey());
+                        errorText.append("\"");
+                    }
+                    throw new AssertionFailedError("Error while validating ActionForm: " + errorText.toString());
+                }
             }
         }
 
@@ -218,15 +260,21 @@ public class CactusStrutsTestCase extends ServletTestCase {
         Action action = null;
         try {
             action = (Action) Class.forName(mapping.getType()).newInstance();
-	    action.setServlet(actionServlet);
+            action.setServlet(actionServlet);
         } catch (Exception e) {
             throw new AssertionFailedError("Error trying to set up Action: " + e.getMessage());
         }
 
-
-
         try {
             this.forward = action.perform(mapping,form,request,response);
+            ActionForm retForm = null;
+            String scope = mapping.getScope();
+            if ("request".equals(scope)) {
+                retForm = (ActionForm)getRequest().getAttribute(mapping.getAttribute());
+            } else if ("session".equals(scope)) {
+                retForm = (ActionForm)getSession().getAttribute(mapping.getAttribute());
+            }
+            setActionForm(retForm);
         } catch (ServletException e) {
             e.printStackTrace();
             throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
@@ -313,7 +361,13 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (errors != null) {
             Iterator iterator = errors.get();
             if (iterator.hasNext()) {
-                throw new AssertionFailedError("was expecting no error messages, but received some.");
+                StringBuffer errorText = new StringBuffer();
+                while (iterator.hasNext()) {
+                    errorText.append(" \"");
+                    errorText.append(((ActionError) iterator.next()).getKey());
+                    errorText.append("\"");
+                }
+                throw new AssertionFailedError("was expecting no error messages, but received: " + errorText.toString());
             }
         }
     }
