@@ -922,7 +922,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     {
         if ((session == null) && (b))
             this.session = new HttpSessionSimulator(context);
-        return this.session;
+        else if ((session != null) && (!((HttpSessionSimulator) session).isValid()) && (b))
+            this.session = new HttpSessionSimulator(context);
+        if ((session != null) && (((HttpSessionSimulator) session).isValid()))
+            return this.session;
+        else
+            return null;
     }
 
     /**

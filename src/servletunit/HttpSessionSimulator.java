@@ -160,4 +160,8 @@ public class HttpSessionSimulator implements HttpSession
         if (!valid)
             throw new IllegalStateException("session has been invalidated!");
     }
+
+    protected boolean isValid() {
+        return valid;
+    }
 }
