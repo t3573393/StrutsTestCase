@@ -6,12 +6,13 @@
 <LINK REL="stylesheet" TYPE="text/css" HREF="stylesheet.css" TITLE="Default">
 </head>
 <body>
-<center><h1>StrutsTestCase for JUnit v1.9.5</h1></center>
-<center><h3 CLASS="announce">Now supporting Struts 1.1b3, including <a href="#subapp">sub-applications!</a></h3></center>
-<center><p class="copyright">Copyright (C) 2002 Deryl Seale</p></center>
-<hr>
+<div class="header">
+<h1>StrutsTestCase for JUnit v1.9.5</h1>
+<h3 CLASS="announce">Now supporting Struts 1.1b3, including <a href="#subapp">sub-applications!</a></h3>
+<p class="copyright">Copyright (C) 2002 Deryl Seale</p>
 
-<p><center>Questions? Comments? Please mail me at <a href="mailto:deryl@acm.org">deryl@acm.org</a>, or take a short <a href="http://sourceforge.net/survey/survey.php?group_id=39190&survey_id=12467">survey</a>.</center></p>
+<p>Questions? Comments? Please mail me at <a href="mailto:deryl@acm.org">deryl@acm.org</a>.</p>
+</div>
 
 <h2>What is it?</h2>
 <p>StrutsTestCase for JUnit is an extension of the standard JUnit TestCase class that provides facilities
@@ -36,9 +37,8 @@ for testing code based on the Struts framework.  StrutsTestCase provides both a 
 <p><b>Please note</b> that the StrutsTestCase distribution comes with these and other examples, as well as step-by-step instructions for running them -- see
 the README file in the examples directory for more details.  As well, <a href="api/index.html">there are many more methods</a> in the StrutsTestCase library than are illustrated here -- check out the javadocs for a complete picture of what you can do with StrutsTestCase!</p>
 <p>Using the popular cookbook approach, let's consider the following code snippet:</p>
-<table border="0" cellspacing="2" cellpadding="2" align="center">
-<tr>
-    <td><pre>
+
+<pre class="code">
 public class LoginAction extends Action {
 
     public ActionForward perform(ActionMapping mapping,
@@ -67,10 +67,8 @@ public class LoginAction extends Action {
         // Forward control to the specified success URI
         return mapping.findForward("success");
 
-    }
-</pre></td>
-</tr>
-</table>
+}
+</pre>
 
 <p>So, what are we doing here?  Well, we receive an ActionForm bean which should contain login information.  First, we try to get the username and password information, and then check to see if it is valid.  If there is a mismatch in the username or password values, we then create an ActionError message with a key to a message catalogue somewhere, and then try to forward to the login screen so we can log in again.  If the username and password match, however, we store some authentication information in the session, and we try to forward to the next page.</p>
 
@@ -85,76 +83,56 @@ StrutsTestCase gives you the ability to test all of these conditions within the 
 
 <p>So, how do we actually do it?  Let's start by creating an empty test case, which we extend from the base StrutsTestCase class:</p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-    <td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
-    <span class="setup">public void setUp() { super.setUp(); }
+    <em>public void setUp() { super.setUp(); }
 
-    public void tearDown() { super.tearDown(); }</span>
+    public void tearDown() { super.tearDown(); }</em>
 
     public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {}
 }
 </pre>
-</td>
-</tr>
-</table>
 
-<p><b>NOTE:</b> If you choose to override the <code>setUp()</code> method, you
-<b>must</b> explicitly call <code>super.setUp()</code>.  This method performs some important initialization routines, and StrutsTestCase will not work if it is not called.</p>
+<p><b>NOTE:</b> If you choose to override the <tt>setUp()</tt> method, you
+<b>must</b> explicitly call <tt>super.setUp()</tt>.  This method performs some important initialization routines, and StrutsTestCase will not work if it is not called.</p>
 
 <p>The first thing we need to do is to tell Struts which mapping to use in this test.  To do so, we specify a path that is associated with a Struts mapping; this is the same mechanism that the Struts tag library method uses.</p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
-       <span class="setup">setRequestPathInfo("/login");</span>
+       <em>setRequestPathInfo("/login");</em>
     }
 }
 </pre>
-</td>
-</tr>
-</table>
+
+
+<p><b>NOTE:</b> By default, the Struts ActionServlet will look for the file <tt>WEB-INF/struts-config.xml</tt>, so you must place the directory that <i>contains</i> WEB-INF in your CLASSPATH.  If you would like to use an alternate configuration file, please see the <a href="api/servletunit/struts/MockStrutsTestCase.html#setConfigFile(java.lang.String)">setConfigFile()</a> method for details on how this file is located.</p>
 
 <p>Next we need to pass form bean properties, which we send via the request object (again, just as Struts does):</p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
        setRequestPathInfo("/login");
-       <span class="setup">addRequestParameter("username","deryl");
-       addRequestParameter("password","radar");</span>
+       <em>addRequestParameter("username","deryl");
+       addRequestParameter("password","radar");</em>
     }
 }
 </pre>
-</td>
-</tr>
-</table>
 
 <p>Finally, we need to get the Action to do its thing, which just involves executing the actionPerform method:</p>
 
-<p><b>NOTE:</b> By default, the Struts ActionServlet will look for the file <code>WEB-INF/struts-config.xml</code>, so you must place the directory that <i>contains</i> WEB-INF in your CLASSPATH.  If you would like to use an alternate configuration file, please see the <a href="api/servletunit/struts/MockStrutsTestCase.html#setConfigFile(java.lang.String)">setConfigFile()</a> method for details on how this file is located.</p>
-
-<table cellspacing="2" cellpadding="2" align="center"  border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
@@ -163,20 +141,14 @@ public class TestLoginAction extends MockStrutsTestCase {
        setRequestPathInfo("/login");
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
-       <span class="setup">actionPerform();</span>
+       <em>actionPerform();</em>
     }
 }
 </pre>
-</td>
-</tr>
-</table>
 
 <p>That's all you have to do to get the ActionServlet to process your request, and if all goes well, then nothing will happen.  But we're not done yet -- we still need to verify that everything happened as we expected it to.  First, we want to make sure we got to the right page:</p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
@@ -186,22 +158,16 @@ public class TestLoginAction extends MockStrutsTestCase {
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
        actionPerform();
-       <span class="verify">verifyForward("success");</span>
+       <em>verifyForward("success");</em>
     }
 }
 </pre>
-</td>
-</tr>
-</table>
 
 <p>It's worth noting here that when you verify which page you ended up at, you can use the Struts forward mapping.  You don't have to hard code filenames -- the StrutsTestCase framework takes care of this for you.  Thus, if you were to change where "success" pointed to, your tests would still work correctly.  All in the spirit of Struts.</p>
 
 <p>Next, we want to make sure that authentication information was stored properly:</p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
@@ -212,25 +178,19 @@ public class TestLoginAction extends MockStrutsTestCase {
        addRequestParameter("password","radar");
        actionPerform();
        verifyForward("success");
-       <span class="verify">assertEquals("deryl",(String) getSession().getAttribute("authentication"));</span>
+       <em>assertEquals("deryl",(String) getSession().getAttribute("authentication"));</em>
     }
 }
 </pre>
-</td>
-</tr>
-</table>
 
 <p>Here we're getting the session object from the request, and checking to see if it has the proper attribute and value.
 You could just as easily place an object on the session that your Action object expects to find.
 All of the servlet classes available in the StrutsTestCase base classes are fully functioning objects.</p>
 
 <p>Finally, we want to make sure that no ActionError messages were sent along.  We can use a built in method
-to make sure of this condition:
+to make sure of this condition: </p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
@@ -242,34 +202,25 @@ public class TestLoginAction extends MockStrutsTestCase {
        actionPerform();
        verifyForward("success");
        assertEquals("deryl",(String) getSession().getAttribute("authentication"));
-       <span class="verify">verifyNoActionErrors();</span>
+       <em>verifyNoActionErrors();</em>
     }
 }
 </pre>
-</td>
-</tr>
-</table>
 
 <p>So, now that we've written one test case, it's easy to write another.  For example, we'd probably want to test the case where a user supplies incorrect login information.  We'd write such a test case like the following:</p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public void testFailedLogin() {
 
     addRequestParameter("username","deryl");
     addRequestParameter("password","express");
     setRequestPathInfo("/login");
     actionPerform();
-    verifyForward("login");
-    <span class="verify">verifyActionErrors(new String[] {"error.password.mismatch"});</span>
+    <em>verifyForward("login");
+    verifyActionErrors(new String[] {"error.password.mismatch"});</em>
     assertNull((String) getSession().getAttribute("authentication"));
 }
 </pre>
-</td>
-</tr>
-</table>
 
 <p>Now, this looks quite similar to our first test case, except that we're passing incorrect
 information.  Also, we're checking to make sure we used a different forward, namely one
@@ -278,7 +229,7 @@ on the session.</p>
 
 <p>We're also verifying that the correct error messages
 were sent.  Note that we used the symbolic name, not the actual text.  Because the
-<code>verifyActionErrors()</code> method takes a String array, we can verify more than
+<tt>verifyActionErrors()</tt> method takes a String array, we can verify more than
 one error message, and StrutsTestCase will make sure there is an exact match.  If the test
 produced more error messages than we were expecting, it will fail; if it produced fewer, it
 will also fail.  Only an exact match in name and number will pass.</p>
@@ -295,17 +246,14 @@ can point a unit test to a configuration file, execute an action, and validate t
 for setting the configuration file and executing an action are a little different, however, as the following
 example shows:</p>
 
-<table cellspacing="2" cellpadding="2" align="center" border="0">
-<tr>
-	<td>
-<pre>
+<pre class="code">
 public class TestLoginAction extends MockStrutsTestCase {
 
     public TestLoginAction(String testName) { super(testName); }
 
     public void testSuccessfulLogin() {
-       <span class="setup">setConfigFile("mymodule","/WEB-INF/struts-config-mymodule.xml");
-       setRequestPathInfo("/mymodule","/login.do");</span>
+       <em>setConfigFile("mymodule","/WEB-INF/struts-config-mymodule.xml");
+       setRequestPathInfo("/mymodule","/login.do");</em>
        addRequestParameter("username","deryl");
        addRequestParameter("password","radar");
        actionPerform();
@@ -315,9 +263,7 @@ public class TestLoginAction extends MockStrutsTestCase {
     }
 }
 </pre>
-</td>
-</tr>
-</table>
+
 <p>As you can see, this looks very similar to our other test cases.  The first important difference is in setting the configuration
 file.  Here, we set the files <i>and</i> associate this configuration file with a given sub-application name.  This allows the
 StrutsTestsCase library to pass this configuration information so that the ActionServlet can correctly identify the sub-application.
@@ -325,7 +271,7 @@ Note that the same rules apply to setting the CLASSPATH to locate the configurat
 
 <p>The other important difference is in setting the request path information.  Here, we set not only the path information, but also
 the sub-application names.  The combination of these two parameters is equivalent to the entire request path; in our test case
-above, this would be equivalent to a path like this: <b><code>/mymodule/login.do</code></b>.  It is important to note that when using
+above, this would be equivalent to a path like this: <b><tt>/mymodule/login.do</tt></b>.  It is important to note that when using
 this method, the first argument <i>must contain only the sub-application name</i>, and the second argument must contain the rest
 of the path <i>not including the sub-application name</i>.  Otherwise, the request path will be incorrectly constructed, resulting
 in a spurious test failure.</p>

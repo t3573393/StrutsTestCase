@@ -7,7 +7,6 @@
 </head>
 <body>
 <center><h2>Frequently Asked Questions About StrutsTestCase for JUnit</h2></center>
-<hr>
 <ul>
 <li> <a href="#1">Are there more detailed instructions on how to run the StrutsTestCase examples?</a>
 <li> <a href="#2">Does StrutsTestCase support Tiles?</a>
@@ -17,7 +16,7 @@
 <li> <a href="#6">Why is a session value I set in one test method not available in another test method? </a>
 <li> <a href="#7">How can I use the Struts transaction token support in my test cases? </a>
 <li> <a href="#8">Can I access the ActionForm for my test before and after the Action is executed?</a>
-<li> <a href="#9">When I use <code>setActionForm()</code>, why are the form attributes I set not showing up in my Action class?   </a>
+<li> <a href="#9">When I use <tt>setActionForm()</tt>, why are the form attributes I set not showing up in my Action class?   </a>
 </ul>
 
 <h3 id=1>Are there more detailed instructions on how to run the StrutsTestCase examples?</h3>
@@ -32,38 +31,38 @@ entry for more details.
 <h3 id=3>Why does my test fail complaining about "Missing configuration resource for path /WEB-INF/struts-config.xml"?</h3>
 This usually occurs when your CLASSPATH is not set properly to point to the directory <i>that contains</i> the WEB-INF directory.
 For example, if your struts-config.xml is located in the following directory:<br><br>
-<pre>/my/directory/WEB-INF/struts-config.xml</pre>
-.. then you would set the CLASSPATH as follows:
-<pre>CLASSPATH=/my/directory</pre>
-The same applies for all other resource files, like tiles definitions and the like.  As an alternative, you can use
-the <a href="api/servletunit/struts/MockStrutsTestCase.html#setConfigFile(java.lang.String)"><code>setConfigFile</code></a> method
-to point to your configuration file, keeping in mind that you must reference the file appropriately.
+<tt>/my/directory/WEB-INF/struts-config.xml</tt>
+<p>.. then you would set the CLASSPATH as follows:</p>
+<tt>CLASSPATH=/my/directory</tt>
+<p>The same applies for all other resource files, like tiles definitions and the like.  As an alternative, you can use
+the <a href="api/servletunit/struts/MockStrutsTestCase.html#setConfigFile(java.lang.String)"><tt>setConfigFile</tt></a> method
+to point to your configuration file, keeping in mind that you must reference the file appropriately.</p>
 
 <h3 id=4>Why do I keep getting NoClassDefFoundErrors when I run my test case?</h3>
 Assuming that your CLASSPATH is indeed set up properly, there are two situations where this problem might occur:
 <ul>
-<li>If the NoClassDefFoundError you're receiving complains about a class called <code><b>ActionConfig</b></code>, then you are probably trying to use a version of strutstest.jar built against Struts 1.1 in a Struts 1.0 environment.  Get the version of StrutsTestCase appropriate to your test environment.<br><br>
-<li>If the NoClassDefFoundError you're receiving complains about either <code><b>ServletRequestWrapper</b></code> or a <code><b>ServletResponseWrapper</b></code>, then you are probably trying to run a version of strutstest.jar that supports Servlet 2.3 in a Servlet engine that only supports the 2.2 specification.  Get the version of StrutsTestCase appropriate to your test environment.<br><br>
-<li>If the NoClassDefFoundError you're receiving complains about <b>Tiles classes</b> (eg: <code>DefinitionsUtil</code> or <code>ComponentDefinition</code>), you must include the tiles.jar in your CLASSPATH.  This should only an issue for Struts 1.1b1.
+<li>If the NoClassDefFoundError you're receiving complains about a class called <tt><b>ActionConfig</b></tt>, then you are probably trying to use a version of strutstest.jar built against Struts 1.1 in a Struts 1.0 environment.  Get the version of StrutsTestCase appropriate to your test environment.<br><br>
+<li>If the NoClassDefFoundError you're receiving complains about either <tt><b>ServletRequestWrapper</b></tt> or a <tt><b>ServletResponseWrapper</b></tt>, then you are probably trying to run a version of strutstest.jar that supports Servlet 2.3 in a Servlet engine that only supports the 2.2 specification.  Get the version of StrutsTestCase appropriate to your test environment.<br><br>
+<li>If the NoClassDefFoundError you're receiving complains about <b>Tiles classes</b> (eg: <tt>DefinitionsUtil</tt> or <tt>ComponentDefinition</tt>), you must include the tiles.jar in your CLASSPATH.  This should only an issue for Struts 1.1b1.
 </ul>
 
 <h3 id=5>Why do I keep getting LinkageError's when I run my test case?</h3>
 There are three known causes for this problem:
 <ul>
-<li><code><b>CLASSPATH issues: </b></code>  If your CLASSPATH contains multiple XML libraries that are incompatible, you will get this error.  One solution is to places <code><b>xerces.jar</b></code> at the front of your CLASSPATH, which ensures that a compatible set of interfaces and implementation classes are loaded.
-<li><code><b>JUnit Swing UI TestRunner: </b></code> If you are using the <code>swingui.TestRunner</code> class, you must uncheck the <code><b>reload classes every run</b></code> box before you run your tests.
-<li><code><b>Ant &lt;junit&gt; task: </b></code> If you are using the <code>&lt;junit&gt;</code> task, you must make sure the <b><code>fork</code></b> attribute is set to <b><code>true</code></b> before you run your tests.
+<li><tt><b>CLASSPATH issues: </b></tt>  If your CLASSPATH contains multiple XML libraries that are incompatible, you will get this error.  One solution is to places <tt><b>xerces.jar</b></tt> at the front of your CLASSPATH, which ensures that a compatible set of interfaces and implementation classes are loaded.
+<li><tt><b>JUnit Swing UI TestRunner: </b></tt> If you are using the <tt>swingui.TestRunner</tt> class, you must uncheck the <tt><b>reload classes every run</b></tt> box before you run your tests.
+<li><tt><b>Ant &lt;junit&gt; task: </b></tt> If you are using the <tt>&lt;junit&gt;</tt> task, you must make sure the <b><tt>fork</tt></b> attribute is set to <b><tt>true</tt></b> before you run your tests.
 </ul>
 
 <h3 id=6>Why is a session value I set in one test method not available in another test method?</h3>
-StrutsTestCase follows a common JUnit practice of not saving state between unit tests.  This is to avoid side effects when running many unit tests at once, each of which should remain independent of one another.  If you wish to test an Action subclass that depends on another Action or Servlet having set up one or more state variables, you should simulate this behavior by setting the state variables in the session object (via the <code>getSession()</code> method) or the request object (via the <code>getRequest()</code> method).  Alternately, you can test several Action subclasses in a sequence by calling setRequestPathInfo() and actionPerform() for each one.  For more information, please see the <a href="http://www.junit.org">JUnit site</a>.
+StrutsTestCase follows a common JUnit practice of not saving state between unit tests.  This is to avoid side effects when running many unit tests at once, each of which should remain independent of one another.  If you wish to test an Action subclass that depends on another Action or Servlet having set up one or more state variables, you should simulate this behavior by setting the state variables in the session object (via the <tt>getSession()</tt> method) or the request object (via the <tt>getRequest()</tt> method).  Alternately, you can test several Action subclasses in a sequence by calling setRequestPathInfo() and actionPerform() for each one.  For more information, please see the <a href="http://www.junit.org">JUnit site</a>.
 
 <h3 id=7>How can I use the Struts transaction token support in my test cases?</h3>
-You can use the Struts transaction token in your tests by using the <b><code>addRequestParameter</code></b> method, thusly:<br><br>
+You can use the Struts transaction token in your tests by using the <b><tt>addRequestParameter</tt></b> method, thusly:<br><br>
 <pre>
      public void testTransactionToken() {
-	<span class="setup" color=red>addRequestParameter(Constants.TOKEN_KEY, "test_token");
-	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</span>
+	<em>addRequestParameter(Constants.TOKEN_KEY, "test_token");
+	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</em>
         setRequestPathInfo("/testToken");
         actionPerform();
         verifyNoActionErrors();
@@ -71,11 +70,11 @@ You can use the Struts transaction token in your tests by using the <b><code>add
 </pre>
 
 <h3 id=8>Can I access the ActionForm for my test before and after the Action is executed?</h3>
-Yes, you can.  Both MockStrutsTestCase and CactusStrutsTestCase have a <code><b>setActionForm()</b></code> method for
-setting the ActionForm for a given test, and a <code><b>getActionForm()</b></code> method for retrieving an ActionForm instance
+Yes, you can.  Both MockStrutsTestCase and CactusStrutsTestCase have a <tt><b>setActionForm()</b></tt> method for
+setting the ActionForm for a given test, and a <tt><b>getActionForm()</b></tt> method for retrieving an ActionForm instance
 after the Action is executed.
 
-<h3 id=9>When I use <code>setActionForm()</code>, why are the form attributes I set not showing up in my Action class?</h3>
+<h3 id=9>When I use <tt>setActionForm()</tt>, why are the form attributes I set not showing up in my Action class?</h3>
 Even though you can pass an ActionForm instance to your Action, it does not mean you are subverting how
 Struts handles the form processing.  In particular, if you have overridden the ActionForm.reset() method,
 then you could potentially be resetting any attributes you had set in the ActionForm instance you

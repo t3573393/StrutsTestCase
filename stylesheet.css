@@ -1,15 +1,27 @@
-BODY {background: white; color: black;}
+BODY {background: #eeeee0; color: black; font-size: x-small; font-family: Verdana, Helvetica, Arial, sans-serif; }
+
+p { font-size: x-small; }
+tt { font-size: x-small; }
+h3 tt {font-size: medium; }
+
+H1 {font: italic 900 30px }
+H2 {font-style: italic; background: #a6caf0; }
+H3 {font-style: italic; }
 
 /* link settings */
 A {text-decoration:none; }
-A:hover,A:active { text-decoration:underline; }
+A:hover,A:active { text-decoration: underline; }
 
-/* font settings */
-.warning {color: red; font-weight: bold; }
+/* header settings */
+DIV.header {text-align: center; }
 .announce {color: red; }
-.copyright {font-size: x-small; }
+.copyright {font-size: xx-small; }
 
-/* code examples */
-TABLE { background: #FEEACB; }
-.setup {color: red; }
-.verify {color: blue; }
+/* general font settings */
+.warning {color: red; font-weight: bold; }
+
+/* code example settings */
+pre { font-size: x-small; }
+pre.code { margin: 0 10% 0 10%; background: #FEEACB; padding: 1em; }
+pre.code em { font-style: normal; color: red; }
+
