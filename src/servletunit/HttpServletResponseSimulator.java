@@ -40,6 +40,7 @@ import java.io.IOException;
 import javax.servlet.ServletOutputStream;
 import java.io.*;
 import java.util.Locale;
+import java.util.HashMap;
 import javax.servlet.http.Cookie;
 import junit.framework.AssertionFailedError;
 
@@ -55,219 +56,223 @@ import junit.framework.AssertionFailedError;
 public class HttpServletResponseSimulator implements HttpServletResponse
 {
     private OutputStream servOStream;       // The non-default javax.servlet.ServletOutputStream
-    
+
     private boolean calledGetWriter, calledGetOutputStream;
     private StringWriter stringWriter=null;
     private PrintWriter printWriter=null;
     private Locale locale = null;
     private int contentLength;
     private String contentType = null;
+    private int status = 0;
+    private String message = null;
+    private HashMap headers = new HashMap();
 
     public static final int SC_CONTINUE = 100;
-    
-    
+
+
     public static final int SC_SWITCHING_PROTOCOLS = 101;
-    
+
     public static final int SC_OK = 200;
-    
+
     public static final int SC_CREATED = 201;
-    
+
     public static final int SC_ACCEPTED = 202;
-    
+
     public static final int SC_NON_AUTHORITATIVE_INFORMATION = 203;
-    
+
     public static final int SC_NO_CONTENT = 204;
-    
+
     public static final int SC_RESET_CONTENT = 205;
-    
+
     public static final int SC_PARTIAL_CONTENT = 206;
-    
+
     public static final int SC_MULTIPLE_CHOICES = 300;
-    
+
     public static final int SC_MOVED_PERMANENTLY = 301;
-    
+
     public static final int SC_MOVED_TEMPORARILY = 302;
-    
+
     public static final int SC_SEE_OTHER = 303;
-    
+
     public static final int SC_NOT_MODIFIED = 304;
-    
+
     public static final int SC_USE_PROXY = 305;
-    
+
     public static final int SC_BAD_REQUEST = 400;
-    
+
     public static final int SC_UNAUTHORIZED = 401;
-    
+
     public static final int SC_PAYMENT_REQUIRED = 402;
-    
+
     public static final int SC_FORBIDDEN = 403;
-    
+
     public static final int SC_NOT_FOUND = 404;
-    
+
     public static final int SC_METHOD_NOT_ALLOWED = 405;
-    
+
     public static final int SC_NOT_ACCEPTABLE = 406;
-    
+
     public static final int SC_PROXY_AUTHENTICATION_REQUIRED = 407;
-    
+
     public static final int SC_REQUEST_TIMEOUT = 408;
-    
+
     public static final int SC_CONFLICT = 409;
-    
+
     public static final int SC_GONE = 410;
-    
+
     public static final int SC_LENGTH_REQUIRED = 411;
-    
+
     public static final int SC_PRECONDITION_FAILED = 412;
-    
+
     public static final int SC_REQUEST_ENTITY_TOO_LARGE = 413;
-    
+
     public static final int SC_REQUEST_URI_TOO_LONG = 414;
-    
+
     public static final int SC_UNSUPPORTED_MEDIA_TYPE = 415;
-    
+
     public static final int SC_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
-    
+
     public static final int SC_EXPECTATION_FAILED = 417;
-    
+
     public static final int SC_INTERNAL_SERVER_ERROR = 500;
-    
+
     public static final int SC_NOT_IMPLEMENTED = 501;
-    
+
     public static final int SC_BAD_GATEWAY = 502;
-    
+
     public static final int SC_SERVICE_UNAVAILABLE = 503;
-    
+
     public static final int SC_GATEWAY_TIMEOUT = 504;
-    
+
     public static final int SC_HTTP_VERSION_NOT_SUPPORTED = 505;
-    
+
     /**
      * This method is not supported.
      */
     public void addCookie(Cookie cookie)
     {
-	throw new UnsupportedOperationException("addCookie operation is not supported!");
+    throw new UnsupportedOperationException("addCookie operation is not supported!");
     }
-    
+
     /**
      * This method is not supported.
      */
     public void addDateHeader(String name, long date)
     {
-	throw new UnsupportedOperationException("addDateHeader operation is not supported!");
+    throw new UnsupportedOperationException("addDateHeader operation is not supported!");
     }
-    
+
     /**
      * This method is not supported.
      */
     public void addHeader(String name, String value)
     {
-	throw new UnsupportedOperationException("addHeader operation is not supported!");
+        throw new UnsupportedOperationException("addDateHeader operation is not supported!");
     }
-    
+
     /**
      * This method is not supported.
      */
     public void addIntHeader(String name, int value)
     {
-	throw new UnsupportedOperationException("addIntHeader operation is not supported!");
+        throw new UnsupportedOperationException("addDateHeader operation is not supported!");
     }
 
     /**
-     * This method is not supported.
+     * returns true if a header with the given name
+     * has already been set
      */
     public boolean containsHeader(String name)
     {
-	throw new UnsupportedOperationException("containsHeader operation is not supported!");
+        return headers.containsKey(name);
     }
-    
+
     /**
-     * This method is not supported.
+     * Returns the given URL unmodified
      */
     public String encodeRedirectUrl(String url)
     {
-	throw new UnsupportedOperationException("encodeRedirectUrl operation is not supported!");
+        return url;
     }
-        
-    
+
+
     /**
-     * This method is not supported.
+     * Returns the given URL unmodified
      */
     public String encodeRedirectURL(String url)
     {
-	throw new UnsupportedOperationException("encodeRedirectUrl operation is not supported!");
+        return url;
     }
-    
+
     /**
-     * This method is not supported.
+     * Returns the given URL unmodified
      */
     public String encodeUrl(String url)
     {
-	throw new UnsupportedOperationException("encodeUrl operation is not supported!");
+        return url;
     }
-    
+
     /**
-     * This method is not supported.
+     * Returns the given URL unmodified
      */
     public String encodeURL(String url)
     {
-	throw new UnsupportedOperationException("encodeURL operation is not supported!");
+        return url;
     }
-    
+
     /**
      * This method is not supported.
      */
     public void flushBuffer() throws IOException
     {
-	throw new UnsupportedOperationException("flushBuffer operation is not supported!");
+    throw new UnsupportedOperationException("flushBuffer operation is not supported!");
     }
 
-    
+
     /**
      * This method is not supported.
      */
     public int getBufferSize()
     {
-	throw new UnsupportedOperationException("getBufferSize operation is not supported!");
+    throw new UnsupportedOperationException("getBufferSize operation is not supported!");
     }
-        
+
     /**
      * This method is not supported.
      */
     public String getCharacterEncoding()
     {
-	throw new UnsupportedOperationException("getBufferSize operation is not supported!");
+    throw new UnsupportedOperationException("getBufferSize operation is not supported!");
     }
 
     /**
      * Returns the locale assigned to the response.
-     * 
-     * 
+     *
+     *
      * @see 		#setLocale
      *
      */
     public Locale getLocale()
     {
-	if (locale == null)
-	    return Locale.US;
-	else
-	    return locale;
+    if (locale == null)
+        return Locale.US;
+    else
+        return locale;
     }
 
-    
-        
+
+
     /**
-     * Returns a {@link ServletOutputStream} suitable for writing binary 
+     * Returns a {@link ServletOutputStream} suitable for writing binary
      * data in the response. The servlet container does not encode the
-     * binary data.  
-     
+     * binary data.
+
      * <p> Calling flush() on the ServletOutputStream commits the response.
-     
-     * Either this method or {@link #getWriter} may 
+
+     * Either this method or {@link #getWriter} may
      * be called to write the body, not both.
      *
-     * @return				a {@link ServletOutputStream} for writing binary data	
+     * @return				a {@link ServletOutputStream} for writing binary data
      *
      * @exception IllegalStateException if the <code>getWriter</code> method
      * 					has been called on this response
@@ -281,7 +286,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     {
         if( this.calledGetWriter )
             throw new IllegalStateException( "The getWriter method has already been called" );
-	
+
         ServletOutputStream oStream = null;
         if( null == this.servOStream )
             oStream = new ServletOutputStreamSimulator();
@@ -292,17 +297,17 @@ public class HttpServletResponseSimulator implements HttpServletResponse
         this.calledGetOutputStream = true;
         return oStream;
     }
-    
-    
+
+
     /**
-     * Returns a <code>PrintWriter</code> object that 
-     * can send character text to the client. 
-     * The character encoding used is the one specified 
+     * Returns a <code>PrintWriter</code> object that
+     * can send character text to the client.
+     * The character encoding used is the one specified
      * in the <code>charset=</code> property of the
      * {@link #setContentType} method, which must be called
-     * <i>before</i> calling this method for the charset to take effect. 
+     * <i>before</i> calling this method for the charset to take effect.
      *
-     * <p>If necessary, the MIME type of the response is 
+     * <p>If necessary, the MIME type of the response is
      * modified to reflect the character encoding used.
      *
      * <p> Calling flush() on the PrintWriter commits the response.
@@ -310,16 +315,16 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      * <p>Either this method or {@link #getOutputStream} may be called
      * to write the body, not both.
      *
-     * 
-     * @return 				a <code>PrintWriter</code> object that 
-     *					can return character data to the client 
+     *
+     * @return 				a <code>PrintWriter</code> object that
+     *					can return character data to the client
      *
      * @exception UnsupportedEncodingException  if the charset specified in
      *						<code>setContentType</code> cannot be
      *						used
      *
      * @exception IllegalStateException    	if the <code>getOutputStream</code>
-     * 						method has already been called for this 
+     * 						method has already been called for this
      *						response object
      *
      * @exception IOException   		if an input or output exception occurred
@@ -332,27 +337,27 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     {
         if( this.calledGetOutputStream )
             throw new IllegalStateException( "The getOutputStream method has already been called" );
-	
+
         if( stringWriter == null )
             stringWriter = new StringWriter();
         if( printWriter == null )
             printWriter = new PrintWriter( stringWriter );
-	
+
         this.calledGetWriter = true;
-	return printWriter;
+    return printWriter;
     }
 
-    
+
         /**
          * Use this method to pick up the string buffer which will hold
-	 * the contents of the string buffer. You can then
+     * the contents of the string buffer. You can then
          * write your test case to examine the contents of this
-	 * buffer and match it against an expected output.
+     * buffer and match it against an expected output.
          */
     public StringBuffer getWriterBuffer()
     {
-	if (stringWriter==null) return null;
-	return stringWriter.getBuffer();
+    if (stringWriter==null) return null;
+    return stringWriter.getBuffer();
     }
 
     /**
@@ -360,25 +365,35 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public boolean isCommitted()
     {
-	throw new UnsupportedOperationException("isCommitted operation is not supported.");
+    throw new UnsupportedOperationException("isCommitted operation is not supported.");
+    }
+
+    /**
+     * Reinitializes all local variables.
+     * Note, in most servlet containers, you may get an
+     * IllegalStateException if you call this method
+     * after committing the response.
+     * That behavior is not replicated here.
+     */
+    public void reset()
+    {
+        this.calledGetOutputStream = false;
+        this.calledGetWriter = false;
+        this.contentLength = 0;
+        this.contentType = null;
+        this.stringWriter = null;
+        this.printWriter = null;
+        headers = new HashMap();
     }
 
     /**
      * This method is not supported.
      */
-    public void reset()
-    {
-	throw new UnsupportedOperationException("reset operation is not supported.");
-    }
-    
-    /**
-     * This method is not supported.
-     */
     public void resetBuffer()
     {
-	throw new UnsupportedOperationException("resetBuffer operation is not supported.");
+    throw new UnsupportedOperationException("resetBuffer operation is not supported.");
     }
-    
+
     /**
      * Sends an error response to the client using the specified
      * status clearing the buffer.  This method always throws
@@ -389,10 +404,10 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void sendError(int sc) throws IOException
     {
-	throw new AssertionFailedError("received error: " + sc);
+    throw new AssertionFailedError("received error: " + sc);
     }
-    
-        
+
+
     /**
      * Sends an error response to the client using the specified
      * status clearing the buffer.  This method always throws
@@ -404,51 +419,54 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void sendError(int sc, String msg) throws IOException
     {
-	throw new AssertionFailedError("recieved error " + sc + " : " + msg);
+    throw new AssertionFailedError("recieved error " + sc + " : " + msg);
+    }
+
+    /**
+     * Resets the response and sets the appropriate redirect headers.
+     */
+    public void sendRedirect(String location) throws IOException
+    {
+        reset();
+
+        setStatus(SC_MOVED_TEMPORARILY);
+        setHeader("Location", location);
     }
 
     /**
      * This method is not supported.
      */
-    public void sendRedirect(String location) throws IOException
-    {
-	throw new UnsupportedOperationException("sendRedirect operation is not supported.");
-    }
-    
-    /**
-     * This method is not supported.
-     */
     public void setBufferSize(int size)
     {
-	throw new UnsupportedOperationException("setBufferSize operation not supported.");
+    throw new UnsupportedOperationException("setBufferSize operation not supported.");
     }
-    
-       
+
+
     /**
      * Sets the length of the content body in the response
      * In HTTP servlets, this method sets the HTTP Content-Length header.
      *
      *
-     * @param len 	an integer specifying the length of the 
+     * @param len 	an integer specifying the length of the
      * 			content being returned to the client; sets
      *			the Content-Length header
      *
      */
     public void setContentLength(int len)
     {
-	this.contentLength = len;
+    this.contentLength = len;
     }
-    
+
     /**
      * Sets the content type of the response being sent to
      * the client. The content type may include the type of character
      * encoding used, for example, <code>text/html; charset=ISO-8859-4</code>.
      *
-     * <p>If obtaining a <code>PrintWriter</code>, this method should be 
+     * <p>If obtaining a <code>PrintWriter</code>, this method should be
      * called first.
      *
      *
-     * @param type 	a <code>String</code> specifying the MIME 
+     * @param type 	a <code>String</code> specifying the MIME
      *			type of the content
      *
      * @see 		#getOutputStream
@@ -457,41 +475,52 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void setContentType(String type)
     {
-	this.contentType = type;
+    this.contentType = type;
     }
-     
-    
+
+
     /**
      * This method is not supported.
      */
     public void setDateHeader(String name, long date)
     {
-	throw new UnsupportedOperationException("setDateHeader operation not supported.");
+    throw new UnsupportedOperationException("setDateHeader operation not supported.");
     }
-    
+
     /**
-     * This method is not supported.
+     * adds the name/value pair to the headers
      */
     public void setHeader(String name, String value)
     {
-	throw new UnsupportedOperationException("setHeader operation not supported.");
+
+        if (name.equalsIgnoreCase("content-type")) {
+          setContentType(value);
+          return;
+        }
+        else if (name.equalsIgnoreCase("content-length")) {
+          this.setContentLength(Integer.parseInt(value));
+          return;
+        }
+
+        headers.put(name, value);
+
     }
-    
+
     /**
-     * This method is not supported.
+     * Adds the given name/value pair to the headers collection.
      */
     public void setIntHeader(String name, int value)
     {
-	throw new UnsupportedOperationException("setIntHeader operation not supported.");
+        setHeader(name, String.valueOf(value));
     }
-    
-        
+
+
     /**
      * Sets the locale of the response, setting the headers (including the
      * Content-Type's charset) as appropriate.  This method should be called
      * before a call to {@link #getWriter}.  By default, the response locale
      * is the default locale for the server.
-     * 
+     *
      * @param loc  the locale of the response
      *
      * @see 		#getLocale
@@ -499,16 +528,16 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void setLocale(Locale loc)
     {
-	this.locale = loc;
+    this.locale = loc;
     }
-    
+
     /**
-     * The default action of calling the <code>getOutputStream</code> method 
-     * is to return a <code>javax.servlet.ServletOutputStream</code> object 
+     * The default action of calling the <code>getOutputStream</code> method
+     * is to return a <code>javax.servlet.ServletOutputStream</code> object
      * that sends the data to <code> System.out</code>.  If you don't want
      * the output sent to <code>System.out</code> you can use this method to
-     * set where the output will go.  Please note, subsequent calls to 
-     * <code>getOutputStream</code> will reset the output path to 
+     * set where the output will go.  Please note, subsequent calls to
+     * <code>getOutputStream</code> will reset the output path to
      * <code>System.out</code>. This prevents the OutputStream returned by
      * calling getOutputStream from writing to a closed stream
      *
@@ -519,21 +548,22 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     {
         this.servOStream = out;
     }
-        
+
     /**
-     * This method is not supported.
+     * Sets the given status code.
      */
     public void setStatus(int sc)
     {
-	throw new UnsupportedOperationException("setStatus operation is not supported.");
+        setStatus(sc, null);
     }
-    
+
     /**
-     * This method is not supported.
+     * Sets the given status and an associated message.
      */
     public void setStatus(int sc, String sm)
     {
-	throw new UnsupportedOperationException("setStatus operation is not supported.");
+        this.status = sc;
+        this.message = sm;
     }
 
 }
