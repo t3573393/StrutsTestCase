@@ -258,6 +258,7 @@ public class MockStrutsTestCase extends TestCase {
 	try {
 	    this.getActionServlet().doPost(request,response);
 	} catch (ServletException se) {
+	    se.getRootCause().printStackTrace();
 	    fail("Error running action.perform(): " + se.getRootCause().getClass() + " - " + se.getRootCause().getMessage());
 	} catch (Exception ex) {
 	    ex.printStackTrace();
@@ -275,6 +276,18 @@ public class MockStrutsTestCase extends TestCase {
     {
 	init();
         this.request.addParameter(parameterName,parameterValue);
+    }
+
+    /**
+     * Adds an HttpServletRequest parameter that is an array of String values
+     * to be used in setting up the ActionForm instance to be used in this test.
+     * Each parameter added should correspond to an attribute in the ActionForm 
+     * instance used by the Action instance being tested.
+     */
+    public void addRequestParameter(String parameterName, String[] parameterValues)
+    {
+	init();
+	this.request.addParameter(parameterName,parameterValues);
     }
 
     /**

@@ -128,6 +128,13 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     {
         this.parameters.put( key, value );
     }
+    
+    /**
+     * Adds a parameter as a String array to this object's list of parameters
+     */
+    public void addParameter(String name, String[] values) {
+	parameters.put(name,values);
+    }
 
     /**
      * Returns a java.util.Map of the parameters of this request.
