@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MessageAction extends Action {
 
+
+
     public ActionForward perform(ActionMapping mapping,
                                  ActionForm form,
                                  HttpServletRequest request,
