@@ -25,7 +25,7 @@ public class TestAbsolutePath extends MockStrutsTestCase {
     }
 
     public void testSuccessfulLogin() {
-        setConfigFile("/Users/deryl/develop/projects/strutstestcase/src/examples/WEB-INF/struts-config.xml");
+        setConfigFile("c:/develop/projects/strutstestcase/src/examples/WEB-INF/struts-config.xml");
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
         setRequestPathInfo("/login");
