@@ -62,6 +62,7 @@
 	    </webinf>
 	    <lib dir="${basedir}/lib">
 	         <exclude name="ant*.jar"/>
+		 <exclude name="servlet.jar"/>
             </lib>
 	    <!-- do we want to remove test classes? -->
 	    <classes dir="${build.dir}"/>
