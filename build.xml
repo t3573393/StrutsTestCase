@@ -251,7 +251,7 @@
         <mkdir dir="${temp.dir}"/>
         <get src="http://jakarta.apache.org/builds/jakarta-struts/nightly/jakarta-struts-${DSTAMP}.zip"
             dest="${temp.dir}/jakarta-struts-nightly.zip"
-            verbose="on"/>
+            verbose="false"/>
         <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
         <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1b2.jar"/>
         <!--<delete dir="${temp.dir}"/>-->
