@@ -42,6 +42,10 @@
                depend="${comp.depend}">
             <classpath refid="class.path" />
             <include name="**/*.java" />
+	    <!-- Build the Servlet 2.2 Spec version if specified -->
+	    <exclude name="**/2.2/**" unless="build_2.2"/>
+	    <exclude name="**/struts/MockStrutsTestCase.java" if="build_2.2"/>
+	    <exclude name="**/struts/CactusStrutsTestCase.java" if="build_2.2"/>
         </javac>
     </target>
 
@@ -78,7 +82,7 @@
         <delete dir="${build.dir}" />
         <delete dir="${basedir}/dist" />
         <delete dir="${test.dir}" />
-	<delete dir="${basedir}/test.war"/>
+	<delete file="${basedir}/test.war"/>
 	<delete file="${basedir}/strutstest.zip"/>
 	<delete file="${basedir}/strutstest.tar.gz"/>
 	<delete file="${basedir}/strutstest-src.tar.gz"/>
