@@ -7,7 +7,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.security.Principal;
@@ -978,7 +977,6 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      * @see			#getRequestedSessionId
      * @see			#getSession
-     * @see			HttpSessionContext
      *
      */
     public boolean isRequestedSessionIdValid()
@@ -1025,6 +1023,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * @return		<code>false</code> in all cases
      *
      */
+    // TODO: need to make this work.
     public boolean isUserInRole(String s)
     {
         return false;
