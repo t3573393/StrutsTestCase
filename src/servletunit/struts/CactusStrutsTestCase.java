@@ -422,7 +422,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
         }
 
         try {
-            this.forward = action.perform(mapping,form,request,response);
+            this.forward = action.execute(mapping,form,request,response);
 	    if (mapping.getAttribute() != null) {
 		ActionForm retForm = null;
 		String scope = mapping.getScope();
@@ -433,13 +433,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
 		}
 		setActionForm(retForm);
 	    }
-        } catch (ServletException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new AssertionFailedError("Error running action.perform(): " + e.getMessage());
-        }
+            throw new AssertionFailedError("Error running action.perform(): " + e.getClass() + " - " + e.getMessage());
+	}
     }
 
     /**
