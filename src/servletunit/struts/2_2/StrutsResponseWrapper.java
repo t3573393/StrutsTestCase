@@ -127,7 +127,6 @@ public class StrutsResponseWrapper implements HttpServletResponse
 
     public void resetBuffer()
     {
-        
     }
 
     public void sendError(int sc) throws IOException
