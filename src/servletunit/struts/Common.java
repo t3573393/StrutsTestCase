@@ -383,7 +383,8 @@ public class Common {
     protected static ActionForward findForward(String mappingName, String forwardName, HttpServletRequest request, ServletContext context, ActionServlet actionServlet) {
         if (logger.isTraceEnabled())
             logger.trace("Entering findForward() : mappingName = " + mappingName + ", forwardName = " + forwardName + ", request = " + request + ", context = " + context + ", actionServlet = " + actionServlet);
-        ActionForward forward = getActionConfig(actionServlet, mappingName, request, context).findForward(forwardName);
+        ActionMapping mapping = getActionConfig(actionServlet, mappingName, request, context);
+        ActionForward forward =  mapping == null ? null : mapping.findForward(forwardName);
         if (logger.isDebugEnabled()) {
             logger.debug("findForward() : retrieved forward = " + forward);
         }
