@@ -25,6 +25,10 @@
             <include name="*.zip" />
 	    <exclude name="struts-1.1b2.jar" if="build_1.0"/>
 	    <exclude name="struts-1.0.jar" unless="build_1.0"/>
+        <exclude name="servletapi-2.3.jar" if="build_2.2"/>
+        <exclude name="servletapi-2.2.jar" unless="build_2.2"/>
+        <exclude name="cactus-13-1.4.1.jar" if="build_2.2"/>
+        <exclude name="cactus-12-1.4.1.jar" unless="build_2.2"/>
         </fileset>
         <pathelement location="${build.dir}" />
     </path>
@@ -51,6 +55,7 @@
 	    <exclude name="**/*Token*.java" if="build_1.0"/>
 	    <exclude name="**/*Dyna*.java" if="build_1.0"/>
 	    <exclude name="**/*Tiles*.java" if="build_1.0"/>
+        <exclude name="**/Filter*.java" if="build_2.2"/>
         </javac>
 	<antcall target="patch.restore" inheritAll="true"/>
     </target>
@@ -63,6 +68,7 @@
     <target name="patch.22" if="build_2.2">
        <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/CactusStrutsTestCase-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/CactusStrutsTestCase.java"/>
        <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/MockStrutsTestCase-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/MockStrutsTestCase.java"/>
+       <patch backups="true" patchfile="${src.dir}/servletunit/struts/patches/StrutsResponseWrapper-2.2-patch.txt" originalfile="${src.dir}/servletunit/struts/StrutsResponseWrapper.java"/>
     </target>
 
     <target name="patch.10" if="build_1.0">
