@@ -191,10 +191,8 @@ public class Common {
         ActionForm form;
         // It's deprecated, I know.  It's a lot of trouble to do it differently for now.
         ActionMapping mapping = actionServlet.findMapping(actionPath);
-        System.out.println("looking for this key: " + mapping.getAttribute() + " in this scope: " + mapping.getScope());
         if ("request".equals(mapping.getScope())) {
             form = (ActionForm) request.getAttribute(mapping.getAttribute());
-            System.out.println("form = " + form);
         } else {
             HttpSession session = request.getSession();
             form = (ActionForm) session.getAttribute(mapping.getAttribute());
