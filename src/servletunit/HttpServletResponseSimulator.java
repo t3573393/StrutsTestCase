@@ -70,7 +70,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     private Locale locale = null;
     private int contentLength;
     private String contentType = null;
-    private int status = 0;
+    private int status = 200;
     private String message = null;
     private HashMap headers = new HashMap();
     private HashMap cookies = new HashMap();
@@ -435,7 +435,8 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void sendError(int sc) throws IOException
     {
-	throw new AssertionFailedError("received error: " + sc);
+        setStatus(sc);
+        throw new AssertionFailedError("received error: " + sc);
     }
 
 
@@ -450,7 +451,8 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void sendError(int sc, String msg) throws IOException
     {
-    throw new AssertionFailedError("received error " + sc + " : " + msg);
+        setStatus(sc,msg);
+        throw new AssertionFailedError("received error " + sc + " : " + msg);
     }
 
     /**
@@ -593,6 +595,15 @@ public class HttpServletResponseSimulator implements HttpServletResponse
         this.status = sc;
         this.message = sm;
     }
+
+    /**
+     * Returns the status code for this response, which is useful for testing expected errors.
+     * @return the status code for this response.
+     */
+    public int getStatusCode() {
+        return this.status;
+    }
+
 
 }
 
