@@ -20,6 +20,9 @@ import junit.framework.TestCase;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.ServletContextSimulator;
 
+import java.util.Enumeration;
+import java.util.Locale;
+
 /**
  * A Junit based test of the HttpServletResponseSimulator class
  * @author Sean Pritchard
@@ -75,6 +78,77 @@ public class TestHttpServletRequestSimulator extends TestCase {
     public void testSetAttribute() {
         request.setAttribute("test1","value1");
         assertEquals(request.getAttribute("test1"),"value1");
+    }
+
+    public void testIsUserInRole() {
+        request.setUserRole("role1");
+        assertTrue(request.isUserInRole("role1"));
+    }
+
+    public void testIsUserInRoleFalse() {
+        request.setUserRole("role2");
+        assertTrue(!request.isUserInRole("role1"));
+    }
+
+    public void testGetServerPort() {
+        request.setServerPort(8080);
+        assertEquals(request.getServerPort(),8080);
+    }
+
+    public void testGetRequestURLWithQueryString() {
+        request.setRequestURL("https://server:8080/my/request/url?param=1");
+        assertEquals("https://server:8080/my/request/url",request.getRequestURL().toString());
+        assertEquals("param=1",request.getQueryString());
+        assertEquals("https",request.getScheme());
+        assertTrue(request.isSecure());
+        assertEquals("/my/request/url",request.getRequestURI());
+        assertEquals("server",request.getServerName());
+        assertEquals(8080,request.getServerPort());
+    }
+
+    public void testGetRequestURLWithoutQueryStringOrPort() {
+        request.setRequestURL("http://server/my/request/url");
+        assertEquals("http://server/my/request/url",request.getRequestURL().toString());
+        assertNull(request.getQueryString());
+        assertEquals("http",request.getScheme());
+        assertTrue(!request.isSecure());
+        assertEquals("/my/request/url",request.getRequestURI());
+        assertEquals("server",request.getServerName());
+        assertEquals(80,request.getServerPort());
+    }
+
+    public void testGetSecurePort() {
+        request.setRequestURL("https://server/my/request/url?param=1");
+        assertTrue(request.isSecure());
+        assertEquals(443,request.getServerPort());
+    }
+
+    public void testGetLocales() {
+        Enumeration enum = request.getLocales();
+        for (Object enumObject = enum.nextElement(); enum.hasMoreElements(); enumObject = enum.nextElement()) {
+            Locale locale = (Locale) enumObject;
+            if (!locale.equals(Locale.US))
+                fail();
+        }
+    }
+
+    public void testGetDateHeaderNoHeader() {
+        assertEquals(-1,request.getDateHeader("foo"));
+    }
+
+    public void testGetDateHeaderBadHeader() {
+        request.setHeader("DATE_HEADER","foofoofoo");
+        try {
+            request.getDateHeader("DATE_HEADER");
+        } catch (IllegalArgumentException iae) {
+            return;
+        }
+        fail();
+    }
+
+    public void testGetDateHeader() {
+        request.setHeader("DATE_HEADER","05/23/73 8:05 PM, PDT");
+        assertEquals(107049900000L,request.getDateHeader("DATE_HEADER"));
     }
 
 
