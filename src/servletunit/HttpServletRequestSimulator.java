@@ -11,6 +11,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 
 //  StrutsTestCase - a JUnit extension for testing Struts actions
@@ -35,6 +38,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     private String scheme;
     private String protocol = "HTTP/1.1";
     private String requestURI;
+    private String requestURL;
     private String contextPath = "";
     private String servletPath;
     private String pathInfo;
@@ -46,10 +50,13 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     String remoteAddr;
     String remoteHost;
     private String remoteUser;
+    private String userRole;
     private String reqSessionId;
     String authType;
     String charEncoding;
     private String serverName;
+    private int port;
+
 
     private Hashtable parameters;
     private Hashtable headers;
@@ -85,8 +92,8 @@ public class HttpServletRequestSimulator implements HttpServletRequest
         parameters = new Hashtable();
         headers = new Hashtable();
         requestDispatchers = new Hashtable();
-    cookies = new Vector();
-    this.context = context;
+        cookies = new Vector();
+        this.context = context;
         //if (getHeader("Accept")==null)
         //setHeader("Accept","dummy accept");
     }
@@ -112,12 +119,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     {
         this.parameters.put( key, value );
     }
-    
+
     /**
      * Adds a parameter as a String array to this object's list of parameters
      */
     public void addParameter(String name, String[] values) {
-	parameters.put(name,values);
+        parameters.put(name,values);
     }
 
     /**
@@ -181,7 +188,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Enumeration getAttributeNames()
     {
-          return attributes.keys();
+        return attributes.keys();
     }
 
     /**
@@ -267,7 +274,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String getContextPath()
     {
-    return contextPath;
+        return contextPath;
     }
 
     /**
@@ -280,7 +287,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * @see #getCookies
      */
     public void addCookie(Cookie cookie) {
-    cookies.addElement(cookie);
+        cookies.addElement(cookie);
     }
 
     /**
@@ -293,8 +300,8 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * @see #getCookies
      */
     public void setCookies(Cookie[] cookies) {
-    for (int i = 0; i < cookies.length; i++)
-        this.cookies.addElement(cookies[i]);
+        for (int i = 0; i < cookies.length; i++)
+            this.cookies.addElement(cookies[i]);
     }
 
     /**
@@ -311,12 +318,12 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Cookie [] getCookies()
     {
-    if (cookies.isEmpty())
-        return null;
-    else {
-        Cookie[] cookieArray = new Cookie[cookies.size()];
-        return (Cookie []) cookies.toArray(cookieArray);
-    }
+        if (cookies.isEmpty())
+            return null;
+        else {
+            Cookie[] cookieArray = new Cookie[cookies.size()];
+            return (Cookie []) cookies.toArray(cookieArray);
+        }
     }
 
     /**
@@ -324,7 +331,17 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public long getDateHeader(String s)
     {
-    throw new UnsupportedOperationException("getDateHeader operation is not supported!");
+        String s1 = getHeader(s);
+        if(s1 == null)
+            return -1L;
+        try
+        {
+            DateFormat dateFormat = new SimpleDateFormat();
+            return dateFormat.parse(s1).getTime();
+        }
+        catch(ParseException exception) {
+            throw new IllegalArgumentException("Cannot parse date: " + s1);
+        }
     }
 
     /**
@@ -380,14 +397,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Enumeration getHeaders(String s)
     {
-    throw new UnsupportedOperationException("getHeaders operation is not supported!");
+        throw new UnsupportedOperationException("getHeaders operation is not supported!");
     }
 
     /**
      * This operation is not supported.
      */
     public ServletInputStream getInputStream() throws IOException {
-    throw new UnsupportedOperationException("getInputStream operation is not supported!");
+        throw new UnsupportedOperationException("getInputStream operation is not supported!");
     }
 
     /**
@@ -415,15 +432,15 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     public int getIntHeader(String s)
     {
         Object header = headers.get(s);
-    if (header != null) {
-        try {
-        Integer intHeader = (Integer) header;
-        return intHeader.intValue();
-        } catch (ClassCastException e) {
-        throw new NumberFormatException("header '" + s + "' cannot be converted to number format.");
-        }
-    } else
-        return -1;
+        if (header != null) {
+            try {
+                Integer intHeader = (Integer) header;
+                return intHeader.intValue();
+            } catch (ClassCastException e) {
+                throw new NumberFormatException("header '" + s + "' cannot be converted to number format.");
+            }
+        } else
+            return -1;
     }
 
     /**
@@ -441,10 +458,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public  Locale getLocale()
     {
-    if (this.locale == null)
-        return Locale.US;
-    else
-        return this.locale;
+        if (this.locale == null)
+            return Locale.US;
+        else
+            return this.locale;
     }
 
     /**
@@ -452,7 +469,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Enumeration getLocales()
     {
-    throw new UnsupportedOperationException("getLocale operation is not supported!");
+        return java.util.Collections.enumeration(Collections.singleton(getLocale()));
     }
 
     /**
@@ -469,10 +486,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String getMethod()
     {
-	if (method == null)
-	    return "POST";
-	else
-	    return method;
+        if (method == null)
+            return "POST";
+        else
+            return method;
     }
 
     /**
@@ -595,7 +612,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public String getPathTranslated()
     {
-    throw new UnsupportedOperationException("getPathTranslated operation is not supported!");
+        throw new UnsupportedOperationException("getPathTranslated operation is not supported!");
     }
 
     /**
@@ -636,7 +653,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * This operation is not supported.
      */
     public BufferedReader getReader() throws IOException {
-    throw new UnsupportedOperationException("getReader operation is not supported!");
+        throw new UnsupportedOperationException("getReader operation is not supported!");
     }
 
     /**
@@ -662,7 +679,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      */
     public String getRemoteAddr() {
-    return remoteAddr;
+        return remoteAddr;
     }
 
     /**
@@ -677,7 +694,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      *
      */
     public String getRemoteHost() {
-    return remoteHost;
+        return remoteHost;
     }
 
     /**
@@ -788,7 +805,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public StringBuffer getRequestURL()
     {
-    throw new UnsupportedOperationException("getRequestURL is not supported!");
+        return new StringBuffer(requestURL);
     }
 
     /**
@@ -821,7 +838,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * This operation is not supported.
      */
     public int getServerPort() {
-    throw new UnsupportedOperationException("getServerPort operation is not supported!");
+        return this.port;
+    }
+
+    /**
+     * Sets the server port to be used with {@link#getServerPort}.
+     */
+    public void setServerPort(int port) {
+        this.port = port;
     }
 
     /**
@@ -922,7 +946,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public Principal getUserPrincipal()
     {
-    return this.principal;
+        return this.principal;
     }
 
     /**
@@ -981,15 +1005,15 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public boolean isRequestedSessionIdValid()
     {
-    if (session != null) {
-        try {
-        session.getId();
-        return true;
-        } catch (IllegalStateException e) {
-        return false;
-        }
-    } else
-        return false;
+        if (session != null) {
+            try {
+                session.getId();
+                return true;
+            } catch (IllegalStateException e) {
+                return false;
+            }
+        } else
+            return false;
     }
 
     /**
@@ -1023,10 +1047,16 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * @return		<code>false</code> in all cases
      *
      */
-    // TODO: need to make this work.
     public boolean isUserInRole(String s)
     {
-        return false;
+        return s.equals(userRole);
+    }
+
+    /**
+     * Sets user role to be used in {@link #isUserInRole}
+     */
+    public void setUserRole(String role) {
+        this.userRole = role;
     }
 
     /**
@@ -1100,7 +1130,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets content type to be used in {@link #getContentType}.
      */
     public void setContentType(String s) {
-    contentType = s;
+        contentType = s;
     }
 
     /**
@@ -1125,10 +1155,10 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     {
         switch (methodType)
         {
-        case GET:method="GET";break;
-        case PUT:method="PUT";break;
-        case POST:method="POST";break;
-        default:method="POST";
+            case GET:method="GET";break;
+            case PUT:method="PUT";break;
+            case POST:method="POST";break;
+            default:method="POST";
         }
     }
 
@@ -1152,7 +1182,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets query string to be used by {@link #getQueryString}.
      */
     public void setQueryString(String s) {
-    this.queryString = s;
+        this.queryString = s;
     }
 
     /**
@@ -1167,14 +1197,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets remote address to be used by {@link #getRemoteAddr}.
      */
     public void setRemoteAddr(String remoteAddr) {
-    this.remoteAddr = remoteAddr;
+        this.remoteAddr = remoteAddr;
     }
 
     /**
      * Sets remote host to be used by {@link #getRemoteHost}.
      */
     public void setRemoteHost(String remoteHost) {
-    this.remoteHost = remoteHost;
+        this.remoteHost = remoteHost;
     }
 
     /**
@@ -1191,6 +1221,44 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     public void setRequestURI(String requestURI)
     {
         this.requestURI = requestURI;
+    }
+
+    /**
+     * Sets the request URL to be used in this test.  This method uses
+     * the given request URL to also set the scheme, server name, server
+     * port, request URI, and query string.
+     */
+    public void setRequestURL(String url) {
+
+        // set request url
+        int queryIndex = url.lastIndexOf('?');
+        if (queryIndex < 0)
+            queryIndex = url.length();
+        this.requestURL = url.substring(0,queryIndex);
+
+        // set query string
+        if (queryIndex != url.length())
+            setQueryString(url.substring(queryIndex + 1));
+
+        // set scheme
+        int schemeIndex = url.lastIndexOf("://");
+        setScheme(url.substring(0,schemeIndex));
+
+        // set uri
+        setRequestURI(url.substring(url.indexOf('/',schemeIndex + 3),queryIndex));
+
+        // set server name and port
+        int portIndex = url.indexOf(':',schemeIndex + 2);
+        if (portIndex > 0) {
+            setServerName(url.substring(schemeIndex + 3, portIndex));
+            setServerPort(Integer.parseInt(url.substring(portIndex + 1,url.indexOf('/',schemeIndex + 3))));
+        } else {
+            setServerName(url.substring(schemeIndex + 3,url.indexOf('/',schemeIndex + 3)));
+            if (isSecure())
+                setServerPort(443);
+            else
+                setServerPort(80);
+        }
     }
 
     /**
@@ -1222,7 +1290,7 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      */
     public void setContextPath(String s)
     {
-    contextPath = s;
+        contextPath = s;
     }
 
 
@@ -1230,14 +1298,15 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * Sets the locale to be used by {@link #getLocale}.
      */
     public void setLocale(Locale locale) {
-    this.locale = locale;
+        this.locale = locale;
     }
 
     /**
      * Sets the Principal used by {@link #getUserPrincipal}.
      */
     public void setUserPrincipal(Principal principal) {
-    this.principal = principal;
+        this.principal = principal;
     }
+
 
 }
