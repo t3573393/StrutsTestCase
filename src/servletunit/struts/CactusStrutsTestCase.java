@@ -55,6 +55,8 @@ public class CactusStrutsTestCase extends ServletTestCase {
     boolean actionServletIsInitialized = false;
     boolean requestPathIsSet = false;
     String moduleName;
+    Object oldRequestProcessor;
+
 
     protected static Log logger = LogFactory.getLog(CactusStrutsTestCase.class);
 
@@ -91,6 +93,10 @@ public class CactusStrutsTestCase extends ServletTestCase {
         if (logger.isDebugEnabled())
             logger.debug("Entering setUp()");
         try {
+            // save original request processors to replace in teardown
+            String name = "org.apache.struts.action.REQUEST_PROCESSOR";
+            oldRequestProcessor = config.getServletContext().getAttribute(name);
+
             if (actionServlet == null)
                 actionServlet = new ActionServlet();
             requestWrapper = null;
@@ -109,6 +115,20 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 logger.debug("Error in setUp()",e);
             throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
         }
+    }
+
+    public void tearDown () {
+        if (logger.isTraceEnabled())
+            logger.trace("Entering");
+        new ActionServlet();
+        actionServlet = null;
+        actionServletIsInitialized = false;
+
+        // FIXME -- Do the same for all Modules
+        String name = "org.apache.struts.action.REQUEST_PROCESSOR";
+        config.getServletContext().setAttribute(name, oldRequestProcessor);
+        if (logger.isTraceEnabled())
+            logger.trace("Exiting");
     }
 
     /**

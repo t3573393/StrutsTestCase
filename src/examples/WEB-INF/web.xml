@@ -63,19 +63,19 @@
 	</welcome-file-list>
 	<!-- Struts Tag Library Descriptors -->
 	<taglib>
-		<taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
+		<taglib-uri>/tags/struts-bean</taglib-uri>
 		<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
 	</taglib>
 	<taglib>
-		<taglib-uri>/WEB-INF/struts-html.tld</taglib-uri>
+		<taglib-uri>/tags/struts-html</taglib-uri>
 		<taglib-location>/WEB-INF/struts-html.tld</taglib-location>
 	</taglib>
 	<taglib>
-		<taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
+		<taglib-uri>/tags/struts-logic</taglib-uri>
 		<taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
 	</taglib>
 	<taglib>
-		<taglib-uri>/WEB-INF/struts-form.tld</taglib-uri>
+		<taglib-uri>/tags/struts-form</taglib-uri>
 		<taglib-location>/WEB-INF/struts-form.tld</taglib-location>
 	</taglib>
 </web-app>
