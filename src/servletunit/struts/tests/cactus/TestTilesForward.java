@@ -40,7 +40,7 @@ public class TestTilesForward extends CactusStrutsTestCase {
     public void testTilesForward() {
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
-        setRequestPathInfo("/tiles/tilesForward");
+        setRequestPathInfo("tiles","/tilesForward");
         actionPerform();
         verifyForward("success");
         verifyForwardPath("/layouts/pageLayout.jsp");

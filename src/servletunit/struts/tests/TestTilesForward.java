@@ -20,6 +20,7 @@
 package servletunit.struts.tests;
 
 import servletunit.struts.MockStrutsTestCase;
+import servletunit.HttpServletRequestSimulator;
 import org.apache.struts.action.RequestProcessor;
 
 public class TestTilesForward extends MockStrutsTestCase {
@@ -42,11 +43,10 @@ public class TestTilesForward extends MockStrutsTestCase {
     public void testTilesForward() {
         addRequestParameter("username","deryl");
         addRequestParameter("password","radar");
-        setRequestPathInfo("/tiles/tilesForward");
+        setRequestPathInfo("tiles","/tilesForward.do");
         actionPerform();
         verifyForward("success");
         verifyForwardPath("/layouts/pageLayout.jsp");
-        System.out.println(getRequest().getServletPath());
     }
 
 
