@@ -323,7 +323,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      * Set to false if you do not want your test to fail if a form
      * does not pass validation.  By default, this is is set to true.
      */
-    public void setFailIfFormInvalid(boolean flag) {
+    public void setFailIfInvalid(boolean flag) {
 	this.failIfFormInvalid = flag;
     }
 
