@@ -51,6 +51,7 @@
 	    <!-- Build the Servlet 2.2 Spec version if specified -->
 	    <exclude name="**/2.2/**"/>
 	    <exclude name="**/*Token*.java" if="build_1.0"/>
+	    <exclude name="**/*Dyna*.java" if="build_1.0"/>
         </javac>
 	<antcall target="patch.restore" inheritAll="true"/>
     </target>
@@ -163,6 +164,7 @@
             <classpath refid="class.path" />
 	    <classpath>
 	       <pathelement location="${src.dir}/examples/"/>
+	       <pathelement location="${src.dir}/"/>
 	    </classpath>
             <formatter type="plain" />
 
