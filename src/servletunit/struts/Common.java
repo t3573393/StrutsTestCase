@@ -146,10 +146,11 @@ public class Common {
      * @throws AssertionFailedError if expected and actual paths do not match.
      */
     protected static void verifyForwardPath(ActionServlet actionServlet, String actionPath, String forwardName, String actualForwardPath, boolean isInputPath, HttpServletRequest request, ServletContext context, ServletConfig config) {
+
         if ((forwardName == null) && (isInputPath)) {
             forwardName = getActionConfig(actionPath,request,context).getInput();
             if (forwardName == null)
-                throw new AssertionFailedError("no input mapping defined!");
+                throw new AssertionFailedError("Trying to validate against an input mapping, but none is defined for this Action.");
         }
         if (!isInputPath) {
             ActionForward expectedForward = findForward(actionPath,forwardName,request,context);
@@ -164,6 +165,9 @@ public class Common {
                 forwardName = tilesForward;
         }
         forwardName = request.getContextPath() + forwardName;
+        if (actualForwardPath == null) {
+            throw new AssertionFailedError("Was expecting '" + forwardName + "' but it appears the Action has tried to return an ActionForward that is not mapped correctly.");
+        }
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
     }
