@@ -71,7 +71,7 @@ There are several things we can test here:
 <br>
 StrutsTestCase gives you the ability to test all of these conditions within the familiar JUnit framework.  All of the Struts setup -- which really amounts to starting up the ActionServlet -- is taken care of for you.
 <br><br>
-So, how do actually do it?  Let's start by creating an empty test case, which we extend from the base StrutsTestCase class:
+So, how do we actually do it?  Let's start by creating an empty test case, which we extend from the base StrutsTestCase class:
 <br>
 <br>
 <table bgcolor="#FEEACB" cellspacing="2" cellpadding="2" align="center" border="0">
@@ -244,14 +244,14 @@ public void testFailedLogin() {
 </tr>
 </table>
 <br>
-Now, this look quite similar to our first test case, except that we're passing incorrect
+Now, this looks quite similar to our first test case, except that we're passing incorrect
 information.  Also, we're checking to make sure we used a different forward, namely one
 that takes us back to the login page, and that the authentication information is <i>not</i>
 on the session.
 <br><br> We're also verifying that the correct error messages
 were sent.  Note that we used the symbolic name, not the actual text.  Because the 
 <code>verifyActionErrors()</code> method takes a String array, we can verify more than
-one error messages, and StrutsTestCase will make sure there is an exact match.  If the test
+one error message, and StrutsTestCase will make sure there is an exact match.  If the test
 produced more error messages than we were expecting, it will fail; if it produced fewer, it
 will also fail.  Only an exact match in name and number will pass.  
 <br><br>
