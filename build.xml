@@ -147,7 +147,7 @@
 
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
-                    <include name="**/examples/cactus/Test*.class" />
+                    <include name="**/cactus/**/Test*.class" />
                 </fileset>
             </batchtest>
         </junit>
