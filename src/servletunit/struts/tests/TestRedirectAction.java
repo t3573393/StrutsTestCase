@@ -36,10 +36,11 @@ public class TestRedirectAction extends MockStrutsTestCase {
     public void testVerifyRedirect() {
         setRequestPathInfo("/testRedirect");
         actionPerform();
-    verifyForward("redirect");
+	verifyForward("redirect");
+	verifyForwardPath("http://www.yahoo.com");
         verifyNoActionErrors();
     }
-
+    
     /**
      * Confirms verifyForward works correctly when the redirect path
      * is a relative (not absolute) URL
@@ -47,21 +48,22 @@ public class TestRedirectAction extends MockStrutsTestCase {
     public void testRelativeRedirect() {
         setRequestPathInfo("/testRelativeRedirect");
         actionPerform();
-    verifyForward("redirect");
+	verifyForward("redirect");
+	verifyForwardPath("/main/success.jsp");
         verifyNoActionErrors();
     }
 
     public void testVerifyRedirectFail() {
-    try {
-        setRequestPathInfo("/testRedirect");
-        actionPerform();
-        verifyForward("login");
-        verifyNoActionErrors();
-    } catch (AssertionFailedError e) {
-        return;
+	try {
+	    setRequestPathInfo("/testRedirect");
+	    actionPerform();
+	    verifyForward("login");
+	    verifyNoActionErrors();
+	} catch (AssertionFailedError e) {
+	    return;
+	}
+	fail("We are apparently getting the same redirects, when they should be different.");
     }
-    fail("We are apparently getting the same redirects, when they should be different.");
-    }
-
+    
 
 }

@@ -35,7 +35,21 @@ public class TestRedirectAction extends CactusStrutsTestCase {
         setRequestPathInfo("/testRedirect");
         actionPerform();
 	verifyForward("redirect");
+	verifyForwardPath("http://www.yahoo.com");
         verifyNoActionErrors();
     }
+    
+    /**
+     * Confirms verifyForward works correctly when the redirect path
+     * is a relative (not absolute) URL
+     */
+    public void testRelativeRedirect() {
+        setRequestPathInfo("/testRelativeRedirect");
+        actionPerform();
+	// in a servlet engine, this will have the context prepended
+	verifyForwardPath("/test/main/success.jsp");
+        verifyNoActionErrors();
+    }
+    
     
 }
