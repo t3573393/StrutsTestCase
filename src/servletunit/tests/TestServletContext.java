@@ -161,6 +161,20 @@ public class TestServletContext extends TestCase {
         assertTrue("resource was not found", file.exists());
     }
 
+    /**
+     * verifies that web.xml can be loaded
+     * using the filesystem.  Assumes test is being run from
+     * the strutstestcase project root directory
+     * and that WEB-INF is in src/examples
+     * this is necessary because the other tests could be "fooled"
+     * by a file that was actually loaded by the classloader.
+     */
+    public void testGetResourceAsFileFromFileSystemWithRelativePath(){
+        File file = context.getResourceAsFile("/src/examples/WEB-INF/web.xml");
+        assertNotNull("resource was not found", file);
+        assertTrue("resource was not found", file.exists());
+    }
+
 
 
 
