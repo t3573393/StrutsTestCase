@@ -101,6 +101,13 @@ public class StrutsRequestWrapper extends HttpServletRequestWrapper {
             parameters.put(name,values);
     }
 
+    public Map getParameterMap() {
+        Map result = new HashMap();
+        result.putAll(super.getParameterMap());
+        result.putAll(parameters);
+        return result;
+    }
+
     public void clearRequestParameters() {
         this.parameters.clear();
 //        super.request.getParameterMap().clear();

@@ -1,7 +1,8 @@
 package servletunit.struts.tests.cactus;
 
-import servletunit.struts.MockStrutsTestCase;
 import servletunit.struts.CactusStrutsTestCase;
+
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,5 +25,13 @@ public class TestClearParameters extends CactusStrutsTestCase {
         clearRequestParameters();
         assertNull(getRequest().getParameter("foo"));
         assertNull(getRequest().getParameter("hi"));
+    }
+
+    public void testGetParameterMap() {
+        addRequestParameter("foo","bar");
+        assertEquals("bar",getRequest().getParameter("foo"));
+        Map parameterMap = getRequest().getParameterMap();
+        assertNotNull(parameterMap);
+        assertEquals("bar",parameterMap.get("foo"));
     }
 }
