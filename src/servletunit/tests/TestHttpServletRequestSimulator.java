@@ -22,6 +22,7 @@ import servletunit.ServletContextSimulator;
 
 import java.util.Enumeration;
 import java.util.Locale;
+import java.io.File;
 
 /**
  * A Junit based test of the HttpServletResponseSimulator class
@@ -32,13 +33,15 @@ import java.util.Locale;
 public class TestHttpServletRequestSimulator extends TestCase {
 
     HttpServletRequestSimulator request;
+    ServletContextSimulator context;
 
     public TestHttpServletRequestSimulator(String testCase) {
         super(testCase);
     }
 
     public void setUp() {
-	request = new HttpServletRequestSimulator(new ServletContextSimulator());
+        context = new ServletContextSimulator();
+        request = new HttpServletRequestSimulator(context);
     }
 
     public void testAddParameterArray() {
@@ -149,6 +152,16 @@ public class TestHttpServletRequestSimulator extends TestCase {
     public void testGetDateHeader() {
         request.setHeader("DATE_HEADER","05/23/73 8:05 PM, PDT");
         assertEquals(107049900000L,request.getDateHeader("DATE_HEADER"));
+    }
+
+     public void testGetRealPath() {
+         File file = new File("c:/develop/projects/strutstestcase");
+         context.setContextDirectory(new File("c:/develop/projects/strutstestcase"));
+         assertEquals(new File(file,"test.html").getAbsolutePath(),request.getRealPath("/test.html"));
+     }
+
+    public void testGetRealPathNotSet() {
+        assertNull(request.getRealPath("/test.html"));
     }
 
 

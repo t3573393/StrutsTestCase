@@ -42,6 +42,7 @@ public class ServletContextSimulator implements ServletContext
     private Hashtable attributes;
     private RequestDispatcherSimulator dispatcher = null;
     private static Log logger = LogFactory.getLog( ServletContextSimulator.class );
+    private File contextDirectory;
 
     public ServletContextSimulator() {
         this.initParameters = new Hashtable();
@@ -205,12 +206,12 @@ public class ServletContextSimulator implements ServletContext
         throw new UnsupportedOperationException("getNamedDispatcher operation is not supported!");
     }
 
-    /**
-     * Unsupported in this version.
-     */
     public String getRealPath(String path)
     {
-        throw new UnsupportedOperationException("getRealPath operation is not supported!");
+        if ((contextDirectory == null) || (path == null))
+            return null;
+        else
+            return (new File(contextDirectory, path)).getAbsolutePath();
     }
 
     /**
@@ -346,7 +347,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public String getServerInfo()
     {
-        return "MockServletEngine/1.5";
+        return "MockServletEngine/1.9.1";
     }
 
     /**
@@ -393,7 +394,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public void log(Exception exception, String msg)
     {
-	logger.info(msg + "\n" + exception.getClass() + " - " + exception.getMessage());
+        logger.info(msg + "\n" + exception.getClass() + " - " + exception.getMessage());
     }
 
     /**
@@ -410,7 +411,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public void log(String msg)
     {
-	logger.info(msg);
+        logger.info(msg);
     }
 
     /**
@@ -429,7 +430,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public void log(String message, Throwable throwable)
     {
-	logger.info(message + "\n" + throwable.getClass() + " - " + throwable.getMessage());
+        logger.info(message + "\n" + throwable.getClass() + " - " + throwable.getMessage());
     }
 
     /**
@@ -488,6 +489,18 @@ public class ServletContextSimulator implements ServletContext
      */
     public Set getResourcePaths(String path) {
         throw new UnsupportedOperationException("getResourcePaths operation is not supported!");
+    }
+
+    /**
+     * Sets the absolute context directory to be used in the getRealPath() method.
+     * @param contextDirectory the absolute path of the root context directory for this application.
+     */
+    public void setContextDirectory(File contextDirectory) {
+        this.contextDirectory = contextDirectory;
+    }
+
+    public File getContextDirectory() {
+        return contextDirectory;
     }
 
 

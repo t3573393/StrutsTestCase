@@ -29,6 +29,7 @@ import servletunit.ServletContextSimulator;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.InputStream;
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -328,8 +329,20 @@ public class MockStrutsTestCase extends TestCase {
      * @param value the value of the intialization parameter
      */
     public void setInitParameter(String key, String value){
+        init();
         config.setInitParameter(key, value);
         actionServletIsInitialized = false;
+    }
+
+    /**
+     * Sets the context directory to be used with the getRealPath() methods in
+     * the ServletContext and HttpServletRequest API.
+     * @param contextDirectory a File object representing the root context directory
+     * for this application.
+     */
+    public void setContextDirectory(File contextDirectory) {
+        init();
+        context.setContextDirectory(contextDirectory);
     }
 
     /**

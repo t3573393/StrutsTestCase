@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.File;
 import java.security.Principal;
 import java.util.*;
 import java.text.SimpleDateFormat;
@@ -56,7 +57,6 @@ public class HttpServletRequestSimulator implements HttpServletRequest
     String charEncoding;
     private String serverName;
     private int port;
-
 
     private Hashtable parameters;
     private Hashtable headers;
@@ -672,12 +672,14 @@ public class HttpServletRequestSimulator implements HttpServletRequest
      * @deprecated 	As of Version 2.1 of the Java Servlet API,
      * 			use {@link ServletContext#getRealPath} instead.
      *
-     * This operation is not supported.
-     *
      */
-    public String getRealPath(String s)
+    public String getRealPath(String path)
     {
-        throw new UnsupportedOperationException("getRealPath operation is not supported.");
+        File contextDirectory = ((ServletContextSimulator) context).getContextDirectory();
+        if ((contextDirectory == null) || (path == null))
+            return null;
+        else
+            return (new File(contextDirectory, path)).getAbsolutePath();
     }
 
     /**

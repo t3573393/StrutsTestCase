@@ -17,24 +17,34 @@
 
 package servletunit.struts.tests;
 
-import junit.framework.TestCase;
 import servletunit.struts.MockStrutsTestCase;
+
+import java.io.File;
 
 /**
  * A Junit test of the MockStrutsTestCase
  * @author Sean Pritchard
  */
 
-public class TestMockStrutsTestCase extends TestCase {
+public class TestMockStrutsTestCase extends MockStrutsTestCase {
 
     public TestMockStrutsTestCase(String testCase) {
         super(testCase);
     }
 
     public void testSetInitParameter() throws Exception{
-        MockStrutsTestCase mock = new MockStrutsTestCase("");
-        mock.setUp();
-        mock.setInitParameter("testName", "testValue");
-        assertEquals("testValue", mock.getActionServlet().getInitParameter("testName"));
+        setInitParameter("testName", "testValue");
+        assertEquals("testValue", getActionServlet().getInitParameter("testName"));
     }
+
+    public void testSetContextDirectory() {
+        File file = new File("c:/develop/projects/strutstestcase");
+        setContextDirectory(file);
+        assertEquals(new File(file,"test.html").getAbsolutePath(),getRequest().getRealPath("/test.html"));
+    }
+
+    public void testGetRealPathNotSet() {
+        assertNull(getRequest().getRealPath("/test.html"));
+    }
+
 }
