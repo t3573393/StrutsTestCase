@@ -347,7 +347,7 @@ public class ServletContextSimulator implements ServletContext
      */
     public String getServerInfo()
     {
-        return "MockServletEngine/1.9.1";
+        return "MockServletEngine/1.9.5";
     }
 
     /**
