@@ -17,6 +17,7 @@
 package servletunit.struts.tests;
 
 import servletunit.struts.MockStrutsTestCase;
+import examples.LoginForm;
 
 public class TestSetActionForm extends MockStrutsTestCase {
 
@@ -29,18 +30,28 @@ public class TestSetActionForm extends MockStrutsTestCase {
         setServletConfigFile("/WEB-INF/web.xml");
     }
 
-    // todo: this does not seem to work in sub-modules.
+    public void testNonModuleSetActionForm() {
+        LoginForm form = new LoginForm();
+        form.setUsername("deryl");
+        form.setPassword("radar");
+        setRequestPathInfo("/login");
+        setActionForm(form);
+        actionPerform();
+        verifyNoActionErrors();
+        verifyForward("success");
+        verifyForwardPath("/main/success.jsp");
+    }
 
     public void testSetActionForm() {
         ComplexForm form = new ComplexForm();
         form.setUsername("deryl");
         form.setPassword("radar");
         form.setComplexObject(new Object());
-        setRequestPathInfo("/testSetActionForm");
+        setRequestPathInfo("test","/testSetActionForm");
         setActionForm(form);
         actionPerform();
         verifyForward("success");
-        verifyForwardPath("/main/success.jsp");
+        verifyForwardPath("/test/main/success.jsp");
         verifyNoActionErrors();
     }
 
@@ -49,7 +60,7 @@ public class TestSetActionForm extends MockStrutsTestCase {
         form.setUsername("deryl");
         form.setPassword("radar");
         form.setComplexObject(new Object());
-        setRequestPathInfo("/testSetActionForm");
+        setRequestPathInfo("test","/testSetActionForm");
         addRequestParameter("test.reset","true");
         setActionForm(form);
         actionPerform();

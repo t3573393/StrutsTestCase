@@ -41,11 +41,6 @@ public class LoginForm extends ActionForm {
         this.password = password;
     }
 
-    public void reset(ActionMapping mapping, HttpServletRequest request) {
-        this.password = null;
-        this.username = null;
-    }
-
     public ActionErrors validate(ActionMapping mapping,
                                  HttpServletRequest request) {
         ActionErrors errors = new ActionErrors();

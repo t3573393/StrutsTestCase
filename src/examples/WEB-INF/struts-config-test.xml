@@ -13,6 +13,7 @@
         </form-bean>
         <form-bean name="complexForm" type="servletunit.struts.tests.ComplexForm"/>
         <form-bean name="nullPointerForm" type="servletunit.struts.tests.NullPointerForm"/>
+        <form-bean name="complexForm" type="servletunit.struts.tests.ComplexForm"/>
     </form-beans>
     <!-- ========== Global Forward Definitions ============================== -->
     <global-forwards>
@@ -25,6 +26,7 @@
     <action-mappings>
         <!-- The following mappings are for internal testing -->
         <!-- only, and can be safely ignored.                -->
+        <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request"/>
         <action path="/testMessage" type="servletunit.struts.tests.MessageResourceAction" input="/login/login.jsp" scope="request"/>
         <action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
         <action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request" />

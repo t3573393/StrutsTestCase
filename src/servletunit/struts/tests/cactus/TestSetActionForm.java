@@ -18,6 +18,7 @@ package servletunit.struts.tests.cactus;
 
 import servletunit.struts.CactusStrutsTestCase;
 import servletunit.struts.tests.ComplexForm;
+import examples.LoginForm;
 
 public class TestSetActionForm extends CactusStrutsTestCase {
 
@@ -25,16 +26,28 @@ public class TestSetActionForm extends CactusStrutsTestCase {
         super(testName);
     }
 
+    public void testNonModuleSetActionForm() {
+        LoginForm form = new LoginForm();
+        form.setUsername("deryl");
+        form.setPassword("radar");
+        setRequestPathInfo("/login");
+        setActionForm(form);
+        actionPerform();
+        verifyNoActionErrors();
+        verifyForward("success");
+        verifyForwardPath("/main/success.jsp");
+    }
+
     public void testSetActionForm() {
         ComplexForm form = new ComplexForm();
         form.setUsername("deryl");
         form.setPassword("radar");
         form.setComplexObject(new Object());
-        setRequestPathInfo("/testSetActionForm");
+        setRequestPathInfo("test","/testSetActionForm");
         setActionForm(form);
         actionPerform();
         verifyForward("success");
-        verifyForwardPath("/main/success.jsp");
+        verifyForwardPath("/test/main/success.jsp");
         verifyNoActionErrors();
     }
 
@@ -43,7 +56,7 @@ public class TestSetActionForm extends CactusStrutsTestCase {
         form.setUsername("deryl");
         form.setPassword("radar");
         form.setComplexObject(new Object());
-        setRequestPathInfo("/testSetActionForm");
+        setRequestPathInfo("test","/testSetActionForm");
         addRequestParameter("test.reset","true");
         setActionForm(form);
         actionPerform();

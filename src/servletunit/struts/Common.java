@@ -23,6 +23,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.config.ActionConfig;
 import org.apache.struts.Globals;
+import org.apache.struts.util.RequestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.collections.Transformer;
@@ -484,7 +485,13 @@ public class Common {
 
         if (actionPath == null || actionPath.equalsIgnoreCase(""))
             throw new IllegalStateException("You must call setRequestPathInfo() before calling setActionForm()!");
+
         ActionConfig actionConfig = getActionConfig(actionPath, request, context);
+        if (actionConfig == null) {
+            RequestUtils.selectModule(request,context);
+            actionConfig = getActionConfig(actionPath, request, context);
+        }
+
         if (actionConfig.getScope().equals("request"))  {
             if (logger.isDebugEnabled()) {
                 logger.debug("setActionForm() : setting form in request context");

@@ -3,8 +3,6 @@
     <!-- ========== Form Bean Definitions =================================== -->
     <form-beans>
         <form-bean name="loginForm" type="examples.LoginForm"/>
-        <!-- todo: move this to test module -->
-        <form-bean name="complexForm" type="servletunit.struts.tests.ComplexForm"/>
     </form-beans>
     <!-- ========== Global Forward Definitions ============================== -->
     <global-forwards>
@@ -15,7 +13,5 @@
     <action-mappings>
         <!-- Process a user logon -->
         <action path="/login" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request" />
-        <!-- todo: move this to test module -->
-        <action path="/testSetActionForm" type="servletunit.struts.tests.ComplexFormAction" name="complexForm" scope="request"/>
     </action-mappings>
 </struts-config>
