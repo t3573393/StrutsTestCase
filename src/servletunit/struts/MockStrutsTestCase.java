@@ -393,7 +393,7 @@ public class MockStrutsTestCase extends TestCase {
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
     init();
     RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
-    if (!dispatcher.getForward().equals(forwardPath))
+    if (!Common.stripJSessionID(dispatcher.getForward()).equals(forwardPath))
         throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + dispatcher.getForward() + "'");
     }
 

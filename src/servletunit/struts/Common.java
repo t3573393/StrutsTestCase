@@ -97,19 +97,42 @@ public class Common {
                 throw new AssertionFailedError("cannot find forward '" + forwardName + "'");
             forwardName = expectedForward.getPath();
         }
-        if (!forwardName.equals(actualForwardPath))
+        if (!forwardName.equals(stripJSessionID(actualForwardPath)))
             throw new AssertionFailedError("was expecting '" + forwardName + "' but received '" + actualForwardPath + "'");
     }
 
     /**
      * Strips off *.do from action paths specified as such.
      */
-    public static String stripActionPath(String path) {
+    protected static String stripActionPath(String path) {
+	if (path == null)
+	    return null;
+	
         int slash = path.lastIndexOf("/");
         int period = path.lastIndexOf(".");
         if ((period >= 0) && (period > slash))
             path = path.substring(0, period);
         return path;
     }
+    
+    /**
+     * Strip ;jsessionid=<sessionid> from path.
+     * @return stripped path
+     */
+    protected static String stripJSessionID(String path)
+    {
+         if (path == null)
+             return null;
+	 
+         int jsess_idx = path.indexOf(";jsessionid=");
+         if (jsess_idx > 0)
+	     {
+		 // Strip jsessionid from obtained path
+		 StringBuffer buf = new StringBuffer(path);
+		 path = buf.delete(jsess_idx, jsess_idx + 44).toString();
+	     }
+         return path;
+      }
+  
 
 }

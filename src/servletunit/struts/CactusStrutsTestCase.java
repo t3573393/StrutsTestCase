@@ -384,6 +384,15 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getMessage());
             }
 
+            // Store the newly created bean in the appropriate scope
+	    String scope = mapping.getScope();
+	    String attribute = mapping.getAttribute();
+            if ("request".equals(scope))
+                getRequest().setAttribute(attribute, form);
+            else if ("session".equals(scope))
+                getSession().setAttribute(attribute, form);
+
+
             if (mapping.getValidate()) {
                 ActionErrors errors = form.validate(mapping,request);
                 if ((errors != null) && (!errors.empty())) {
@@ -471,7 +480,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
      */
     public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
 	init();
-	if (!forward.getPath().equals(forwardPath))
+	if (!Common.stripJSessionID(forward.getPath()).equals(forwardPath))
 	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + forward.getPath() + "'");
     }
 
