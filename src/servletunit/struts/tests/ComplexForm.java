@@ -45,5 +45,14 @@ public class ComplexForm extends ActionForm {
         this.complexObject = complexObject;
     }
 
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        String testFlag = request.getParameter("test.reset");
+        if ((testFlag != null) && (testFlag.equals("true"))) {
+            this.setComplexObject(null);
+            this.setPassword(null);
+            this.setUsername(null);
+        }
+    }
+
 
 }

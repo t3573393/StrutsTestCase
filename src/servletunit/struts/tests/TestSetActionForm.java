@@ -37,6 +37,20 @@ public class TestSetActionForm extends MockStrutsTestCase {
         verifyNoActionErrors();
     }
 
+    public void testFormReset() {
+        ComplexForm form = new ComplexForm();
+        form.setUsername("deryl");
+        form.setPassword("radar");
+        form.setComplexObject(new Object());
+        setRequestPathInfo("/testSetActionForm");
+        addRequestParameter("test.reset","true");
+        setActionForm(form);
+        actionPerform();
+        verifyForward("login");
+        verifyForwardPath("/login/login.jsp");
+        verifyActionErrors(new String[] {"error.password.mismatch"});
+    }
+
     public static void main(String[] args) {
         junit.textui.TestRunner.run(TestSetActionForm.class);
     }
