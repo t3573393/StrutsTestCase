@@ -37,16 +37,30 @@
 
     <!-- ====================== Build Targets ====================== -->
 
+    <!-- intialize build -->
+    <target name="init">
+        <condition property="servlet.version" value="2.2">
+            <isset property="build_2.2"/>
+        </condition>
+        <condition property="struts.version" value="1.0">
+            <isset property="build_1.0"/>
+        </condition>
+        <condition property="servlet.version" value="2.3">
+            <not>
+                <isset property="build_2.2"/>
+            </not>
+        </condition>
+        <condition property="struts.version" value="1.1">
+            <not>
+                <isset property="build_1.0"/>
+            </not>
+        </condition>
+    </target>
 
     <!-- Compile the application classes -->
-    <target name="build" description="compile all Java classes">
+    <target name="build" depends="init" description="compile all Java classes">
         <mkdir dir="${build.dir}" />
-        <condition property="build_1.0_2.2">
-            <and>
-                <isset property="build_1.0"/>
-                <isset property="build_2.2"/>
-            </and>
-        </condition>
+
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
             deprecation="${comp.deprecate}"
@@ -56,22 +70,7 @@
             depend="${comp.depend}">
             <classpath refid="class.path" />
             <include name="**/*.java" />
-            <!-- Build the Servlet 2.2 or Struts 1.0.2 version if specified -->
-            <exclude name="**/1_0/**" unless="build_1.0"/>
-            <exclude name="**/struts/Common.java" if="build_1.0"/>
-            <exclude name="**/struts/CactusStrutsTestCase.java" if="build_1.0" />
-            <exclude name="**/struts/MockStrutsTestCase.java" if="build_1.0" />
-            <exclude name="**/*Token*.java" if="build_1.0"/>
-            <exclude name="**/*Dyna*.java" if="build_1.0"/>
-            <exclude name="**/*Tiles*.java" if="build_1.0"/>
-            <exclude name="**/tests/**/MessageAction.java" if="build_1.0" />
-            <exclude name="**/tests/**/TestMessageAction.java" if="build_1.0" />
-
-            <exclude name="**/2_2/**" unless="build_2.2"/>
-            <exclude name="**/struts/CactusStrutsTestCase.java" if="build_2.2"/>
-            <exclude name="**/struts/MockStrutsTestCase.java" if="build_2.2"/>
-            <exclude name="**/struts/StrutsResponseWrapper.java" if="build_2.2"/>
-            <exclude name="**/Filter*.java" if="build_2.2"/>
+            <excludesfile name="excludes-${struts.version}-${servlet.version}"/>
         </javac>
     </target>
 
@@ -107,25 +106,23 @@
     </target>
 
     <!-- prepare code for public release -->
-    <target name="release" depends="package,docs">
-        <!-- property name="servlet.version" value="2.3"/>
-        <property name="struts.version" value="1.1"/ -->
-        <condition property="servlet.version" value="2.2">
-            <isset property="build_2.2"/>
-        </condition>
-        <condition property="struts.version" value="1.0">
-            <isset property="build_1.0"/>
-        </condition>
-        <condition property="servlet.version" value="2.3">
-            <not>
-                <isset property="build_2.2"/>
-            </not>
-        </condition>
-        <condition property="struts.version" value="1.1">
-            <not>
-                <isset property="build_1.0"/>
-            </not>
-        </condition>
+    <target name="release" depends="init,package,docs">
+<!--        <condition property="servlet.version" value="2.2">-->
+<!--            <isset property="build_2.2"/>-->
+<!--        </condition>-->
+<!--        <condition property="struts.version" value="1.0">-->
+<!--            <isset property="build_1.0"/>-->
+<!--        </condition>-->
+<!--        <condition property="servlet.version" value="2.3">-->
+<!--            <not>-->
+<!--                <isset property="build_2.2"/>-->
+<!--            </not>-->
+<!--        </condition>-->
+<!--        <condition property="struts.version" value="1.1">-->
+<!--            <not>-->
+<!--                <isset property="build_1.0"/>-->
+<!--            </not>-->
+<!--        </condition>-->
         <echo message="creating release for servlet v${servlet.version} and struts v${struts.version}.."/>
         <zip zipFile="${basedir}/strutstest-${struts.version}_${servlet.version}.zip" basedir="${basedir}/dist"/>
     </target>
@@ -238,7 +235,7 @@
             verbose="false"/>
         <unzip src="${temp.dir}/jakarta-struts-nightly.zip" dest="${temp.dir}"/>
         <copy file="${temp.dir}/jakarta-struts/lib/struts.jar" tofile="${lib.dir}/struts-1.1.jar" overwrite="true"/>
-        <!--<delete dir="${temp.dir}"/>-->
+        <delete dir="${temp.dir}"/>
     </target>
 
     <!-- Run all the build targets -->
