@@ -111,7 +111,7 @@
 	<copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
 	<copy file="${basedir}/faq.htm" toDir="${doc.dir}"/>
 	<copy file="${basedir}/LICENSE.TXT" toDir="${distribute.dir}"/>
-	<copy file="${basedir}/release.txt" toDir="${distribute.dir}"/>
+	<copy file="${basedir}/README.TXT" toDir="${distribute.dir}"/>
 	<mkdir dir="${distribute.dir}/examples" />
 	<copy todir="${distribute.dir}/examples" >
 	     <fileset dir="${src.dir}/examples"/>
