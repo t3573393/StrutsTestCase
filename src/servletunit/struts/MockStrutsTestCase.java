@@ -34,7 +34,9 @@ import servletunit.RequestDispatcherSimulator;
 import java.util.Iterator;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 
@@ -61,6 +63,8 @@ public class MockStrutsTestCase extends TestCase {
     ActionServlet actionServlet;
     HttpServletRequestSimulator request;
     HttpServletResponseSimulator response;
+    HttpServletRequestWrapper requestWrapper;
+    HttpServletResponseWrapper responseWrapper;
     ServletContextSimulator context;
     ServletConfigSimulator config;
     String actionPath;
@@ -77,9 +81,13 @@ public class MockStrutsTestCase extends TestCase {
      * and instance of the ActionServlet, initializes it to validate
      * forms and turn off debugging, and creates a mock HttpServletRequest
      * and HttpServletResponse object to use in this test.
+     * <p>
+     * Please note that this method performs some important initialization
+     * calls, and <b>must</b> be called if this method is overridden in a
+     * subclass.
      */
-    public void setUp() {
-        try {
+    public void setUp() throws Exception {
+	try {
 	    if (actionServlet == null)
 		actionServlet = new ActionServlet();
             config = new ServletConfigSimulator();
@@ -88,6 +96,8 @@ public class MockStrutsTestCase extends TestCase {
             config.setInitParameter("validate","true");
             request = new HttpServletRequestSimulator();
             response = new HttpServletResponseSimulator();
+	    requestWrapper = null;
+	    responseWrapper = null;
         } catch (Exception e) {
             throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
         }
@@ -96,8 +106,12 @@ public class MockStrutsTestCase extends TestCase {
     /**
      * Tears down the test fixture upon completion.  This method calls
      * the destroy method on the ActionServlet method used in this test.
+     * <p>
+     * Please note that this method calls the destroy method on the
+     * ActionServlet method used in this test, and <b>must</b> be called
+     * if this method is overridden in a subclass.
      */
-    public void tearDown() {
+    public void tearDown() throws Exception {
         try {
             actionServlet.destroy();
         } catch (Exception e) {
@@ -113,12 +127,74 @@ public class MockStrutsTestCase extends TestCase {
         return this.request;
     }
 
+     /**
+     * Returns a HttpServletRequestWrapper object that can be used
+     * in this test. Note that if {@link #setRequestWrapper} has not been
+     * called, this method will return an instance of 
+     * javax.servlet.http.HttpServletRequestWrapper.
+     */
+    public HttpServletRequestWrapper getRequestWrapper() {
+	if (requestWrapper == null)
+	    return new HttpServletRequestWrapper(this.request);
+	else
+	    return requestWrapper;
+    }
+
+    /**
+     * Set this TestCase to use a given HttpServletRequestWrapper
+     * class when calling Action.perform().  Note that if this
+     * method is not called, then the normal HttpServletRequest
+     * object is used.
+     *
+     * @param wrapper an HttpServletRequestWrapper object to be
+     * used when calling Action.perform().
+     */
+    public void setRequestWrapper(HttpServletRequestWrapper wrapper) {
+	if (wrapper == null)
+	    throw new IllegalArgumentException("wrapper class cannot be null!");
+	else {
+	    wrapper.setRequest(this.request);
+	    this.requestWrapper = wrapper;
+	}
+    }
+
     /**
      * Returns an HttpServletResponse object that can be used in
      * this test.
      */
     public HttpServletResponse getResponse() {
         return this.response;
+    }
+
+    /**
+     * Returns an HttpServletResponseWrapper object that can be used in
+     * this test.  Note that if {@link #setResponseWrapper} has not been
+     * called, this method will return an instance of 
+     * javax.servlet.http.HttpServletResponseWrapper.
+     */
+    public HttpServletResponseWrapper getResponseWrapper() {
+	if (responseWrapper == null)
+	    return new HttpServletResponseWrapper(this.response);
+	else
+	    return responseWrapper;
+    }
+
+    /**
+     * Set this TestCase to use a given HttpServletResponseWrapper
+     * class when calling Action.perform().  Note that if this
+     * method is not called, then the normal HttpServletResponse
+     * object is used.
+     *
+     * @param wrapper an HttpServletResponseWrapper object to be
+     * used when calling Action.perform().
+     */
+    public void setResponseWrapper(HttpServletResponseWrapper wrapper) {
+	if (wrapper == null)
+	    throw new IllegalArgumentException("wrapper class cannot be null!");
+	else {
+	    wrapper.setResponse(this.response);
+	    this.responseWrapper = wrapper;
+	}
     }
 
     /**
@@ -167,8 +243,15 @@ public class MockStrutsTestCase extends TestCase {
      *
      */
     public void actionPerform() {
+	HttpServletRequest request = this.request;
+	HttpServletResponse response = this.response;
+	if (this.requestWrapper != null)
+	    request = this.requestWrapper;
+	if (this.responseWrapper != null)
+	    response = this.responseWrapper;
+	
         try {
-            this.getActionServlet().doPost(request,response);
+	    this.getActionServlet().doPost(request,response);
         } catch (ServletException e) {
             throw new AssertionFailedError("ServletException: " + e.getMessage());
         } catch (IOException e) {
@@ -237,6 +320,23 @@ public class MockStrutsTestCase extends TestCase {
     public void verifyForward(String forwardName) throws AssertionFailedError {
         RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
         Common.verifyForwardPath(actionServlet,actionPath,forwardName,dispatcher.getForward(),false);
+    }
+
+    /**
+     * Verifies if the ActionServlet controller used this actual path
+     * as a forward.
+     *
+     * @param forwardPath an absolute pathname to which the request
+     * is to be forwarded.
+     * 
+     * @exception AssertionFailedError if the ActionServlet controller
+     * used a different forward path than <code>forwardPath</code> after
+     * executing an Action object.
+     */
+    public void verifyForwardPath(String forwardPath) throws AssertionFailedError {
+	RequestDispatcherSimulator dispatcher = ((ServletContextSimulator) config.getServletContext()).getRequestDispatcherSimulator();
+	if (!dispatcher.getForward().equals(forwardPath))
+	    throw new AssertionFailedError("was expecting '" + forwardPath + "' but received '" + dispatcher.getForward() + "'");
     }
 
     /**
