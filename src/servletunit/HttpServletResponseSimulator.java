@@ -159,7 +159,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void addDateHeader(String name, long date)
     {
-	throw new UnsupportedOperationException("addDateHeader operation is not supported!");
+	this.headers.put(name,new Long(date).toString());
     }
     
     /**
@@ -494,7 +494,7 @@ public class HttpServletResponseSimulator implements HttpServletResponse
      */
     public void setDateHeader(String name, long date)
     {
-	throw new UnsupportedOperationException("setDateHeader operation not supported.");
+	this.addDateHeader(name,date);
     }
 
     /**
