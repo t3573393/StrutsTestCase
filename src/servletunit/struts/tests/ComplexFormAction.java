@@ -35,7 +35,15 @@ public class ComplexFormAction extends Action {
                                  HttpServletResponse response) {
 
         ComplexForm complexForm = (ComplexForm) form;
+
+        String username = complexForm.getUsername();
+        String password = complexForm.getPassword();
+
         ActionErrors errors = new ActionErrors();
+
+        if ((!username.equals("deryl")) || (!password.equals("radar")))
+            errors.add("password",new ActionError("error.password.mismatch"));
+
         if (complexForm.getComplexObject() == null) {
             errors.add("password",new ActionError("error.password.mismatch"));
         }
