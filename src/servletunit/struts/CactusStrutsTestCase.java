@@ -102,7 +102,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
 	    responseWrapper = null;
 	    isInitialized = true;
 	} catch (Exception e) {
-	    throw new AssertionFailedError("\n" + e.getClass() + " - " + e.getMessage());
+	    throw new AssertionFailedError("Error trying to set up test fixture: " + e.getClass() + " - " + e.getMessage());
 	}
     }
 
@@ -368,7 +368,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
                 }
                 BeanUtils.populate(form,parameters);
             } catch (Exception e) {
-                throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getMessage());
+                throw new AssertionFailedError("Error trying to set up ActionForm: " + e.getClass() + " - " + e.getMessage());
             }
 
             // Store the newly created bean in the appropriate scope
@@ -418,7 +418,7 @@ public class CactusStrutsTestCase extends ServletTestCase {
             action = (Action) Class.forName(mapping.getType()).newInstance();
             action.setServlet(actionServlet);
         } catch (Exception e) {
-            throw new AssertionFailedError("Error trying to set up Action: " + e.getMessage());
+            throw new AssertionFailedError("Error trying to set up Action: " + e.getClass() + " - " + e.getMessage());
         }
 
         try {
