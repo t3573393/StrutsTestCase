@@ -19,6 +19,8 @@
 <li> <a href="#8">Can I access the ActionForm for my test before and after the Action is executed?</a>
 <li> <a href="#9">When I use <tt>setActionForm()</tt>, why are the form attributes I set not showing up in my Action class?   </a>
 <li> <a href="#11">How can I test uploading a file using StrutsTestCase?</a>
+<li> <a href="#12">Why does my test stop executing before the ActionForward is processed?</a>
+<li> <a href="#13">Can I test multiple Actions in the same test method?</a>
 </ul>
 
 <h3 id=10>Is there a discussion group for StrutsTestCase?</h3>
@@ -89,6 +91,15 @@ in your ActionForm instance will replace whatever you set in your test method.
 <h3 id=11>How can I test uploading a file using StrutsTestCase?</h3>
 This is a tricky operation to test, but at least one enterprising user has found <a href="https://sourceforge.net/forum/message.php?msg_id=1812671">a way to do it</a>.
 
+<h3 id=12>Why does my test stop executing before the ActionForward is processed?</h3>
+StrutsTestCase is designed to test only a single Action class within a test method, and as such,
+does not actually process the forward, be it another action or a JSP page. You can simulate calling
+multiple actions in a test method by calling setRequestPathInfo() and actionPerform() multiple times
+within the same method. If you choose to do this, however, you should call <a href="api/servletunit/struts/MockStrutsTestCase.html#clearRequestParameters()">clearRequestParameters()</a> to
+ensure that no unexpected request parameters are passed along.
+
+<h3 id=13>Can I test multiple Actions in the same test method?</h3>
+Yes you can -- see the <a href="#12">previous question.</a>
 <br>
 <br>
 <br>
