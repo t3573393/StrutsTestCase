@@ -8,6 +8,7 @@
 <body>
 <center><h2>Frequently Asked Questions About StrutsTestCase for JUnit</h2></center>
 <ul>
+<li> <a href="#10">Is there a discussion group for StrutsTestCase?</a>
 <li> <a href="#1">Are there more detailed instructions on how to run the StrutsTestCase examples?</a>
 <li> <a href="#2">Does StrutsTestCase support Tiles?</a>
 <li> <a href="#3">Why does my test fail complaining about "Missing configuration resource for path /WEB-INF/struts-config.xml"? </a>
@@ -18,6 +19,9 @@
 <li> <a href="#8">Can I access the ActionForm for my test before and after the Action is executed?</a>
 <li> <a href="#9">When I use <tt>setActionForm()</tt>, why are the form attributes I set not showing up in my Action class?   </a>
 </ul>
+
+<h3 id=10>Is there a discussion group for StrutsTestCase?</h3>
+Yes, there is an active <a href="http://sourceforge.net/forum/?group_id=39190">user forum</a> hosted on the SourceForge site.
 
 <h3 id=1>Are there more detailed instructions on how to run the StrutsTestCase examples?</h3>
 The StrutsTestCase distribution comes with several sample classes, and step-by-step instructions on how to run them.  Please
@@ -58,11 +62,11 @@ There are three known causes for this problem:
 StrutsTestCase follows a common JUnit practice of not saving state between unit tests.  This is to avoid side effects when running many unit tests at once, each of which should remain independent of one another.  If you wish to test an Action subclass that depends on another Action or Servlet having set up one or more state variables, you should simulate this behavior by setting the state variables in the session object (via the <tt>getSession()</tt> method) or the request object (via the <tt>getRequest()</tt> method).  Alternately, you can test several Action subclasses in a sequence by calling setRequestPathInfo() and actionPerform() for each one.  For more information, please see the <a href="http://www.junit.org">JUnit site</a>.
 
 <h3 id=7>How can I use the Struts transaction token support in my test cases?</h3>
-You can use the Struts transaction token in your tests by using the <b><tt>addRequestParameter</tt></b> method, thusly:<br><br>
+You can use the Struts transaction token in your tests by using the <b><tt>addRequestParameter</tt></b> method, thusly:
 <pre>
      public void testTransactionToken() {
-	<em>addRequestParameter(Constants.TOKEN_KEY, "test_token");
-	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</em>
+        <em>addRequestParameter(Constants.TOKEN_KEY, "test_token");
+        getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</em>
         setRequestPathInfo("/testToken");
         actionPerform();
         verifyNoActionErrors();
@@ -80,8 +84,10 @@ Struts handles the form processing.  In particular, if you have overridden the A
 then you could potentially be resetting any attributes you had set in the ActionForm instance you
 pass to setActionForm().  Likewise, any request parameters you pass along that correspond to attributes
 in your ActionForm instance will replace whatever you set in your test method.
+
+
 <br>
 <br>
 <br>
-<center><b>Still scratching your head?  Please send a message to <a href="mailto:deryl@acm.org">deryl@acm.org</a>.</b></center>
+<center><b>Still scratching your head?  Please post a message on the <a href="http://sourceforge.net/forum/?group_id=39190">user forums</a>.</b></center>
 </body>

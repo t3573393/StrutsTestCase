@@ -7,11 +7,11 @@
 </head>
 <body>
 <div class="header">
-<h1>StrutsTestCase for JUnit v1.9.5</h1>
-<h3 CLASS="announce">Now supporting Struts 1.1b3, including <a href="#subapp">sub-applications!</a></h3>
-<p class="copyright">Copyright (C) 2002 Deryl Seale</p>
+<h1>StrutsTestCase for JUnit v2.0</h1>
+<h3 CLASS="announce">Now supporting Struts 1.1, including <a href="#subapp">sub-applications!</a></h3>
 
-<p>Questions? Comments? Please mail me at <a href="mailto:deryl@acm.org">deryl@acm.org</a>.</p>
+
+<p>Questions? Comments? Check out the <a href="http://sourceforge.net/forum/?group_id=39190">user forums</a>.</p>
 </div>
 
 <h2>What is it?</h2>
@@ -21,11 +21,11 @@ for testing code based on the Struts framework.  StrutsTestCase provides both a 
  StrutsTestCase uses the ActionServlet controller to test your code, you can test not only the implementation
  of your Action objects, but also your mappings, form beans, and forwards declarations.  And because StrutsTestCase already provides validation methods, it's quick and easy to write unit test cases.</p>
 
-<p>StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.02 and 1.1 (beta3 and the latest nightly builds), and Cactus 1.4.1 and JUnit 3.8.  <span CLASS="warning">Please note that this latest release of StrutsTestCase will not work with Struts 1.1b2!</span></p>
+<p>StrutsTestCase is compliant with both the Java Servlet 2.2 and 2.3 specifications, and supports Struts 1.02 and 1.1, and Cactus 1.4.1 and JUnit 3.8.1  <span CLASS="warning">Please note that this latest release of StrutsTestCase will not work with the Struts 1.1 Beta releases!</span></p>
 
 <h2>Where does it live?</h2>
 <p>StrutsTestCase for JUnit is hosted at <a href="http://sourceforge.net/projects/strutstestcase/">SourceForge</a>. You can find the latest and greatest release of StrutsTestCase <a href="http://sourceforge.net/project/showfiles.php?group_id=39190">here.</a></p>
-<p>Javadocs for all of the StrutsTestCase classes can be found <a href="api/index.html">here</a>, and there is also a list of <a href="faq.htm">frequently asked questions</a>.</p>
+<p>Javadocs for all of the StrutsTestCase classes can be found <a href="api/index.html">here</a>, and there is also a <a href="http://sourceforge.net/forum/?group_id=39190">discussion forum</a> and a list of <a href="faq.htm">frequently asked questions</a>.</p>
 
 <h2>Mock Testing vs. In-Container Testing</h2>
 <p>There are two popular approaches to testing server-side classes: <b>mock objects</b>, which test classes by simulating the server container, and <b>in-container testing</b>, which tests classes running in the actual server container.  StrutsTestCase for JUnit allows you to use either approach, with very minimal impact on your actual unit test code.  In fact, because the StrutsTestCase setup and validation methods are exactly the same for both approaches, choosing one approach over the other simply effects which base class you use!</p>
@@ -60,7 +60,7 @@ public class LoginAction extends Action {
             return mapping.findForward("login");
         }
 
-	// store authentication info on the session
+        // store authentication info on the session
         HttpSession session = request.getSession();
         session.setAttribute("authentication", username);
 
@@ -276,7 +276,8 @@ this method, the first argument <i>must contain only the sub-application name</i
 of the path <i>not including the sub-application name</i>.  Otherwise, the request path will be incorrectly constructed, resulting
 in a spurious test failure.</p>
 
-<!-- <center><A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=39190" width="88" height="31" border="0" alt="SourceForge Logo"></A></center> -->
+<center><A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=39190" width="88" height="31" border="0" alt="SourceForge Logo"></A></center>
+<p class="copyright">Copyright (C) 2003 Deryl Seale</p>
 </body>
 </html>
 
