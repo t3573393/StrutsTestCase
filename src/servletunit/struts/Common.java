@@ -459,6 +459,9 @@ public class Common {
     protected static void setActionForm(ActionForm form, HttpServletRequest request, String actionPath, ServletContext context) {
         if (logger.isTraceEnabled())
             logger.trace("Entering setActionForm() : form = " + form + ", request = " + request + ", actionPath = " + actionPath + ", context = " + context);
+
+        if (actionPath == null || actionPath.equalsIgnoreCase(""))
+            throw new IllegalStateException("You must call setRequestPathInfo() before calling setActionForm()!");
         ActionConfig actionConfig = getActionConfig(actionPath, request, context);
         if (actionConfig.getScope().equals("request"))  {
             if (logger.isDebugEnabled()) {

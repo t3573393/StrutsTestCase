@@ -58,6 +58,19 @@ public class TestSetActionForm extends MockStrutsTestCase {
         verifyActionErrors(new String[] {"error.password.mismatch"});
     }
 
+    public void testSetActionFormBeforeSettingRequestPathFails() {
+        ComplexForm form = new ComplexForm();
+        form.setUsername("deryl");
+        form.setPassword("radar");
+        form.setComplexObject(new Object());
+        try {
+            setActionForm(form);
+        } catch (IllegalStateException ise) {
+            return;
+        }
+        fail("should have thrown IllegalStateException");
+    }
+
     public static void main(String[] args) {
         junit.textui.TestRunner.run(TestSetActionForm.class);
     }
