@@ -33,12 +33,8 @@ public class TestTokenAction extends CactusStrutsTestCase {
         super(testName);
     }
 
-    public void beginTransactionToken(WebRequest theRequest) {
-    	theRequest.addParameter(Constants.TOKEN_KEY, "test_token");
-    }
-	
-    
     public void testTransactionToken() {
+	addRequestParameter(Constants.TOKEN_KEY, "test_token");
 	getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");
         setRequestPathInfo("/testToken");
         actionPerform();
