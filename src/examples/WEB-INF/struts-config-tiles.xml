@@ -24,7 +24,7 @@
                       value="/WEB-INF/tiles-config.xml" />
         <set-property property="definitions-debug" value="0" />
         <set-property property="definitions-parser-details" value="0" />
-        <set-property property="definitions-parser-validate" value="true" />
+        <set-property property="definitions-parser-validate" value="false" />
     </plug-in>
 
 
