@@ -26,10 +26,6 @@ public class TestTilesForward extends MockStrutsTestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        // For some reason, I have to pass these values in here; the plugin
-        // properties don't seem to work.
-        setInitParameter("definitions-config","/WEB-INF/tiles-config.xml");
-        setInitParameter("definitions-debug","0");
         setConfigFile("tiles","/WEB-INF/struts-config-tiles.xml");
         setConfigFile("/WEB-INF/struts-config.xml");
     }
