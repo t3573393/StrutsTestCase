@@ -69,7 +69,7 @@ You can use the Struts transaction token in your tests by using the <b><tt>addRe
 <pre>
      public void testTransactionToken() {
         <em>addRequestParameter(Constants.TOKEN_KEY, "test_token");
-        getSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, "test_token");</em>
+        getSession().setAttribute(Globals.TRANSACTION_TOKEN_KEY, "test_token");</em>
         setRequestPathInfo("/testToken");
         actionPerform();
         verifyNoActionErrors();
