@@ -59,6 +59,7 @@
 	    <lib dir="${basedir}/lib">
 	         <exclude name="ant*.jar"/>
             </lib>
+	    <!-- do we want to remove test classes? -->
 	    <classes dir="${build.dir}"/>
 	</war>
     </target>
@@ -120,6 +121,7 @@
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
                     <include name="**/examples/**/Test*.class" />
+		    <include name="**/tests/**/Test*.class" />
 		    <exclude name="**/cactus/**" />
                 </fileset>
             </batchtest>
