@@ -64,7 +64,19 @@ public class TestHttpServletRequestSimulator extends TestCase {
 	if (!(result.equals("value1")))
 	    fail();
     }
-    
+
+    public void testSetAttributeNullValue() {
+        request.setAttribute("test1","value1");
+        assertEquals(request.getAttribute("test1"),"value1");
+        request.setAttribute("test1",null);
+        assertNull(request.getAttribute("test1"));
+    }
+
+    public void testSetAttribute() {
+        request.setAttribute("test1","value1");
+        assertEquals(request.getAttribute("test1"),"value1");
+    }
+
 
 }
 
