@@ -3,35 +3,36 @@
     <!-- ================ Initialize Property Values ================ -->
 
     <!-- set jikes as the java compiler -->
-    <property name="build.compiler" value="jikes" />
+    <property name="build.compiler" value="jikes"/>
 
     <!-- set the release version -->
     <property name="major.version" value="1"/>
     <property name="minor.version" value="9"/>
     <property name="point.version" value="5"/>
     <property name="release.version" value="${major.version}${minor.version}${point.version}"/>
+    <property name="jar.name" value="strutstest-${major.version}.${minor.version}.${point.version}.jar"/>
 
     <!-- compile options defaults -->
-    <property name="comp.deprecate"      value="off" />
-    <property name="comp.debug"          value="on" />
-    <property name="comp.optimize"       value="off" />
-    <property name="comp.depend"         value="on" />
-    <property name="comp.verbose"        value="off" />
+    <property name="comp.deprecate" value="off"/>
+    <property name="comp.debug" value="on"/>
+    <property name="comp.optimize" value="off"/>
+    <property name="comp.depend" value="on"/>
+    <property name="comp.verbose" value="off"/>
 
-    <property name="build.dir"      value="${basedir}/build"/>
-    <property name="src.dir"        value="${basedir}/src"/>
+    <!-- important directories -->
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="src.dir" value="${basedir}/src"/>
     <property name="distribute.dir" value="${basedir}/dist/strutstest"/>
-    <property name="doc.dir"        value="${distribute.dir}/docs"/>
-    <property name="test.dir"       value="${basedir}/test-results"/>
-    <property name="temp.dir"       value="${basedir}/temp"/>
-    <property name="lib.dir"        value="${basedir}/lib"/>
-    <property name="jar.name"       value="strutstest-${major.version}.${minor.version}.${point.version}.jar" />
+    <property name="doc.dir" value="${distribute.dir}/docs"/>
+    <property name="test.dir" value="${basedir}/test-results"/>
+    <property name="temp.dir" value="${basedir}/temp"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
 
     <!-- set class.path to use with javac/jikes -->
     <path id="class.path">
         <fileset dir="${lib.dir}">
-            <include name="*.jar" />
-            <include name="*.zip" />
+            <include name="*.jar"/>
+            <include name="*.zip"/>
             <exclude name="struts-1.1.jar" if="build_1.0"/>
             <exclude name="struts-1.0.jar" unless="build_1.0"/>
             <exclude name="servletapi-2.3.jar" if="build_2.2"/>
@@ -39,7 +40,7 @@
             <exclude name="cactus-13-1.4.1.jar" if="build_2.2"/>
             <exclude name="cactus-12-1.4.1.jar" unless="build_2.2"/>
         </fileset>
-        <pathelement location="${build.dir}" />
+        <pathelement location="${build.dir}"/>
     </path>
 
     <!-- ====================== Build Targets ====================== -->
@@ -66,7 +67,7 @@
 
     <!-- Compile the application classes -->
     <target name="build" depends="init" description="compile all Java classes">
-        <mkdir dir="${build.dir}" />
+        <mkdir dir="${build.dir}"/>
 
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -75,8 +76,8 @@
             optimize="${comp.optimize}"
             verbose="${comp.verbose}"
             depend="${comp.depend}">
-            <classpath refid="class.path" />
-            <include name="**/*.java" />
+            <classpath refid="class.path"/>
+            <include name="**/*.java"/>
             <excludesfile name="excludes-${struts.version}-${servlet.version}"/>
         </javac>
     </target>
@@ -128,9 +129,9 @@
 
     <!-- Clean up the build -->
     <target name="clean" description="remove all build products">
-        <delete dir="${build.dir}" />
-        <delete dir="${basedir}/dist" />
-        <delete dir="${test.dir}" />
+        <delete dir="${build.dir}"/>
+        <delete dir="${basedir}/dist"/>
+        <delete dir="${test.dir}"/>
         <delete file="${basedir}/test.war"/>
         <delete>
             <fileset dir="${basedir}" includes="strutstest*.zip"/>
@@ -139,13 +140,13 @@
 
     <!-- Generate Javadocs for the application -->
     <target name="docs" description="compile documentation for all Java classes">
-        <mkdir dir="${doc.dir}/api" />
+        <mkdir dir="${doc.dir}/api"/>
         <copy file="${basedir}/howto.htm" toDir="${doc.dir}"/>
         <copy file="${basedir}/faq.htm" toDir="${doc.dir}"/>
         <copy file="${basedir}/LICENSE.TXT" toDir="${distribute.dir}"/>
         <copy file="${basedir}/README.TXT" toDir="${distribute.dir}"/>
-        <mkdir dir="${distribute.dir}/examples" />
-        <copy todir="${distribute.dir}/examples" >
+        <mkdir dir="${distribute.dir}/examples"/>
+        <copy todir="${distribute.dir}/examples">
             <fileset dir="${src.dir}/examples" excludes="**/tiles*.xml"/>
         </copy>
         <javadoc packagenames="servletunit,servletunit.struts"
@@ -162,49 +163,49 @@
             <!-- Put in links to JDK classes -->
             <link offline="true"
                 href="http://java.sun.com/products/j2se/1.3/docs/api/"
-                packagelistLoc="http://java.sun.com/products/jdk/1.3/docs/api" />
+                packagelistLoc="http://java.sun.com/products/jdk/1.3/docs/api"/>
             <link offline="true"
                 href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"
-                packagelistLoc="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/" />
+                packagelistLoc="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
         </javadoc>
     </target>
 
     <!-- Run unit tests -->
     <target name="test" description="run all mock object tests">
-        <mkdir dir="${test.dir}" />
+        <mkdir dir="${test.dir}"/>
         <junit printsummary="yes" haltonfailure="yes">
-            <sysproperty key="test.dir" value="${test.dir}" />
-            <sysproperty key="basedir" value="${basedir}" />
-            <classpath refid="class.path" />
+            <sysproperty key="test.dir" value="${test.dir}"/>
+            <sysproperty key="basedir" value="${basedir}"/>
+            <classpath refid="class.path"/>
             <classpath>
                 <pathelement location="${src.dir}/examples/"/>
                 <pathelement location="${src.dir}/"/>
             </classpath>
-            <formatter type="xml" />
+            <formatter type="xml"/>
 
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
-                    <include name="**/examples/**/Test*.class" />
-                    <include name="**/tests/**/Test*.class" />
-                    <exclude name="**/cactus/**" />
+                    <include name="**/examples/**/Test*.class"/>
+                    <include name="**/tests/**/Test*.class"/>
+                    <exclude name="**/cactus/**"/>
                 </fileset>
             </batchtest>
         </junit>
     </target>
 
     <target name="test.cactus" description="run all cactus tests">
-        <mkdir dir="${test.dir}" />
+        <mkdir dir="${test.dir}"/>
         <junit printsummary="yes" haltonfailure="yes">
-            <sysproperty key="test.dir" value="${test.dir}" />
-            <classpath refid="class.path" />
+            <sysproperty key="test.dir" value="${test.dir}"/>
+            <classpath refid="class.path"/>
             <classpath>
                 <pathelement location="${src.dir}/"/>
                 <pathelement location="${src.dir}/examples/cactus"/>
             </classpath>
-            <formatter type="xml" />
+            <formatter type="xml"/>
             <batchtest fork="yes" todir="${test.dir}">
                 <fileset dir="${build.dir}">
-                    <include name="**/cactus/**/Test*.class" />
+                    <include name="**/cactus/**/Test*.class"/>
                 </fileset>
             </batchtest>
         </junit>
