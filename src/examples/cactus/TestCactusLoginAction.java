@@ -16,10 +16,7 @@
 
 package examples.cactus;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import servletunit.struts.CactusStrutsTestCase;
-import java.io.IOException;
 
 public class TestCactusLoginAction extends CactusStrutsTestCase {
 
@@ -35,7 +32,7 @@ public class TestCactusLoginAction extends CactusStrutsTestCase {
         actionPerform();
         verifyForward("success");
 	verifyForwardPath("/main/success.jsp");
-        assertEquals("deryl",(String) getSession().getAttribute("authentication"));
+        assertEquals("deryl", getSession().getAttribute("authentication"));
         verifyNoActionErrors();
     }
 
@@ -49,7 +46,7 @@ public class TestCactusLoginAction extends CactusStrutsTestCase {
 	verifyForwardPath("/login/login.jsp");
 	verifyInputForward();
         verifyActionErrors(new String[] {"error.password.mismatch"});
-        assertNull((String) getSession().getAttribute("authentication"));
+        assertNull(getSession().getAttribute("authentication"));
     }
 
     public static void main(String[] args) {

@@ -44,14 +44,22 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
-/**
- * This class captures the response from the servlet. Use this to pass
- * the response object to doGet() or doPost().
- * Important : We can only capture the output when it is written using a
- * PrintWriter. In order to examine the output of the doGet or the doPost
- * methods, pick up the string buffer from this response object by using
- * getWriterBuffer().
- */
+//  StrutsTestCase - a JUnit extension for testing Struts actions
+//  within the context of the ActionServlet.
+//  Copyright (C) 2002 Deryl Seale
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the Apache Software License as
+//  published by the Apache Software Foundation; either version 1.1
+//  of the License, or (at your option) any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  Apache Software Foundation Licens for more details.
+//
+//  You may view the full text here: http://www.apache.org/LICENSE.txt
+
 public class HttpServletResponseSimulator implements HttpServletResponse
 {
     private OutputStream servOStream;       // The non-default javax.servlet.ServletOutputStream
