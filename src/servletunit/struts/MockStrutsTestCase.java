@@ -284,6 +284,18 @@ public class MockStrutsTestCase extends TestCase {
     }
 
     /**
+     * Sets an initialization parameter on the
+     * ActionServlet.  Allows you to simulate an init parameter
+     * that would normally have been found in web.xml,
+     * but is not available while testing with mock objects.
+     * @param key the name of the initialization parameter
+     * @parame value the value of the intialization parameter
+     */
+    public void setInitParameter(String key, String value){
+        config.setInitParameter(key, value);
+    }
+
+    /**
      * Sets the location of the Struts configuration file.  This method
      * should only be called if the configuration file is different than
      * the default value of /WEB-INF/struts-config.xml.<br><br>
@@ -307,6 +319,21 @@ public class MockStrutsTestCase extends TestCase {
         this.config.setInitParameter("config",pathname);
     }
 
+    /**
+     * Sets the location of the web.xml configuration file to be used
+     * to set up the servlet context and configuration for this test.
+     * This method supports both init-param and context-param tags,
+     * setting the ServletConfig and ServletContext appropriately.<br><br>
+     * The rules for searching for the configuration files are the same
+     * as the rules associated with calling Class.getResourceAsStream().
+     * Briefly, this method delegates the call to its class loader, after
+     * making these changes to the resource name: if the resource name starts
+     * with "/", it is unchanged; otherwise, the package name is prepended
+     * to the resource name after converting "." to "/". <br><br>
+     * To be on the safe side, always make sure the pathname refers to a
+     * file in the same directory as your test, or make sure it begins
+     * with a "/" character.
+     */
     public void setServletConfigFile(String pathname) {
 	init();
 	// ugly hack to get this to play ball with Class.getResourceAsStream()
@@ -447,17 +474,7 @@ public class MockStrutsTestCase extends TestCase {
         Common.verifyNoActionErrors(request);
     }
 
-    /**
-     * Sets an initialization parameter on the
-     * ActionServlet.  Allows you to simulate an init parameter
-     * that would normally have been found in web.xml,
-     * but is not available while testing with mock objects.
-     * @param key the name of the initialization parameter
-     * @parame value the value of the intialization parameter
-     */
-    public void setInitParameter(String key, String value){
-        config.setInitParameter(key, value);
-    }
+    
 
 }
 
