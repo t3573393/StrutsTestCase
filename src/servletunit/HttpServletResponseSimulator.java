@@ -557,6 +557,14 @@ public class HttpServletResponseSimulator implements HttpServletResponse
     }
 
     /**
+     * Removes a given header
+     */
+    public void removeHeader(String name) {
+        if (headers.containsKey(name))
+            headers.remove(name);
+    }
+
+    /**
      * Adds the given name/value pair to the headers collection.
      */
     public void setIntHeader(String name, int value)

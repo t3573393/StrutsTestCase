@@ -192,6 +192,9 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void clearRequestParameters() {
         this.request.getParameterMap().clear();
+
+        // also, clear out the redirect header if it's there.
+        response.removeHeader("Location");
     }
 
     /**
