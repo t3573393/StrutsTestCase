@@ -389,7 +389,10 @@ public class MockStrutsTestCase extends TestCase {
     public void verifyForward(String forwardName) throws AssertionFailedError {
     init();
 	if (response.containsHeader("Location")) {
-	    String expectedRedirect = actionServlet.findMapping(actionPath).findForward(forwardName).getPath();
+	    ActionForward expectedRedirectForward = actionServlet.findMapping(actionPath).findForward(forwardName);
+	    if (expectedRedirectForward == null) 
+		fail("Cannot find forward '" + forwardName + "' - it is possible that it is not mapped correctly.");
+	    String expectedRedirect = expectedRedirectForward.getPath();
 	    String actualRedirect = response.getHeader("Location");
 	    if (!expectedRedirect.equals(actualRedirect))
 		fail("Was expecting redirect '" + expectedRedirect + "' but received redirect '" + actualRedirect + "'");

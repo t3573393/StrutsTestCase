@@ -94,7 +94,7 @@ public class Common {
             if (expectedForward == null)
                 expectedForward = actionServlet.findForward(forwardName);
             if (expectedForward == null)
-                throw new AssertionFailedError("cannot find forward '" + forwardName + "'");
+                throw new AssertionFailedError("Cannot find forward '" + forwardName + "'  - it is possible that it is not mapped correctly.");
             forwardName = expectedForward.getPath();
         }
         if (!forwardName.equals(stripJSessionID(actualForwardPath)))
