@@ -35,17 +35,17 @@ public class MessageAction extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
 
-	MessageResources resources = getResources();
-	if (resources == null) {
-	    return mapping.findForward("failure");
-	} else {
-	    String message = resources.getMessage("button.save");
-	    if ((message != null) && (message.equals("Save")))
-		return mapping.findForward("success");
-	    else {
-		return mapping.findForward("failure");
-	    }
-	}
+        MessageResources resources = getResources();
+        if (resources == null) {
+            return mapping.findForward("failure");
+        } else {
+            String message = resources.getMessage("button.save");
+            if ((message != null) && (message.equals("Save")))
+                return mapping.findForward("success");
+            else {
+                return mapping.findForward("failure");
+            }
+        }
     }
 
 }
