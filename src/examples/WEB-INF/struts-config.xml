@@ -19,6 +19,8 @@
 		<action path="/login" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request">
 			<forward name="success" path="/main/success.jsp"/>
 		</action>
+
+
 		<!-- The following mappings are for internal testing -->
 		<!-- only, and can be safely ignored.                -->
 		<action path="/testMessage" type="servletunit.struts.tests.MessageAction" input="/login/login.jsp" scope="request">
@@ -36,6 +38,9 @@
 		<action path="/testContextParams" type="servletunit.struts.tests.InitParameterAction" scope="request"/>
 		<action path="/testDynamicAction" type="servletunit.struts.tests.DynamicAction" name="dynamicLogin" scope="request"/>
 		<action path="/userAction" type="servletunit.struts.tests.UserAction">
+		</action>
+		<action path="/loginNoInput" type="examples.LoginAction" name="loginForm" scope="request">
+			<forward name="success" path="/main/success.jsp"/>
 		</action>
 	</action-mappings>
 </struts-config>
