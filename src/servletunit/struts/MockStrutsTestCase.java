@@ -29,6 +29,7 @@ import servletunit.ServletContextSimulator;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.InputStream;
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -359,12 +360,6 @@ public class MockStrutsTestCase extends TestCase {
      */
     public void setConfigFile(String moduleName, String pathname) {
         init();
-        // todo: this will not work with windows paths.
-        // ugly hack to get this to play ball with Class.getResourceAsStream()
-        if (!pathname.startsWith("/")) {
-            String prefix = this.getClass().getPackage().getName().replace('.','/');
-            pathname = "/" + prefix + "/" + pathname;
-        }
         if (moduleName == null)
             this.config.setInitParameter("config",pathname);
         else
