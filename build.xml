@@ -74,8 +74,8 @@
             <exclude name="servletapi-2.2.jar" if="build_2.4"/>
             <exclude name="servletapi-2.3.jar" if="build_2.4"/>
 
-            <exclude name="cactus-13-1.6.1.jar" if="build_2.2"/>
-            <exclude name="cactus-12-1.6.1.jar" unless="build_2.2"/>
+            <exclude name="cactus-13-1.7.jar" if="build_2.2"/>
+            <exclude name="cactus-12-1.7.jar" unless="build_2.2"/>
         </fileset>
         <pathelement location="${build.dir}"/>
     </path>
@@ -113,8 +113,8 @@
                 <include name="cactus.properties"/>
             </webinf>
             <lib dir="${lib.dir}">
-                <exclude name="cactus-13-1.6.1.jar" if="build_2.2"/>
-                <exclude name="cactus-12-1.6.1.jar" unless="build_2.2"/>
+                <exclude name="cactus-13-1.7.jar" if="build_2.2"/>
+                <exclude name="cactus-12-1.7.jar" unless="build_2.2"/>
                 <exclude name="servletapi*.jar" />
                 <exclude name="ant*.jar"/>
             </lib>
