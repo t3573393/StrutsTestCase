@@ -143,8 +143,8 @@ public class TestHttpServletRequestSimulator extends TestCase {
     }
 
     public void testGetLocales() {
-        Enumeration enum = request.getLocales();
-        for (Object enumObject = enum.nextElement(); enum.hasMoreElements(); enumObject = enum.nextElement()) {
+        Enumeration enumeration = request.getLocales();
+        for (Object enumObject = enumeration.nextElement(); enumeration.hasMoreElements(); enumObject = enumeration.nextElement()) {
             Locale locale = (Locale) enumObject;
             if (!locale.equals(Locale.US))
                 fail();
