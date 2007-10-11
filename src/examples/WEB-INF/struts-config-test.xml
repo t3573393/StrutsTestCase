@@ -31,9 +31,6 @@
         <action path="/testSimpleForward" forward="/WEB-INF/struts-config.xml"/>
         <action path="/testRedirect" type="servletunit.struts.tests.RedirectAction" scope="request" />
         <action path="/testRelativeRedirect" type="servletunit.struts.tests.RedirectAction" scope="request"/>
-        <action path="/testContextRelative" type="servletunit.struts.tests.RedirectAction">
-            <forward name="redirect" path="/main/success.jsp" contextRelative="true"/>
-        </action>
         <action path="/testToken" type="servletunit.struts.tests.TokenAction" scope="request"/>
         <action path="/testNullPointer" type="servletunit.struts.tests.NullPointerAction" scope="request"/>
         <action path="/testNullPointerForm" name="nullPointerForm" type="servletunit.struts.tests.NullPointerAction" scope="request" validate="true"/>
