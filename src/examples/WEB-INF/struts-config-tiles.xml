@@ -15,8 +15,8 @@
 	<!-- ========== Action Mapping Definitions ============================== -->
 	<action-mappings>
 		<action path="/tilesForward" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request">
-			<forward name="success" path="page.library" contextRelative="true"/>
-            <forward name="failure" path="another.page"/>
+			<forward name="success" path="page.library"/>
+			<forward name="failure" path="another.page"/>
 		</action>
         <action path="/tilesInputForward" type="examples.LoginAction" name="loginForm" input="page.library" scope="request"/>
 	</action-mappings>
