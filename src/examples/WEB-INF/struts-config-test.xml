@@ -57,5 +57,9 @@
             <forward name="redirect" path="http://www.yahoo.com" redirect="true"/>
         </action>
     </action-mappings>
+    
+    <!-- specify controller so that tests work with struts 1.3 -->
+    <controller processorClass="org.apache.struts.action.RequestProcessor" />
+
     <message-resources parameter="examples.ApplicationResources"/>
 </struts-config>

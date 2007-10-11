@@ -20,6 +20,10 @@
 		</action>
         <action path="/tilesInputForward" type="examples.LoginAction" name="loginForm" input="page.library" scope="request"/>
 	</action-mappings>
+    
+    <!-- specify controller so that tests work with struts 1.3 -->
+    <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" />
+    
     <plug-in className="org.apache.struts.tiles.TilesPlugin" >
         <set-property property="definitions-config"
                       value="/WEB-INF/tiles-config.xml" />
