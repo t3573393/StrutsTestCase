@@ -170,7 +170,6 @@
         <copy todir="${distribute.dir}/examples">
             <fileset dir="${src.dir}/examples" excludes="**/tiles*.xml"/>
         </copy>
-        <copy todir="${distribute.dir}/examples" file="test.war"/>
         <javadoc packagenames="servletunit,servletunit.struts"
             sourcepath="${src.dir}"
             destdir="${doc.dir}/api"
@@ -190,6 +189,7 @@
                 href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"
                 packagelistLoc="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
         </javadoc>
+        <copy todir="${distribute.dir}/examples" file="test.war"/>
     </target>
 
     <!-- Run unit tests -->
