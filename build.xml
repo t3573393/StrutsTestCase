@@ -27,6 +27,8 @@
     <property name="comp.optimize" value="off"/>
     <property name="comp.depend" value="on"/>
     <property name="comp.verbose" value="off"/>
+    <property name="comp.source" value="1.3"/>
+    <property name="comp.target" value="1.3"/>
 
     <!-- important directories -->
     <property name="build.dir" value="${basedir}/build"/>
@@ -91,7 +93,9 @@
             debug="${comp.debug}"
             optimize="${comp.optimize}"
             verbose="${comp.verbose}"
-            depend="${comp.depend}">
+            depend="${comp.depend}"
+            source="${comp.source}"
+            target="${comp.target}">
             <classpath refid="class.path"/>
             <include name="**/*.java"/>
             <excludesfile name="excludes-${struts.version}-${servlet.version}"/>
