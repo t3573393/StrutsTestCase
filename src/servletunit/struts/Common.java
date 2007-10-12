@@ -23,7 +23,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.config.ActionConfig;
 import org.apache.struts.Globals;
-import org.apache.struts.util.RequestUtils;
+import org.apache.struts.util.ModuleUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.collections.Transformer;
@@ -301,7 +301,7 @@ public class Common {
             }
             // some fowards cross outside modules - check if we need the module
             // in the path or not.
-            useModules = !expectedForward.getContextRelative ();
+            useModules = (expectedForward.getModule() == null);
         }
 
         String moduleName = request.getServletPath() != null ? request.getServletPath() : "";
@@ -490,7 +490,8 @@ public class Common {
 
         ActionConfig actionConfig = getActionConfig(actionPath, request, context);
         if (actionConfig == null) {
-            RequestUtils.selectModule(request,context);
+            ModuleUtils moduleUtils = ModuleUtils.getInstance();
+            moduleUtils.selectModule(request,context);
             actionConfig = getActionConfig(actionPath, request, context);
         }
 

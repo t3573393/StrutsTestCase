@@ -17,7 +17,7 @@
     </form-beans>
     <!-- ========== Global Forward Definitions ============================== -->
     <global-forwards>
-        <forward name="login" path="/login/login.jsp" contextRelative="true"/>
+        <forward name="login" path="/login/login.jsp" module="/"/>
         <forward name="success" path="/main/success.jsp"/>
         <forward name="failure" path="/main/failure.jsp"/>
         <forward name="redirect" path="/main/success.jsp" redirect="true" />
