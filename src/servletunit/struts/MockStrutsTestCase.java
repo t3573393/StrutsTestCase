@@ -52,7 +52,7 @@ import java.net.URL;
  * you would like to use an alternate configuration file, please see
  * the setConfigFile() method for details on how this file is located.
  */
-public class MockStrutsTestCase extends TestCase {
+public abstract class MockStrutsTestCase extends TestCase {
 
     protected ActionServlet actionServlet;
     protected HttpServletRequestSimulator request;
