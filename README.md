@@ -1,4 +1,4 @@
-# StrutsTestCase for JUnit v2.1.4
+# StrutsTestCase for JUnit
 
 ### Now supporting Struts 1.2 and 1.3, including [Tiles](#tiles) and [Sub-Applications!](#subapp)
 
