@@ -8,9 +8,9 @@
     <!-- set the release version -->
     <property name="major.version" value="2"/>
     <property name="minor.version" value="1"/>
-    <property name="point.version" value="4"/>
+    <property name="point.version" value="5"/>
     <property name="release.version" value="${major.version}${minor.version}${point.version}"/>
-    <property name="jar.name" value="strutstest-${major.version}.${minor.version}.${point.version}.jar"/>
+    <property name="jar.name" value="strutstestcase-${major.version}.${minor.version}.${point.version}.jar"/>
 
     <!-- targets this build for different Servlet specs -->
     <!-- uncomment or set on the ant command line       -->
@@ -145,7 +145,7 @@
     </target>
 
     <target name="release.src" depends="clean">
-        <zip zipFile="${basedir}/strutstest-${release.version}-src.zip" basedir="${basedir}">
+        <zip zipFile="${basedir}/strutstestcase-${release.version}-sources.jar" basedir="${basedir}">
             <exclude name="*.zip"/>
             <exclude name="lib/*.jar"/>
         </zip>

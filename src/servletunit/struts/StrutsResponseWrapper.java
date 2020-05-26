@@ -100,6 +100,10 @@ public class StrutsResponseWrapper implements HttpServletResponse
         return this.response.getCharacterEncoding();
     }
 
+    public String getContentType() {
+        return this.response.getContentType();
+    }
+
     public Locale getLocale()
     {
         return this.response.getLocale();
@@ -113,6 +117,10 @@ public class StrutsResponseWrapper implements HttpServletResponse
     public PrintWriter getWriter() throws IOException
     {
         return this.response.getWriter();
+    }
+
+    public void setCharacterEncoding(String s) {
+        this.setCharacterEncoding(s);
     }
 
     public boolean isCommitted()

@@ -3,6 +3,7 @@
     <!-- ========== Form Bean Definitions =================================== -->
     <form-beans>
         <form-bean name="loginForm" type="examples.LoginForm"/>
+        <form-bean name="formFileForm" type="examples.FormFileForm"/>
     </form-beans>
     <!-- ========== Global Forward Definitions ============================== -->
     <global-forwards>
@@ -13,6 +14,8 @@
     <action-mappings>
         <!-- Process a user logon -->
         <action path="/login" type="examples.LoginAction" name="loginForm" input="/login/login.jsp" scope="request" />
+        <!-- Process file upload -->
+        <action path="/upload" type="examples.FormFileAction" name="formFileForm" input="/login/login.jsp" scope="request" />
     </action-mappings>
     
     <!-- specify controller so that tests work with struts 1.3 -->
